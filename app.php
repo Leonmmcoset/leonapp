@@ -35,16 +35,20 @@ $resultImages = $conn->query($sqlImages);
 $sqlReviews = "SELECT * FROM reviews WHERE app_id = $appId ORDER BY created_at DESC"; 
 $resultReviews = $conn->query($sqlReviews);
 
+// 获取评分分布
+$sqlRatingDistribution = "SELECT rating, COUNT(*) as count FROM reviews WHERE app_id = $appId GROUP BY rating ORDER BY rating DESC";
+$resultRatingDistribution = $conn->query($sqlRatingDistribution);
+$ratingDistribution = [];
+while ($row = $resultRatingDistribution->fetch_assoc()) {
+    $ratingDistribution[$row['rating']] = $row['count'];
+}
+
 // 处理评价提交
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
     $rating = $_POST['rating'];
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
-    $insertSql = "INSERT INTO reviews (app_id, ip_address, rating) VALUES ($appId, '$ipAddress', $rating)";
-    if ($conn->query($insertSql) === TRUE) {
-        header('Location: app.php?id=$appId');
-        exit;
-    }
+    $insertSql = "INSERT INTO reviews (app_id, rating) VALUES ($appId, $rating)";    if ($conn->query($insertSql) === TRUE) {        header("Location: app.php?id=$appId");        exit;    }
 }
 ?>
 <!DOCTYPE html>
@@ -55,6 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
     <title><?php echo $app['name']; ?> - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 本地 Chart.js -->
+    <script src="js/charts.js"></script>
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="styles.css">
     <!-- Fluent Design 模糊效果 -->
@@ -173,16 +181,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
 
         <div class="row mt-4">
             <div class="col-md-6">
-                <h2>评价</h2>
-                <?php while ($review = $resultReviews->fetch_assoc()): ?>
-                    <div class="card mb-3 blur-bg">
-                        <div class="card-body">
-                            <p class="card-text">评分: <?php echo $review['rating']; ?>/5</p>
-                            <p class="card-text"><small class="text-muted">评价时间: <?php echo $review['created_at']; ?></small></p>
+                    <h2>评价</h2>
+                    <?php while ($review = $resultReviews->fetch_assoc()): ?>
+                        <div class="card mb-3 blur-bg">
+                            <div class="card-body">
+                                <?php
+                                $rating = $review['rating'] !== null ? $review['rating'] : 0;
+                                echo '<p class="card-text">评分: ';
+                                for ($i = 1; $i <= 5; $i++) {
+                                    if ($i <= floor($rating)) {
+                                        echo '<span class="fas fa-star text-warning"></span>';
+                                    } elseif ($i - $rating <= 0.5) {
+                                        echo '<span class="fas fa-star-half-alt text-warning"></span>';
+                                    } else {
+                                        echo '<span class="far fa-star text-warning"></span>';
+                                    }
+                                }
+                                echo '</p>';
+                                ?>
+                                <p class="card-text"><small class="text-muted">评价时间: <?php echo $review['created_at']; ?></small></p>
+                            </div>
                         </div>
-                    </div>
-                <?php endwhile; ?>
-            </div>
+                    <?php endwhile; ?>
+                </div>
+                <div class="col-md-6">
+                    <h2>评分分布</h2>
+                    <canvas id="ratingChart" width="400" height="200"></canvas>
+                    <script>
+                        const ctx = document.getElementById('ratingChart').getContext('2d');
+                        new Chart(ctx).Bar({
+                            labels: ['5星', '4星', '3星', '2星', '1星'],
+                            datasets: [{
+                                label: '评分数量',
+                                fillColor: 'rgba(75, 192, 192, 0.6)',
+                                strokeColor: 'rgba(75, 192, 192, 1)',
+                                highlightFill: 'rgba(75, 192, 192, 0.8)',
+                                highlightStroke: 'rgba(75, 192, 192, 1)',
+                                data: [
+                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[1] ?? 0; ?>
+                                ]
+                            },
+                            {
+                                label: '评分数量',
+                                fillColor: 'rgba(153, 102, 255, 0.6)',
+                                strokeColor: 'rgba(153, 102, 255, 1)',
+                                highlightFill: 'rgba(153, 102, 255, 0.8)',
+                                highlightStroke: 'rgba(153, 102, 255, 1)',
+                                data: [
+                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[1] ?? 0; ?>
+                                ]
+                            },
+                            {
+                                label: '评分数量',
+                                fillColor: 'rgba(255, 206, 86, 0.6)',
+                                strokeColor: 'rgba(255, 206, 86, 1)',
+                                highlightFill: 'rgba(255, 206, 86, 0.8)',
+                                highlightStroke: 'rgba(255, 206, 86, 1)',
+                                data: [
+                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[1] ?? 0; ?>
+                                ]
+                            },
+                            {
+                                label: '评分数量',
+                                fillColor: 'rgba(255, 99, 132, 0.6)',
+                                strokeColor: 'rgba(255, 99, 132, 1)',
+                                highlightFill: 'rgba(255, 99, 132, 0.8)',
+                                highlightStroke: 'rgba(255, 99, 132, 1)',
+                                data: [
+                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[1] ?? 0; ?>
+                                ]
+                            },
+                            {
+                                label: '评分数量',
+                                fillColor: 'rgba(54, 162, 235, 0.6)',
+                                strokeColor: 'rgba(54, 162, 235, 1)',
+                                highlightFill: 'rgba(54, 162, 235, 0.8)',
+                                highlightStroke: 'rgba(54, 162, 235, 1)',
+                                data: [
+                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
+                                    <?php echo $ratingDistribution[1] ?? 0; ?>
+                                ]
+                            }]
+                        }, {
+                            scaleBeginAtZero: true
+                        });
+                    </script>
+                </div>
             <div class="col-md-6">
                 <h2>提交评价</h2>
                 <form method="post">
