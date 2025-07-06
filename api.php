@@ -42,6 +42,14 @@ if (isset($_GET['action'])) {
             $stmtParams[] = &$ageRating;
             $paramTypes .= 's';
         }
+
+        // 标签过滤
+        if (isset($_GET['tag'])) {
+            $tag = $_GET['tag'];
+            $conditions[] = "apps.id IN (SELECT app_id FROM app_tags JOIN tags ON app_tags.tag_id = tags.id WHERE tags.name = ?)";
+            $stmtParams[] = &$tag;
+            $paramTypes .= 's';
+        }
         
         // 分页参数处理
         $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
@@ -155,6 +163,18 @@ if (isset($_GET['action'])) {
             }
             $app['reviews'] = $reviews;
 
+            // 获取应用标签
+            $sqlTags = "SELECT tags.id, tags.name FROM app_tags JOIN tags ON app_tags.tag_id = tags.id WHERE app_tags.app_id = ?";
+            $stmtTags = $conn->prepare($sqlTags);
+            $stmtTags->bind_param("i", $appId);
+            $stmtTags->execute();
+            $resultTags = $stmtTags->get_result();
+            $tags = [];
+            while ($tag = $resultTags->fetch_assoc()) {
+                $tags[] = $tag;
+            }
+            $app['tags'] = $tags;
+
             echo json_encode($app);
         } else {
             http_response_code(404);
@@ -196,6 +216,18 @@ if (isset($_GET['action'])) {
         }
         
         echo json_encode($favorites);
+        exit;
+    }
+
+    // 获取所有标签
+    elseif ($action === 'tags' && $requestMethod === 'GET') {
+        $sql = "SELECT id, name FROM tags ORDER BY name";
+        $result = $conn->query($sql);
+        $tags = [];
+        while ($row = $result->fetch_assoc()) {
+            $tags[] = $row;
+        }
+        echo json_encode($tags);
         exit;
     }
     

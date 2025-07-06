@@ -75,6 +75,9 @@ if (!$resultApps) {
         <?php endif; ?>
     
         <h2>App列表</h2>
+        <div class="mb-3">
+            <a href="manage_tags.php" class="btn btn-info">标签管理</a>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>

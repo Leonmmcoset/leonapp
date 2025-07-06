@@ -84,11 +84,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
             }
         }
 
-        header('Location: index.php?success=App 更新成功');
-        exit;
-    } else {
-        $error = 'App 更新失败: '. $conn->error;
-    }
+        // 更新标签关联
+            $stmt = $conn->prepare("DELETE FROM app_tags WHERE app_id = ?");
+            $stmt->bind_param("i", $appId);
+            $stmt->execute();
+            $stmt->close();
+
+            if (!empty($_POST['tags'])) {
+                $stmt = $conn->prepare("INSERT INTO app_tags (app_id, tag_id) VALUES (?, ?)");
+                foreach ($_POST['tags'] as $tagId) {
+                    $stmt->bind_param("ii", $appId, $tagId);
+                    $stmt->execute();
+                }
+                $stmt->close();
+            }
+
+            header('Location: index.php?success=App 更新成功');
+            exit;
+        } else {
+            $error = 'App 更新失败: '. $conn->error;
+        }
 }
 ?>
 <!DOCTYPE html>
@@ -150,7 +165,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
                 <label for="name" class="form-label">App名称</label>
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($app['name']); ?>" required>
             </div>
-            <div class="mb-3">
+        <div class="mb-3">
+            <label for="tags" class="form-label">标签</label>
+            <select id="tags" name="tags[]" multiple class="form-control">
+                <?php
+                $selectedTags = [];
+                $tagQuery = $conn->prepare("SELECT tag_id FROM app_tags WHERE app_id = ?");
+                $tagQuery->bind_param("i", $appId);
+                $tagQuery->execute();
+                $tagResult = $tagQuery->get_result();
+                while ($tag = $tagResult->fetch_assoc()) {
+                    $selectedTags[] = $tag['tag_id'];
+                }
+                
+                $allTags = $conn->query("SELECT id, name FROM tags");
+                while ($tag = $allTags->fetch_assoc()):
+                $selected = in_array($tag['id'], $selectedTags) ? 'selected' : '';
+                ?>
+                <option value="<?php echo $tag['id']; ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($tag['name']); ?></option>
+                <?php endwhile; ?>
+            </select>
+            <div class="form-text">按住Ctrl键可选择多个标签</div>
+        </div>
+        <div class="mb-3">
                 <label for="description" class="form-label">描述</label>
                 <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($app['description']); ?></textarea>
             </div>

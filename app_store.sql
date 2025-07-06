@@ -64,6 +64,22 @@ CREATE TABLE IF NOT EXISTS users (
     last_login TIMESTAMP NULL
 );
 
+-- 创建标签表
+CREATE TABLE IF NOT EXISTS tags (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 创建应用标签关联表
+CREATE TABLE IF NOT EXISTS app_tags (
+    app_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    PRIMARY KEY (app_id, tag_id),
+    FOREIGN KEY (app_id) REFERENCES apps(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+);
+
 -- 创建应用分类表
 CREATE TABLE IF NOT EXISTS categories (
     id INT AUTO_INCREMENT PRIMARY KEY,

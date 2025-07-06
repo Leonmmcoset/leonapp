@@ -47,6 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
         if ($stmt->execute() === TRUE) {
         $appId = $stmt->insert_id;
 
+        // 保存标签关联
+        if (!empty($_POST['tags'])) {
+            $stmt = $conn->prepare("INSERT INTO app_tags (app_id, tag_id) VALUES (?, ?)");
+            foreach ($_POST['tags'] as $tagId) {
+                $stmt->bind_param("ii", $appId, $tagId);
+                $stmt->execute();
+            }
+            $stmt->close();
+        }
+
         // 处理上传的预览图片
         if (!empty($_FILES['images']['name'][0])) {
             $uploadDir = '../images/';
@@ -145,6 +155,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
             <div class="mb-3">
                 <label for="name" class="form-label">App名称</label>
                 <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="tags" class="form-label">标签</label>
+                <select id="tags" name="tags[]" multiple class="form-control">
+                    <?php
+                    $tagResult = $conn->query("SELECT id, name FROM tags");
+                    while ($tag = $tagResult->fetch_assoc()):
+                    ?>
+                    <option value="<?php echo $tag['id']; ?>"><?php echo htmlspecialchars($tag['name']); ?></option>
+                    <?php endwhile; ?>
+                </select>
+                <small class="form-text text-muted">按住Ctrl键可选择多个标签</small>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">描述</label>

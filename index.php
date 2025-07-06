@@ -1,7 +1,10 @@
 <?php
 session_start();
 require_once 'config.php';
-?>
+
+if (!isset($conn) || !$conn instanceof mysqli) {
+    die('数据库连接失败，请检查配置文件。');
+}?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -31,23 +34,53 @@ require_once 'config.php';
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">首页</a>
+                        <a class="nav-link" href="index.php">首页</a>
                     </li>
                     <?php if (isset($_SESSION['admin'])): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="/admin/">管理</a>
                         </li>
                     <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tags.php">标签</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container mt-4">
-        <form method="get" action="index.php" class="mb-4">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="搜索应用..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                <button class="btn btn-primary" type="submit">搜索</button>
+        <form method="get" action="index.php" class="mb-4" onsubmit="return validateSearch();">
+    <script>
+    function validateSearch() {
+        const searchInput = document.querySelector('input[name="search"]');
+        if (searchInput.value.trim() === '') {
+            alert('请填写搜索名称后再进行搜索！');
+            return false;
+        }
+        return true;
+    }
+    </script>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="search" class="form-control" placeholder="搜索应用..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                </div>
+                <div class="col-md-4">
+                    <select name="tag" class="form-select">
+                        <option value="">所有标签</option>
+                        <?php
+                        $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
+                        $selectedTag = isset($_GET['tag']) ? $_GET['tag'] : '';
+                        while ($tag = $tagResult->fetch_assoc()):
+                        $selected = ($tag['id'] == $selectedTag) ? 'selected' : '';
+                        ?>
+                        <option value="<?php echo $tag['id']; ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($tag['name']); ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" type="submit">搜索</button>
+                </div>
             </div>
         </form>
         <h1>最新应用</h1>
@@ -55,26 +88,83 @@ require_once 'config.php';
             <!-- 这里将通过PHP动态加载应用列表 -->
             <?php
             $search = isset($_GET['search']) ? $_GET['search'] : '';
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 12;
+            $offset = isset($_GET['page']) ? (intval($_GET['page']) - 1) * $limit : 0;
             $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, AVG(reviews.rating) as avg_rating 
                     FROM apps 
                     LEFT JOIN reviews ON apps.id = reviews.app_id ";
             
-            if (!empty($search)) {
-                $sql .= "WHERE apps.name LIKE ? OR apps.description LIKE ? ";
+            $conditions = [];
+        $params = [];
+        $paramTypes = '';
+            
+            // 标签筛选
+              if (!empty($_GET['tag'])) {
+                  $sql .= "JOIN app_tags ON apps.id = app_tags.app_id 
+                            JOIN tags ON app_tags.tag_id = tags.id ";
+                  $conditions[] = "app_tags.tag_id = ?";
+                  $tagId = $_GET['tag'];
+                  $params[] = &$tagId;
+                  $paramTypes .= 'i';
+              }
+
+              // 平台筛选
+              if (!empty($_GET['platform'])) {
+                  $conditions[] = "apps.platform = ?";
+                  $platform = $_GET['platform'];
+                  $params[] = &$platform;
+                  $paramTypes .= 's';
+              }
+
+              // 年龄分级筛选
+              if (!empty($_GET['age_rating'])) {
+                  $conditions[] = "apps.age_rating = ?";
+                  $ageRating = $_GET['age_rating'];
+                  $params[] = &$ageRating;
+                  $paramTypes .= 's';
+              }
+
+              // 搜索关键词筛选
+        if (!empty($search)) {
+            $conditions[] = "(apps.name LIKE ? OR apps.description LIKE ?)";
+            $searchTerm1 = "%$search%";
+            $searchTerm2 = "%$search%";
+            $params[] = &$searchTerm1;
+            $params[] = &$searchTerm2;
+            $paramTypes .= 'ss';
+        }
+            
+            // 添加条件
+            if (!empty($conditions)) {
+                $sql .= "WHERE " . implode(" AND ", $conditions);
             }
             
             $sql .= "GROUP BY apps.id 
                      ORDER BY apps.created_at DESC 
-                     LIMIT 12";
-                     
-            if (!empty($search)) {
+                     LIMIT ? OFFSET ?";
+            $limitVal = $limit;
+            $offsetVal = $offset;
+            $params[] = &$limitVal;
+            $params[] = &$offsetVal;
+            // 添加分页参数类型
+              $paramTypes .= 'ii';
+                      
+            // 执行查询
+            if (!empty($params)) {
                 $stmt = $conn->prepare($sql);
-                $searchTerm = "%$search%";
-                $stmt->bind_param("ss", $searchTerm, $searchTerm);
-                $stmt->execute();
+                if (!$stmt) {
+                    die('预处理语句失败: ' . $conn->error);
+                }
+                call_user_func_array([$stmt, 'bind_param'], array_merge([$paramTypes], $params));
+                if (!$stmt->execute()) {
+                    die('执行语句失败: ' . $stmt->error);
+                }
                 $result = $stmt->get_result();
             } else {
                 $result = $conn->query($sql);
+                if (!$result) {
+                    die('查询失败: ' . $conn->error);
+                }
             }
 
             if ($result->num_rows > 0) {
