@@ -80,9 +80,9 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
             </div>
             <div class="card-body">
                 <form method="post">
-                    <div class="mb-3">
-                        <label for="tag_name" class="form-label">标签名称</label>
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="tag_name" name="tag_name" required>
+                        <label for="tag_name">标签名称</label>
                     </div>
                     <button type="submit" name="add_tag" class="btn btn-primary">添加标签</button>
                 </form>
@@ -130,9 +130,9 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
                                     <div class="modal-body">
                                         <form method="post">
                                             <input type="hidden" name="tag_id" value="<?php echo $tag['id']; ?>">
-                                            <div class="mb-3">
-                                                <label for="edit_tag_name<?php echo $tag['id']; ?>" class="form-label">标签名称</label>
+                                            <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="edit_tag_name<?php echo $tag['id']; ?>" name="tag_name" value="<?php echo htmlspecialchars($tag['name']); ?>" required>
+                                                <label for="edit_tag_name<?php echo $tag['id']; ?>">标签名称</label>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>

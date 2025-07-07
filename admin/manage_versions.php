@@ -285,14 +285,14 @@ if (isset($_GET['success'])) {
                                 <form method="post" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <input type="hidden" name="version_id" value="<?php echo $version['id']; ?>">
-                                        <div class="mb-3">
-                                            <label for="version_<?php echo $version['id']; ?>" class="form-label">版本号</label>
-                                            <input type="text" class="form-control" id="version_<?php echo $version['id']; ?>" name="version" value="<?php echo htmlspecialchars($version['version']); ?>" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="changelog_<?php echo $version['id']; ?>" class="form-label">更新日志</label>
-                                            <textarea class="form-control" id="changelog_<?php echo $version['id']; ?>" name="changelog" rows="3" required><?php echo htmlspecialchars($version['changelog']); ?></textarea>
-                                        </div>
+                                        <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="version_<?php echo $version['id']; ?>" name="version" value="<?php echo htmlspecialchars($version['version']); ?>" required>
+                <label for="version_<?php echo $version['id']; ?>">版本号</label>
+            </div>
+                                        <div class="form-floating mb-3">
+                <textarea class="form-control" id="changelog_<?php echo $version['id']; ?>" name="changelog" rows="3" required><?php echo htmlspecialchars($version['changelog']); ?></textarea>
+                <label for="changelog_<?php echo $version['id']; ?>">更新日志</label>
+            </div>
                                         <div class="mb-3">
                                             <label for="new_app_file_<?php echo $version['id']; ?>" class="form-label">更新App文件 (可选)</label>
                                             <input class="form-control" type="file" id="new_app_file_<?php echo $version['id']; ?>" name="new_app_file">
@@ -322,14 +322,14 @@ if (isset($_GET['success'])) {
                 </div>
                 <form method="post" enctype="multipart/form-data">
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="version" class="form-label">版本号</label>
-                            <input type="text" class="form-control" id="version" name="version" placeholder="如: 1.0.0" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="changelog" class="form-label">更新日志</label>
-                            <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="描述本次更新内容" required></textarea>
-                        </div>
+                        <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="version" name="version" placeholder="如: 1.0.0" required>
+                <label for="version">版本号</label>
+            </div>
+                        <div class="form-floating mb-3">
+                <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="描述本次更新内容" required></textarea>
+                <label for="changelog">更新日志</label>
+            </div>
                         <div class="mb-3">
                             <label for="app_file" class="form-label">App文件</label>
                             <input class="form-control" type="file" id="app_file" name="app_file" required>

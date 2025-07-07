@@ -123,7 +123,10 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
         <form method="get" action="tags.php" class="mb-4">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <input type="text" name="search" class="form-control" placeholder="搜索应用..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <div class="form-floating">
+                        <input type="text" name="search" class="form-control" id="searchInput" placeholder="搜索应用..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                        <label for="searchInput">搜索应用...</label>
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-primary w-100" type="submit">搜索</button>

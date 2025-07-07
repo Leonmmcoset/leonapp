@@ -183,9 +183,9 @@ if (!($conn instanceof mysqli)) {
                                 <form method="post">
                                     <div class="modal-body">
                                         <input type="hidden" name="app_id" value="<?php echo $app['id']; ?>">
-                                        <div class="mb-3">
-                                            <label for="rejection_reason<?php echo $app['id']; ?>" class="form-label">拒绝原因</label>
+                                        <div class="form-floating mb-3">
                                             <textarea class="form-control" id="rejection_reason<?php echo $app['id']; ?>" name="rejection_reason" rows="3" required></textarea>
+                                            <label for="rejection_reason<?php echo $app['id']; ?>">拒绝原因</label>
                                             <div class="form-text">请详细说明拒绝原因，帮助开发者改进应用</div>
                                         </div>
                                     </div>

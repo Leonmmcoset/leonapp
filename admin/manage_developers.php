@@ -227,14 +227,14 @@ if (!$stmt) {
                 <div class="card-body">
                     <form method="post" action="manage_developers.php">
                         <input type="hidden" name="user_id" value="<?php echo $editUser['id']; ?>">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">用户名</label>
-                            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($editUser['username']); ?>" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">邮箱</label>
-                            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email']); ?>" class="form-control" required>
-                        </div>
+                        <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($editUser['username']); ?>" required>
+                <label for="username">用户名</label>
+            </div>
+                        <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email']); ?>" required>
+                <label for="email">邮箱</label>
+            </div>
                         <button type="submit" name="update_user" class="btn btn-primary me-2">更新用户</button>
                         <a href="manage_developers.php" class="btn btn-secondary">取消</a>
                     </form>

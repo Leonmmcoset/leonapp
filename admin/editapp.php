@@ -162,9 +162,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
 
         <h2>编辑App: <?php echo htmlspecialchars($app['name']); ?></h2>
         <form method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="name" class="form-label">App名称</label>
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($app['name']); ?>" required>
+                <label for="name">App名称</label>
             </div>
         <div class="mb-3">
             <label for="tags" class="form-label">标签</label>
@@ -188,9 +188,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
             </select>
             <div class="form-text">按住Ctrl键可选择多个标签</div>
         </div>
-        <div class="mb-3">
-                <label for="description" class="form-label">描述</label>
+        <div class="form-floating mb-3">
                 <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($app['description']); ?></textarea>
+                <label for="description">描述</label>
             </div>
             <div class="mb-3">
                 <label for="age_rating" class="form-label">年龄分级</label>
@@ -275,14 +275,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
                     </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="version" class="form-label">新版本号</label>
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="version" name="version" placeholder="如: 1.0.1">
+                <label for="version">新版本号</label>
                 <div class="form-text">仅在上传新安装包时填写</div>
             </div>
-            <div class="mb-3">
-                <label for="changelog" class="form-label">更新日志</label>
+            <div class="form-floating mb-3">
                 <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="描述本次更新内容"></textarea>
+                <label for="changelog">更新日志</label>
             </div>
             <div class="mb-3">
                 <label for="app_file" class="form-label">新App文件 (可选)</label>

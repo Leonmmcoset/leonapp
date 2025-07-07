@@ -105,17 +105,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-danger" role="alert"><?php echo $error; ?></div>
         <?php endif; ?>
         <form method="post">
-            <div class="mb-3">
-                <label for="username" class="form-label">用户名</label>
-                <input type="text" id="username" name="username" class="form-control" required>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" name="username" required>
+                <label for="username">用户名</label>
             </div>
-            <div class="form-group">
-                <label for="email" class="form-label">邮箱</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" name="email" required>
+                <label for="email">邮箱</label>
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">密码</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" name="password" required>
+                <label for="password">密码</label>
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="agree" name="agree" required>
