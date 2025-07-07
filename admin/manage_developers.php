@@ -1,5 +1,51 @@
 <?php
 require_once '../config.php';
+
+session_start();
+// 检查管理员登录状态
+if (!isset($_SESSION['admin'])) {
+    header('Location: login.php');
+    exit;
+}
+
+// 处理退出登录
+if (isset($_GET['logout'])) {
+    unset($_SESSION['admin']);
+    header('Location: login.php');
+    exit;
+}
+
+// 导航栏
+?>
+<nav class="navbar navbar-expand-lg navbar-light blur-bg">
+    <div class="container mt-4">
+        <a class="navbar-brand" href="../index.php"><?php echo APP_STORE_NAME; ?></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">App列表</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="addapp.php">添加App</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="review_apps.php">审核APP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="manage_developers.php">管理开发者</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?logout=true">退出登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<?php
 // 检查管理员权限
   // 设置会话cookie路径为根目录以确保跨目录访问
   session_set_cookie_params(0, '/');
@@ -129,82 +175,34 @@ if (!$stmt) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理开发者用户 - 应用商店管理</title>
+    <!-- Bootstrap CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
+    <!-- Fluent Design 模糊效果 -->
     <style>
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        .user-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .user-table th, .user-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .user-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .action-btn {
-            padding: 6px 12px;
-            margin: 0 5px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .edit-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-        }
-        .edit-form {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .submit-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .message {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-        .success {
-            background-color: #dff0d8;
-            color: #3c763d;
-        }
+
     </style>
 </head>
 <body>
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 10) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+</script>
     <div class="container">
         <h1>管理开发者用户</h1>
 <pre>调试信息:
@@ -214,33 +212,37 @@ if (!$stmt) {
 开发者数据: <?php print_r($developers); ?></pre>
         
         <?php if (isset($_GET['deleted'])): ?>
-            <div class="message success">用户已成功删除</div>
+            <div class="alert alert-success">用户已成功删除</div>
         <?php endif; ?>
         
         <?php if (isset($_GET['updated'])): ?>
-            <div class="message success">用户信息已成功更新</div>
+            <div class="alert alert-success">用户信息已成功更新</div>
         <?php endif; ?>
         
         <?php if ($editUser): ?>
-            <div class="edit-form">
-                <h2>编辑开发者用户</h2>
-                <form method="post" action="manage_developers.php">
-                    <input type="hidden" name="user_id" value="<?php echo $editUser['id']; ?>">
-                    <div class="form-group">
-                        <label for="username">用户名</label>
-                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($editUser['username']); ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">邮箱</label>
-                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email']); ?>" required>
-                    </div>
-                    <button type="submit" name="update_user" class="submit-btn">更新用户</button>
-                    <a href="manage_developers.php" class="action-btn">取消</a>
-                </form>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>编辑开发者用户</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="manage_developers.php">
+                        <input type="hidden" name="user_id" value="<?php echo $editUser['id']; ?>">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">用户名</label>
+                            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($editUser['username']); ?>" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">邮箱</label>
+                            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email']); ?>" class="form-control" required>
+                        </div>
+                        <button type="submit" name="update_user" class="btn btn-primary me-2">更新用户</button>
+                        <a href="manage_developers.php" class="btn btn-secondary">取消</a>
+                    </form>
+                </div>
             </div>
         <?php endif; ?>
         
-        <table class="user-table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -258,17 +260,17 @@ if (!$stmt) {
                         <td><?php echo htmlspecialchars($developer['email']); ?></td>
                         <td><?php echo $developer['created_at']; ?></td>
                         <td>
-                            <a href="manage_developers.php?edit=<?php echo $developer['id']; ?>" class="action-btn edit-btn">编辑</a>
+                            <a href="manage_developers.php?edit=<?php echo $developer['id']; ?>" class="btn btn-sm btn-outline-primary">编辑</a>
                             <form method="post" action="manage_developers.php" style="display: inline-block;" onsubmit="return confirm('确定要删除这个用户吗？');">
                                 <input type="hidden" name="user_id" value="<?php echo $developer['id']; ?>">
-                                <button type="submit" name="delete_user" class="action-btn delete-btn">删除</button>
+                                <button type="submit" name="delete_user" class="btn btn-sm btn-outline-danger">删除</button>
                             </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
                 <?php if (empty($developers)): ?>
                     <tr>
-                        <td colspan="5" style="text-align: center;">查询到<?php echo $result->num_rows; ?>条记录，数据: <?php print_r($developers); ?></td>
+                        <td colspan="5" class="text-center">暂无开发者数据</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
