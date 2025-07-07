@@ -116,11 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                 <p>适用平台: <?php
                     $platforms = json_decode($app['platforms'], true) ?? [];
                     $platformIcons = [
-                        'Windows' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path d="M2.5 1.5v10.5h10.5V1.5H2.5zm0 12v10.5h10.5V13.5H2.5zm11 0v10.5H21.5V13.5h-8zm0-12v10.5H21.5V1.5h-8z" fill="currentColor"/></svg>',
-                        'Mac' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path d="M20 18.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-16 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm14.5-17A2.5 2.5 0 0 1 23 4.5v13a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 5 17.5V4.5A2.5 2.5 0 0 1 7.5 2h13zm-13 15A1.5 1.5 0 0 0 6 17.5v9h12v-9a1.5 1.5 0 0 0-1.5-1.5h-9z" fill="currentColor"/></svg>',
-                        'Linux' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 0 1-5.66-2.34l1.41-1.41A6 6 0 0 0 12 18a6 6 0 0 0 4.24-1.76l1.41 1.41A8 8 0 0 1 12 20zm0-14a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm0 4a2 2 0 1 1 2 2 2 2 0 0 1-2-2z" fill="currentColor"/></svg>',
-                        'Android' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path d="M19.92 13.93a1 1 0 0 0-.84-.53h-.67a1 1 0 0 0-.93.62l-1.26 2.71a14.2 14.2 0 0 1-4.74 0l-1.26-2.71a1 1 0 0 0-.93-.62h-.67a1 1 0 0 0-.84.53l-1.6 3.46a1 1 0 0 0 .84 1.41h1.62a1 1 0 0 0 .93-.62l1.26-2.71a12.24 12.24 0 0 0 3.7 0l1.26 2.71a1 1 0 0 0 .93.62h1.62a1 1 0 0 0 .84-1.41zM7.5 10.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm9 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4.5 4.5v-3a1 1 0 0 0-1-1h-1.5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1H20a1 1 0 0 0 1-1zm-18 0v-3a1 1 0 0 1 1-1H5a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" fill="currentColor"/></svg>',
-                        'iOS' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path d="M15.5 2h-7A3.5 3.5 0 0 0 5 5.5v13A3.5 3.5 0 0 0 8.5 22h7A3.5 3.5 0 0 0 19 18.5v-13A3.5 3.5 0 0 0 15.5 2zm-7 1A1.5 1.5 0 0 1 10 4.5v13A1.5 1.5 0 0 1 8.5 19h-1A1.5 1.5 0 0 1 6 17.5v-13A1.5 1.5 0 0 1 7.5 3zm7 1A1.5 1.5 0 0 1 17 4.5v13a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 13 17.5v-13A1.5 1.5 0 0 1 14.5 3zm-3.5 11a1 1 0 0 1 1-1h1a1 1 0 0 1 0 2h-1a1 1 0 0 1-1-1zm0-4a1 1 0 0 1 1-1h1a1 1 0 0 1 0 2h-1a1 1 0 0 1-1-1z" fill="currentColor"/></svg>'
+                        'Windows' => '<i class="fab fa-windows"></i>',
+                        'Mac' => '<i class="fab fa-apple"></i>',
+                        'Linux' => '<i class="fab fa-linux"></i>',
+                        'Android' => '<i class="fab fa-android"></i>',
+                        'iOS' => '<i class="fab fa-app-store-ios"></i>'
                     ];
                     $platformMap = [
                         'android' => 'Android',
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                     
                     $platformTexts = [];
                     foreach ($platforms as $platform) {
-                        $icon = $platformIcons[$platform] ?? $platformIcons[ucfirst($platform)] ?? '';
+                        $icon = $platformIcons[ucfirst($platform)] ?? '';
                         $readableName = $platformMap[strtolower($platform)] ?? ucfirst($platform);
                         $platformTexts[] = $icon . ' ' . $readableName;
                     }
