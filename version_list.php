@@ -58,9 +58,24 @@ while ($row = $result->fetch_assoc()) {
             background-color: #0b5ed7;
             border-color: #0a58ca;
         }
+        
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
@@ -82,6 +97,10 @@ while ($row = $result->fetch_assoc()) {
     </nav>
 
     <div class="container mt-4">
+        <div class="mb-3 form-floating">
+            <input type="text" class="form-control" id="searchVersion" placeholder="搜索版本">
+            <label for="searchVersion">搜索版本</label>
+        </div>
         <div class="row mb-4">
             <div class="col">
                 <h1><?php echo htmlspecialchars($app['name']); ?> - 版本历史</h1>
@@ -122,6 +141,11 @@ while ($row = $result->fetch_assoc()) {
             } else {
                 navbar.classList.remove('scrolled');
             }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('page-transition');
         });
     </script>
 </body>

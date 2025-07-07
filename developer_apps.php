@@ -49,9 +49,24 @@ $resultApps = $conn->query($sqlApps);
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
         }
+        
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
@@ -75,6 +90,10 @@ $resultApps = $conn->query($sqlApps);
     </nav>
 
     <div class="container mt-4">
+        <div class="mb-3 form-floating">
+            <input type="text" class="form-control" id="searchApp" placeholder="搜索应用">
+            <label for="searchApp">搜索应用</label>
+        </div>
         <h1><?php echo $developerName; ?> 的应用</h1>
         <hr>
 
@@ -113,5 +132,10 @@ $resultApps = $conn->query($sqlApps);
     </div>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('page-transition');
+        });
+    </script>
 </body>
 </html>

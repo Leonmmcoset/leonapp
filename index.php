@@ -6,6 +6,22 @@ if (!isset($conn) || !$conn instanceof mysqli) {
     die('数据库连接失败，请检查配置文件。');
 }?>
 <!DOCTYPE html>
+<style>
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +40,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
         }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
@@ -82,10 +98,14 @@ if (!isset($conn) || !$conn instanceof mysqli) {
     </script>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <input type="text" name="search" class="form-control" placeholder="搜索应用..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <div class="form-floating">
+                    <input type="text" name="search" class="form-control" id="searchInput" placeholder="搜索应用..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <label for="searchInput">搜索应用</label>
+                </div>
                 </div>
                 <div class="col-md-4">
-                    <select name="tag" class="form-select">
+                    <div class="form-floating">
+                    <select name="tag" class="form-select" id="tagSelect">
                         <option value="">所有标签</option>
                         <?php
                         $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
@@ -96,6 +116,8 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                         <option value="<?php echo $tag['id']; ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($tag['name']); ?></option>
                         <?php endwhile; ?>
                     </select>
+                    <label for="tagSelect">选择标签</label>
+                </div>
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-primary w-100" type="submit">搜索</button>
@@ -306,6 +328,11 @@ if (!isset($conn) || !$conn instanceof mysqli) {
             } else {
                 navbar.classList.remove('scrolled');
             }
+        });
+    </script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('page-transition');
         });
     </script>
 </body>
