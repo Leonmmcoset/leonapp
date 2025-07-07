@@ -12,9 +12,10 @@ if (!isset($conn) || !$conn instanceof mysqli) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {
@@ -68,7 +69,12 @@ if (!isset($conn) || !$conn instanceof mysqli) {
     function validateSearch() {
         const searchInput = document.querySelector('input[name="search"]');
         if (searchInput.value.trim() === '') {
-            alert('请填写搜索名称后再进行搜索！');
+            Swal.fire({
+                title: '提示',
+                text: '请填写搜索名称后再进行搜索！',
+                icon: 'warning',
+                confirmButtonText: '确定'
+            });
             return false;
         }
         return true;
@@ -96,6 +102,93 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                 </div>
             </div>
         </form>
+        <?php if (isset($_SESSION['user_id'])): ?>
+        <h1>为你推荐</h1>
+        <div class="row">
+            <?php
+            // 获取用户下载过的应用标签
+            $userId = $_SESSION['user_id'];
+            $tagSql = "SELECT DISTINCT t.id FROM tags t
+                       JOIN app_tags at ON t.id = at.tag_id
+                       JOIN app_versions av ON at.app_id = av.app_id
+                       JOIN download_history dh ON av.id = dh.version_id
+                       WHERE dh.user_id = ?";
+            $tagStmt = $conn->prepare($tagSql);
+            $tagStmt->bind_param('i', $userId);
+            $tagStmt->execute();
+            $tagResult = $tagStmt->get_result();
+            $tagIds = [];
+            while ($tag = $tagResult->fetch_assoc()) {
+                $tagIds[] = $tag['id'];
+            }
+            $tagStmt->close();
+
+            // 获取用户已下载的应用
+            $downloadedSql = "SELECT DISTINCT a.id FROM apps a
+                              JOIN app_versions av ON a.id = av.app_id
+                              JOIN download_history dh ON av.id = dh.version_id
+                              WHERE dh.user_id = ?";
+            $downloadedStmt = $conn->prepare($downloadedSql);
+            $downloadedStmt->bind_param('i', $userId);
+            $downloadedStmt->execute();
+            $downloadedResult = $downloadedStmt->get_result();
+            $downloadedIds = [];
+            while ($app = $downloadedResult->fetch_assoc()) {
+                $downloadedIds[] = $app['id'];
+            }
+            $downloadedStmt->close();
+
+            // 基于标签推荐应用
+            if (!empty($tagIds)) {
+                $placeholders = implode(',', array_fill(0, count($tagIds), '?'));
+                $recommendSql = "SELECT a.id, a.name, a.description, a.age_rating, AVG(r.rating) as avg_rating
+                                FROM apps a
+                                LEFT JOIN reviews r ON a.id = r.app_id
+                                JOIN app_tags at ON a.id = at.app_id
+                                WHERE at.tag_id IN ($placeholders)
+                                AND a.id NOT IN (" . (!empty($downloadedIds) ? implode(',', $downloadedIds) : '0') . ")
+                                AND a.status = 'approved'
+                                GROUP BY a.id
+                                ORDER BY COUNT(at.tag_id) DESC
+                                LIMIT 12";
+                $recommendStmt = $conn->prepare($recommendSql);
+                $types = str_repeat('i', count($tagIds));
+                $recommendStmt->bind_param($types, ...$tagIds);
+                $recommendStmt->execute();
+                $recommendResult = $recommendStmt->get_result();
+            } else {
+                // 如果没有标签数据，显示热门应用
+                $recommendSql = "SELECT a.id, a.name, a.description, a.age_rating, AVG(r.rating) as avg_rating, SUM(av.download_count) as total_downloads
+                                FROM apps a
+                                LEFT JOIN reviews r ON a.id = r.app_id
+                                LEFT JOIN app_versions av ON a.id = av.app_id
+                                WHERE a.status = 'approved'
+                                GROUP BY a.id
+                                ORDER BY total_downloads DESC
+                                LIMIT 12";
+                $recommendResult = $conn->query($recommendSql);
+            }
+
+            if ($recommendResult && $recommendResult->num_rows > 0) {
+                while ($row = $recommendResult->fetch_assoc()) {
+                    echo '<div class="col-md-3 mb-4">';
+                    echo '<div class="card blur-bg">';
+                    echo '<img src="images/default.png" class="card-img-top" alt="'. htmlspecialchars($row['name']) . '">';
+                    echo '<div class="card-body">';
+                    echo '<h5 class="card-title">'. htmlspecialchars($row['name']) . '</h5>';
+                    echo '<p class="card-text">'. substr(htmlspecialchars($row['description']), 0, 100) . '...</p>';
+                    echo '<p class="card-text">评分: '. round($row['avg_rating'] ?? 0, 1) . '/5</p>';
+                    echo '<a href="app.php?id='. $row['id'] . '" class="btn btn-primary">查看详情</a>';
+                    echo '</div></div></div>';
+                }
+            } else {
+                echo '<div class="col-12"><p class="text-center">暂无推荐内容</p></div>';
+            }
+            if (isset($recommendStmt)) $recommendStmt->close();
+            ?>
+        </div>
+        <?php endif; ?>
+
         <h1>最新应用</h1>
         <div class="row">
             <!-- 这里将通过PHP动态加载应用列表 -->

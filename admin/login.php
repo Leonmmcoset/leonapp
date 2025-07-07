@@ -25,7 +25,7 @@ if (!isset($_SESSION['admin'])) {
     echo '    <meta name="viewport" content="width=device-width, initial-scale=1.0">';
     echo '    <title>管理员登录 - '. APP_STORE_NAME . '</title>';
     echo '    <!-- Bootstrap CSS -->';
-    echo '    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">';
+    echo '    <link href="../css/bootstrap.min.css" rel="stylesheet">';
     echo '    <!-- 自定义CSS -->';
     echo '    <link rel="stylesheet" href="../styles.css">';
     echo '    <!-- Fluent Design 模糊效果 -->';

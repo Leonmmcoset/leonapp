@@ -195,9 +195,10 @@ if (!($conn instanceof mysqli)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>上传应用 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {
@@ -302,7 +303,12 @@ if (!($conn instanceof mysqli)) {
                     const file = this.files[0];
                     const ext = file.name.split('.').pop().toLowerCase();
                     if (file.size > 100 * 1024 * 1024) { // 100MB限制
-                        alert('文件大小不能超过100MB');
+                        Swal.fire({
+                title: '提示',
+                text: '文件大小不能超过100MB',
+                icon: 'warning',
+                confirmButtonText: '确定'
+            });
                         this.value = '';
                     }
                 }
@@ -313,7 +319,12 @@ if (!($conn instanceof mysqli)) {
                     for (let i = 0; i < this.files.length; i++) {
                         const file = this.files[i];
                         if (file.size > 10 * 1024 * 1024) { // 10MB限制
-                            alert(`图片 ${file.name} 大小不能超过10MB`);
+                            Swal.fire({
+                title: '提示',
+                text: `图片 ${file.name} 大小不能超过10MB`,
+                icon: 'warning',
+                confirmButtonText: '确定'
+            });
                             this.value = '';
                             return;
                         }

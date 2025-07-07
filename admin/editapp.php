@@ -113,9 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>编辑App - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {
@@ -352,14 +353,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
             // 验证Windows子选项
             if (document.getElementById('windows').checked && !document.querySelector('input[name="windows_version"]:checked')) {
                 e.preventDefault();
-                alert('请选择Windows版本（XP以前或Win7以后）');
+                Swal.fire({
+                title: '提示',
+                text: '请选择Windows版本（XP以前或Win7以后）',
+                icon: 'warning',
+                confirmButtonText: '确定'
+            });
                 return;
             }
 
             // 验证Linux子选项
             if (document.getElementById('linux').checked && !document.querySelector('input[name="linux_distribution"]:checked')) {
                 e.preventDefault();
-                alert('请选择Linux发行版（Ubuntu、Arch Linux或CentOS）');
+                Swal.fire({
+                title: '提示',
+                text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
+                icon: 'warning',
+                confirmButtonText: '确定'
+            });
                 return;
             }
 
