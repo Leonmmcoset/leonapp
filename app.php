@@ -217,62 +217,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                         const ctx = document.getElementById('ratingChart').getContext('2d');
                         new Chart(ctx).Bar({
                             labels: ['5星', '4星', '3星', '2星', '1星'],
-                            datasets: [{
-                                label: '评分数量',
-                                fillColor: 'rgba(75, 192, 192, 0.6)',
-                                strokeColor: 'rgba(75, 192, 192, 1)',
-                                highlightFill: 'rgba(75, 192, 192, 0.8)',
-                                highlightStroke: 'rgba(75, 192, 192, 1)',
-                                data: [
-                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[1] ?? 0; ?>
-                                ]
-                            },
-                            {
-                                label: '评分数量',
-                                fillColor: 'rgba(153, 102, 255, 0.6)',
-                                strokeColor: 'rgba(153, 102, 255, 1)',
-                                highlightFill: 'rgba(153, 102, 255, 0.8)',
-                                highlightStroke: 'rgba(153, 102, 255, 1)',
-                                data: [
-                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[1] ?? 0; ?>
-                                ]
-                            },
-                            {
-                                label: '评分数量',
-                                fillColor: 'rgba(255, 206, 86, 0.6)',
-                                strokeColor: 'rgba(255, 206, 86, 1)',
-                                highlightFill: 'rgba(255, 206, 86, 0.8)',
-                                highlightStroke: 'rgba(255, 206, 86, 1)',
-                                data: [
-                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[1] ?? 0; ?>
-                                ]
-                            },
-                            {
-                                label: '评分数量',
-                                fillColor: 'rgba(255, 99, 132, 0.6)',
-                                strokeColor: 'rgba(255, 99, 132, 1)',
-                                highlightFill: 'rgba(255, 99, 132, 0.8)',
-                                highlightStroke: 'rgba(255, 99, 132, 1)',
-                                data: [
-                                    <?php echo $ratingDistribution[5] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[4] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[3] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[2] ?? 0; ?>,
-                                    <?php echo $ratingDistribution[1] ?? 0; ?>
-                                ]
-                            },
+                            datasets: [
+                            // {
+                            //     label: '评分数量',
+                            //     fillColor: 'rgba(75, 192, 192, 0.6)',
+                            //     strokeColor: 'rgba(75, 192, 192, 1)',
+                            //     highlightFill: 'rgba(75, 192, 192, 0.8)',
+                            //     highlightStroke: 'rgba(75, 192, 192, 1)',
+                            //     data: [
+                            //         <?php echo $ratingDistribution[5] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[4] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[3] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[2] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[1] ?? 0; ?>
+                            //     ]
+                            // },
+                            // {
+                            //     label: '评分数量',
+                            //     fillColor: 'rgba(153, 102, 255, 0.6)',
+                            //     strokeColor: 'rgba(153, 102, 255, 1)',
+                            //     highlightFill: 'rgba(153, 102, 255, 0.8)',
+                            //     highlightStroke: 'rgba(153, 102, 255, 1)',
+                            //     data: [
+                            //         <?php echo $ratingDistribution[5] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[4] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[3] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[2] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[1] ?? 0; ?>
+                            //     ]
+                            // },
+                            // {
+                            //     label: '评分数量',
+                            //     fillColor: 'rgba(255, 206, 86, 0.6)',
+                            //     strokeColor: 'rgba(255, 206, 86, 1)',
+                            //     highlightFill: 'rgba(255, 206, 86, 0.8)',
+                            //     highlightStroke: 'rgba(255, 206, 86, 1)',
+                            //     data: [
+                            //         <?php echo $ratingDistribution[5] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[4] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[3] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[2] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[1] ?? 0; ?>
+                            //     ]
+                            // },
+                            // {
+                            //     label: '评分数量',
+                            //     fillColor: 'rgba(255, 99, 132, 0.6)',
+                            //     strokeColor: 'rgba(255, 99, 132, 1)',
+                            //     highlightFill: 'rgba(255, 99, 132, 0.8)',
+                            //     highlightStroke: 'rgba(255, 99, 132, 1)',
+                            //     data: [
+                            //         <?php echo $ratingDistribution[5] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[4] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[3] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[2] ?? 0; ?>,
+                            //         <?php echo $ratingDistribution[1] ?? 0; ?>
+                            //     ]
+                            // },
                             {
                                 label: '评分数量',
                                 fillColor: 'rgba(54, 162, 235, 0.6)',
@@ -286,9 +287,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                                     <?php echo $ratingDistribution[2] ?? 0; ?>,
                                     <?php echo $ratingDistribution[1] ?? 0; ?>
                                 ]
-                            }]
+                            }
+                        ]
                         }, {
-                            scaleBeginAtZero: true
+                            scaleBeginAtZero: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
                         });
                     </script>
                 </div>
