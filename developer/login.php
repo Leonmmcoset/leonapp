@@ -54,89 +54,38 @@ if (!($conn instanceof mysqli)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发者登录</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        h2 {
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        .error {
-            color: red;
-            margin-bottom: 10px;
-        }
-        .success {
-            color: green;
-            margin-bottom: 10px;
-        }
-        .register-link {
-            text-align: center;
-            margin-top: 10px;
+            padding: 20px 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container mt-5 col-md-4">
         <h2>开发者登录</h2>
         <?php if (isset($success)): ?>
-            <div class="success"><?php echo $success; ?></div>
+            <div class="alert alert-success" role="alert"><?php echo $success; ?></div>
         <?php endif; ?>
         <?php if (!empty($error)): ?>
-            <div class="error"><?php echo $error; ?></div>
+            <div class="alert alert-danger" role="alert"><?php echo $error; ?></div>
         <?php endif; ?>
         <form method="post">
-            <div class="form-group">
-                <label for="email">邮箱</label>
-                <input type="email" id="email" name="email" required>
+            <div class="mb-3">
+                <label for="email" class="form-label">邮箱</label>
+                <input type="email" id="email" name="email" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password" class="form-label">密码</label>
+                <input type="password" id="password" name="password" class="form-control" required>
             </div>
-            <input type="submit" value="登录">
+            <button type="submit" class="btn btn-primary w-100">登录</button>
         </form>
-        <div class="register-link">
-            还没有账号？<a href="register.php">注册</a>
+        <div class="text-center mt-3">
+            还没有账号？<a href="register.php" class="text-decoration-none">注册</a>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
