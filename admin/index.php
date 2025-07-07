@@ -16,7 +16,7 @@ if (isset($_GET['logout'])) {
 }
 
 // 获取App列表
-$sqlApps = "SELECT * FROM apps ORDER BY created_at DESC";
+$sqlApps = "SELECT * FROM apps WHERE status = 'approved' ORDER BY created_at DESC";
 $resultApps = $conn->query($sqlApps);
 
 if (!$resultApps) {
@@ -56,7 +56,13 @@ if (!$resultApps) {
                         <a class="nav-link active" aria-current="page" href="index.php">App列表</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="addapp.php">添加App</a>
+                    <a class="nav-link" href="addapp.php">添加App</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="review_apps.php">审核APP</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="manage_developers.php">管理开发者</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="?logout=true">退出登录</a>

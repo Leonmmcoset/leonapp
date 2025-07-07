@@ -41,9 +41,22 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                             <a class="nav-link" href="/admin/">管理</a>
                         </li>
                     <?php endif; ?>
+</li>
                     <li class="nav-item">
                         <a class="nav-link" href="tags.php">标签</a>
                     </li>
+                    <?php if (isset($_SESSION['developer_id'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="developer/dashboard.php">进入面板</a>
+                    </li>
+                    <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="developer/register.php">开发者注册</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="developer/login.php">开发者登录</a>
+                    </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
@@ -133,6 +146,9 @@ if (!isset($conn) || !$conn instanceof mysqli) {
             $params[] = &$searchTerm2;
             $paramTypes .= 'ss';
         }
+            
+            // 只显示已审核通过的应用
+            $conditions[] = "apps.status = 'approved'";
             
             // 添加条件
             if (!empty($conditions)) {

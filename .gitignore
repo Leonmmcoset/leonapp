@@ -1,0 +1,15 @@
+# 忽略上传的应用文件
+uploads/
+
+# 忽略文件目录
+files/
+
+# 忽略图片目录
+images/
+
+# 忽略日志文件
+logs/
+
+# 忽略Windows系统文件
+Thumbs.db
+.DS_Store

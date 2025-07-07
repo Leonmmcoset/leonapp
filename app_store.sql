@@ -11,7 +11,10 @@ CREATE TABLE IF NOT EXISTS apps (
     age_rating_description TEXT,
     platforms JSON NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    version VARCHAR(20) NOT NULL,
+    changelog TEXT NOT NULL,
+    file_path VARCHAR(255) NOT NULL
 );
 
 -- 创建APP版本表
@@ -164,6 +167,41 @@ CREATE TABLE IF NOT EXISTS user_favorites (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (app_id) REFERENCES apps(id) ON DELETE CASCADE
 );
+
+-- 创建开发者表
+CREATE TABLE IF NOT EXISTS developers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 修改 apps 表，添加 developer_id 和 status 字段
+SET @exist_developer_id = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'apps' AND COLUMN_NAME = 'developer_id');
+SET @sql = IF(@exist_developer_id = 0, 'ALTER TABLE apps ADD COLUMN developer_id INT', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @exist_status = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'apps' AND COLUMN_NAME = 'status');
+SET @sql = IF(@exist_status = 0, 'ALTER TABLE apps ADD COLUMN status ENUM(''pending'', ''approved'', ''rejected'') DEFAULT ''pending''', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+-- 添加应用拒绝原因字段
+SET @exist_rejection_reason = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'apps' AND COLUMN_NAME = 'rejection_reason');
+SET @sql = IF(@exist_rejection_reason = 0, 'ALTER TABLE apps ADD COLUMN rejection_reason TEXT NULL', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @exist_fk = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'apps' AND COLUMN_NAME = 'developer_id' AND CONSTRAINT_NAME = 'fk_apps_developers');
+SET @sql = IF(@exist_fk = 0, 'ALTER TABLE apps ADD CONSTRAINT fk_apps_developers FOREIGN KEY (developer_id) REFERENCES developers(id) ON DELETE SET NULL', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 -- 创建应用推荐表
 CREATE TABLE IF NOT EXISTS app_recommendations (

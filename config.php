@@ -15,10 +15,25 @@ define('ADMIN_PASSWORD', '123456');
 // 数据库连接
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 if ($conn->connect_error) {
-    die('数据库连接失败: ' . $conn->connect_error);
+    $error_msg = '数据库连接失败: ' . $conn->connect_error;
+    log_error($error_msg, __FILE__, __LINE__);
+    die($error_msg);
 }
 $conn->set_charset('utf8mb4');
 
 // 设置时区
 date_default_timezone_set('Asia/Shanghai');
+
+// 错误日志记录函数
+function log_error($message, $file = '', $line = '') {
+    $log_entry = date('[Y-m-d H:i:s]') . ' Error: ' . $message;
+    if (!empty($file)) {
+        $log_entry .= ' in ' . $file;
+    }
+    if (!empty($line)) {
+        $log_entry .= ' on line ' . $line;
+    }
+    $log_entry .= "\n";
+    file_put_contents('d:\\app2\\logs\\error.log', $log_entry, FILE_APPEND);
+}
 ?>

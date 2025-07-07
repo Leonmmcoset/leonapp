@@ -1,0 +1,208 @@
+<?php
+require_once '../config.php';
+
+session_start();
+// 检查管理员登录状态
+if (!isset($_SESSION['admin'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$success = '';
+$error = '';
+
+// 处理审核操作
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['review_action'])) {
+    $appId = $_POST['app_id'];
+    $action = $_POST['review_action'];
+    $rejectionReason = $_POST['rejection_reason'] ?? '';
+
+    // 验证应用ID
+    if (!is_numeric($appId)) {
+        $error = '无效的应用ID';
+    } else {
+        // 检查数据库连接
+        if (!($conn instanceof mysqli)) {
+            log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
+            $error = '数据库连接错误，请检查配置';
+        } else {
+            // 更新应用状态
+            $status = $action === 'approve' ? 'approved' : 'rejected';
+            $stmt = $conn->prepare("UPDATE apps SET status = ?, rejection_reason = ? WHERE id = ?");
+            if (!$stmt) {
+                $error = "数据库错误: " . $conn->error;
+            } else {
+                $stmt->bind_param("ssi", $status, $rejectionReason, $appId);
+                if ($stmt->execute()) {
+                    $success = '应用审核已更新';
+                } else {
+                    $error = '更新审核状态失败: ' . $conn->error;
+                }
+                $stmt->close();
+            }
+        }
+    }
+}
+
+// 获取待审核应用列表
+$pendingApps = [];
+if (!($conn instanceof mysqli)) {
+    log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
+    $error = '数据库连接错误，请检查配置';
+} else {
+    $stmt = $conn->prepare("SELECT a.id, a.name, a.description, a.status, a.created_at 
+                           FROM apps a
+                           WHERE a.status = 'pending'
+                           ORDER BY a.created_at DESC");
+    if (!$stmt) {
+        $error = "数据库错误: " . $conn->error;
+    } else {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pendingApps = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用审核 - <?php echo APP_STORE_NAME; ?></title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 自定义CSS -->
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Fluent Design 模糊效果 -->
+    <style>
+        .blur-bg {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        .app-card {
+            transition: transform 0.2s;
+        }
+        .app-card:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light blur-bg">
+        <div class="container">
+            <a class="navbar-brand" href="../index.php"><?php echo APP_STORE_NAME; ?></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">App列表</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="addapp.php">添加App</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="review_apps.php">应用审核</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="?logout=true">退出登录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success"><?php echo $success; ?></div>
+        <?php endif; ?>
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
+        <?php endif; ?>
+
+        <h2>应用审核</h2>
+        <p class="text-muted">待审核应用: <?php echo count($pendingApps); ?></p>
+
+        <?php if (empty($pendingApps)): ?>
+            <div class="alert alert-info">没有待审核的应用</div>
+        <?php else: ?>
+            <div class="row">
+                <?php foreach ($pendingApps as $app): ?>
+                    <div class="col-md-6 mb-4">
+                        <div class="card app-card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0"><?php echo htmlspecialchars($app['name']); ?></h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><strong>开发者:</strong> <?php echo htmlspecialchars($app['username']); ?></p>
+                                <p class="card-text"><strong>提交时间:</strong> <?php echo htmlspecialchars($app['created_at']); ?></p>
+                                <p class="card-text"><strong>描述:</strong> <?php echo nl2br(htmlspecialchars($app['description'])); ?></p>
+
+                                <!-- 获取应用图片 -->
+                                <?php
+                                $images = [];
+                                $stmt = $conn->prepare("SELECT image_path FROM app_images WHERE app_id = ?");
+                                $stmt->bind_param("i", $app['id']);
+                                $stmt->execute();
+                                $imgResult = $stmt->get_result();
+                                while ($img = $imgResult->fetch_assoc()) {
+                                    $images[] = $img['image_path'];
+                                }
+                                $stmt->close();
+                                ?>
+
+                                <?php if (!empty($images)): ?>
+                                    <div class="mb-3">
+                                        <strong>预览图片:</strong><br>
+                                        <img src="<?php echo htmlspecialchars($images[0]); ?>" alt="应用截图" class="img-thumbnail" style="max-width: 200px;">
+                                    </div>
+                                <?php endif; ?>
+
+                                <form method="post" class="mt-3">
+                                    <input type="hidden" name="app_id" value="<?php echo $app['id']; ?>">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" name="review_action" value="approve" class="btn btn-success flex-grow-1">通过</button>
+                                        <button type="button" class="btn btn-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#rejectModal<?php echo $app['id']; ?>">拒绝</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 拒绝原因模态框 -->
+                    <div class="modal fade" id="rejectModal<?php echo $app['id']; ?>" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="rejectModalLabel">拒绝应用: <?php echo htmlspecialchars($app['name']); ?></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="app_id" value="<?php echo $app['id']; ?>">
+                                        <div class="mb-3">
+                                            <label for="rejection_reason<?php echo $app['id']; ?>" class="form-label">拒绝原因</label>
+                                            <textarea class="form-control" id="rejection_reason<?php echo $app['id']; ?>" name="rejection_reason" rows="3" required></textarea>
+                                            <div class="form-text">请详细说明拒绝原因，帮助开发者改进应用</div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                        <button type="submit" name="review_action" value="reject" class="btn btn-danger">确认拒绝</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <!-- Bootstrap JS with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
