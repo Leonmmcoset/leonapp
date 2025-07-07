@@ -212,6 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                 </div>
                 <div class="col-md-6">
                     <h2>评分分布</h2>
+                    <div id="ratingChartSkeleton" class="skeleton-chart"></div>
                     <canvas id="ratingChart" width="400" height="200"></canvas>
                     <script>
                         const ctx = document.getElementById('ratingChart').getContext('2d');
@@ -297,6 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                                 }
                             }
                         });
+                        document.getElementById('ratingChartSkeleton').style.display = 'none';
                     </script>
                 </div>
             <div class="col-md-6">

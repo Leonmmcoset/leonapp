@@ -135,7 +135,7 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <div class="col-md-3 mb-4">
                         <div class="card blur-bg">
-                            <img src="images/default.png" class="card-img-top" alt="<?php echo $row['name']; ?>">
+                            
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $row['name']; ?></h5>
                                 <p class="card-text"><?php echo substr($row['description'], 0, 100); ?>...</p>

@@ -90,7 +90,7 @@ $resultApps = $conn->query($sqlApps);
                             $image = $resultImage ? $resultImage->fetch_assoc() : null;
                             $imagePath = $image ? $image['image_path'] : 'default-app.png';
                             ?>
-                            <img src="<?php echo $imagePath; ?>" class="card-img-top" alt="<?php echo htmlspecialchars($app['name']); ?>">
+                            
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($app['name']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars(substr($app['description'], 0, 100)); ?>...</p>

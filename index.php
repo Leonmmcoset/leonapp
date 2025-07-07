@@ -173,7 +173,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                 while ($row = $recommendResult->fetch_assoc()) {
                     echo '<div class="col-md-3 mb-4">';
                     echo '<div class="card blur-bg">';
-                    echo '<img src="images/default.png" class="card-img-top" alt="'. htmlspecialchars($row['name']) . '">';
+                    
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">'. htmlspecialchars($row['name']) . '</h5>';
                     echo '<p class="card-text">'. substr(htmlspecialchars($row['description']), 0, 100) . '...</p>';
@@ -280,7 +280,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="col-md-3 mb-4">';
                     echo '<div class="card blur-bg">';
-                    echo '<img src="images/default.png" class="card-img-top" alt="'. $row['name'] . '">';
+                    
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">'. $row['name'] . '</h5>';
                     echo '<p class="card-text">'. substr($row['description'], 0, 100) . '...</p>';
