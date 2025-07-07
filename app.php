@@ -10,17 +10,22 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $appId = $_GET['id'];
 
 // 获取App信息
-$sqlApp = "SELECT apps.*, AVG(reviews.rating) as avg_rating 
+$sqlApp = "SELECT apps.*, apps.developer_id, developers.username as developer_name, AVG(reviews.rating) as avg_rating 
            FROM apps 
+           LEFT JOIN developers ON apps.developer_id = developers.id
            LEFT JOIN reviews ON apps.id = reviews.app_id 
            WHERE apps.id = $appId 
-           GROUP BY apps.id"; 
+           GROUP BY apps.id, apps.developer_id, developers.username"; 
 $resultApp = $conn->query($sqlApp);
+if (!$resultApp) {
+    die("<h1>数据库查询错误</h1><p>错误信息: " . htmlspecialchars($conn->error) . "</p><p>SQL语句: " . htmlspecialchars($sqlApp) . "</p>");
+}
 $app = $resultApp->fetch_assoc();
+$developerId = $app['developer_id'] ?? 0;
+$developerName = ($developerId == 0) ? '管理员' : ($app['developer_name'] ?? '未知开发者');
 
 if (!$app) {
-    header('Location: index.php');
-    exit;
+    die("<h1>错误：应用不存在</h1><p>找不到ID为 $appId 的应用。请检查ID是否正确。</p>");
 }
 
 // 获取App版本信息
@@ -136,6 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                     echo implode(', ', $platformTexts);
                 ?></p>
                 <p>评分: <?php echo round($app['avg_rating'], 1); ?>/5</p>
+                <p>开发者: <?php if ($developerId == 0 || empty($developerName)): ?>管理员<?php else: ?><a href="developer_apps.php?id=<?php echo $developerId; ?>"><?php echo htmlspecialchars($developerName); ?></a><?php endif; ?></p>
             </div>
             <div class="col-md-6">
                 <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
