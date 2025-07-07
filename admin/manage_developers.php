@@ -66,21 +66,44 @@ if (isset($_POST['update_user'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
     
-    $stmt = $conn->prepare("UPDATE users SET username = ?, email = ? WHERE id = ? AND role = 'developer'");
-    $stmt->bind_param("ssi", $username, $email, $userId);
-    $stmt->execute();
-    $stmt->close();
-    header("Location: manage_developers.php?updated=true");
+    // 使用mysqli语法更新用户信息
+$stmt = $conn->prepare("UPDATE developers SET username = ?, email = ? WHERE id = ?");
+if (!$stmt) {
+    $error = $conn->error ?? 'Unknown error';
+    error_log("Prepare failed: $error");
+    die("更新用户信息失败: $error");
+}
+$stmt->bind_param("ssi", $username, $email, $userId);
+if (!$stmt->execute()) {
+    $error = $stmt->error ?? 'Unknown error';
+    error_log("Execute failed: $error");
+    die("更新用户信息失败: $error");
+}
+$stmt->close();
+header("Location: manage_developers.php?updated=true");
     exit;
 }
 
 // 获取所有开发者用户
 $developers = [];
-$result = $conn->query("SELECT id, username, email, created_at FROM users WHERE role = 'developer' ORDER BY created_at DESC");
-if (!$result) {
-    error_log('Failed to fetch developers: ' . $conn->error);
-    die('获取开发者列表失败，请稍后重试');
+// 检查developers表是否存在
+$tableExists = $conn->query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'developers'");
+if (!$tableExists || $tableExists->num_rows === 0) {
+    error_log('Developers table does not exist');
+    die('获取开发者列表失败: 开发者数据表不存在');
 }
+
+$sql = "SELECT * FROM developers ORDER BY id DESC";
+$result = $conn->query($sql);
+if (!$result) {
+    error_log('Failed to fetch developers. SQL: ' . $sql . ', Error: ' . $conn->error);
+    die('获取开发者列表失败: ' . $conn->error . ' (SQL: ' . $sql . ')');
+}
+
+// 检查是否有数据
+$rowCount = $result->num_rows;
+error_log('Developer query executed. Rows returned: ' . $rowCount);
+
 while ($row = $result->fetch_assoc()) {
     $developers[] = $row;
 }
@@ -88,9 +111,13 @@ while ($row = $result->fetch_assoc()) {
 // 获取要编辑的用户信息
 $editUser = null;
 if (isset($_GET['edit'])) {
-    $editUserId = $_GET['edit'];
-    $stmt = $conn->prepare("SELECT id, username, email FROM users WHERE id = ? AND role = 'developer'");
-    $stmt->bind_param("i", $editUserId);
+    $editId = (int)$_GET['edit'];
+$stmt = $conn->prepare("SELECT id, username, email FROM developers WHERE id = ?");
+if (!$stmt) {
+    error_log('Prepare failed for edit user: ' . $conn->error);
+    die('获取编辑用户信息失败: ' . $conn->error);
+}
+    $stmt->bind_param("i", $editId);
     $stmt->execute();
     $editUser = $stmt->get_result()->fetch_assoc();
     $stmt->close();
@@ -180,6 +207,11 @@ if (isset($_GET['edit'])) {
 <body>
     <div class="container">
         <h1>管理开发者用户</h1>
+<pre>调试信息:
+查询SQL: <?php echo $sql; ?>
+查询结果行数: <?php echo $rowCount; ?>
+数据表存在: <?php echo $tableExists ? '是' : '否'; ?>
+开发者数据: <?php print_r($developers); ?></pre>
         
         <?php if (isset($_GET['deleted'])): ?>
             <div class="message success">用户已成功删除</div>
@@ -236,7 +268,7 @@ if (isset($_GET['edit'])) {
                 <?php endforeach; ?>
                 <?php if (empty($developers)): ?>
                     <tr>
-                        <td colspan="5" style="text-align: center;">暂无开发者用户</td>
+                        <td colspan="5" style="text-align: center;">查询到<?php echo $result->num_rows; ?>条记录，数据: <?php print_r($developers); ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>
