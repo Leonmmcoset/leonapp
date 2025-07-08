@@ -129,7 +129,7 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-primary w-100" type="submit">搜索</button>
+                    <button class="btn btn-primary w-100" style="width: calc(3.5rem + calc(var(--bs-border-width) * 2)); height: calc(3.5rem + calc(var(--bs-border-width) * 2))" type="submit">搜索</button>
                 </div>
             </div>
         </form>

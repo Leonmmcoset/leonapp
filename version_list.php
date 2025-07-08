@@ -121,6 +121,7 @@ while ($row = $result->fetch_assoc()) {
                                 <h5 class="card-title">版本 <?php echo htmlspecialchars($version['version']); ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted">发布日期: <?php echo date('Y-m-d', strtotime($version['created_at'])); ?></h6>
                                 <p class="card-text"><?php echo nl2br(htmlspecialchars($version['changelog'])); ?></p>
+                                <button class="btn btn-outline-secondary mt-2" onclick="toggleFavorite(<?php echo $appId; ?>, '<?php echo addslashes(htmlspecialchars($app['name'])); ?>')">收藏</button>
                             </div>
                             <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">                                <a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-primary" download>下载</a>                                <small class="text-muted">文件大小: <?php echo $fileSize; ?></small>                            </div>
                         </div>
@@ -130,6 +131,23 @@ while ($row = $result->fetch_assoc()) {
         <?php endif; ?>
     </div>
 
+    <!-- 收藏功能逻辑 -->
+    <script>
+        function toggleFavorite(appId, appName) {
+            let favorites = JSON.parse(localStorage.getItem('appFavorites')) || {};
+            
+            if (favorites[appId]) {
+                delete favorites[appId];
+                alert('已取消收藏 ' + appName);
+            } else {
+                favorites[appId] = appName;
+                alert('已收藏 ' + appName);
+            }
+            
+            localStorage.setItem('appFavorites', JSON.stringify(favorites));
+        }
+    </script>
+    
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>

@@ -120,7 +120,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                 </div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-primary w-100" type="submit">搜索</button>
+                    <button class="btn btn-primary w-100" style="width: calc(3.5rem + calc(var(--bs-border-width) * 2)); height: calc(3.5rem + calc(var(--bs-border-width) * 2))" type="submit">搜索</button>
                 </div>
             </div>
         </form>
@@ -201,6 +201,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                     echo '<p class="card-text">'. substr(htmlspecialchars($row['description']), 0, 100) . '...</p>';
                     echo '<p class="card-text">评分: '. round($row['avg_rating'] ?? 0, 1) . '/5</p>';
                     echo '<a href="app.php?id='. $row['id'] . '" class="btn btn-primary">查看详情</a>';
+                    echo '<button class="btn btn-outline-secondary mt-2" onclick="toggleFavorite('. $row['id'] . ', \''. htmlspecialchars($row['name']) . '\')">收藏</button>';
                     echo '</div></div></div>';
                 }
             } else {

@@ -119,6 +119,7 @@ $resultApps = $conn->query($sqlApps);
                                     </small>
                                 </p>
                                 <a href="app.php?id=<?php echo $app['id']; ?>" class="btn btn-primary">查看详情</a>
+                                <button class="btn btn-outline-secondary mt-2" onclick="toggleFavorite(<?php echo $app['id']; ?>, '<?php echo addslashes(htmlspecialchars($app['name'])); ?>')">收藏</button>
                             </div>
                         </div>
                     </div>
