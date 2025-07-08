@@ -11,7 +11,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $developerId = intval($_GET['id']);
 
 // 获取开发者信息
-$sqlDeveloper = "SELECT username FROM developers WHERE id = $developerId";
+$sqlDeveloper = "SELECT username, social_links FROM developers WHERE id = $developerId";
 $resultDeveloper = $conn->query($sqlDeveloper);
 $developer = $resultDeveloper->fetch_assoc();
 
@@ -40,7 +40,7 @@ $resultApps = $conn->query($sqlApps);
     <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="styles.css">
     <!-- Fluent Design 模糊效果 -->
@@ -96,6 +96,27 @@ $resultApps = $conn->query($sqlApps);
         </div>
         <h1><?php echo $developerName; ?> 的应用</h1>
         <hr>
+        <?php if (isset($developer['social_links']) && !empty($developer['social_links'])): ?>
+            <div class="mb-4">
+                <h5>开发者链接</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <?php 
+                    $socialLinks = explode(',', $developer['social_links']);
+                    foreach ($socialLinks as $link):
+                        $link = trim($link);
+                        if (!empty($link)):
+                    ?>
+                        <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-link me-1"></i>
+                            <?php echo parse_url($link, PHP_URL_HOST) ?: $link; ?>
+                        </a>
+                    <?php 
+                        endif;
+                    endforeach; 
+                    ?>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <?php if ($resultApps && $resultApps->num_rows > 0): ?>
             <div class="row">

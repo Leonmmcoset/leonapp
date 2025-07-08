@@ -81,6 +81,9 @@ if (!$resultApps) {
                         <a class="nav-link" href="manage_developers.php">管理开发者</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="system_info.php">系统信息</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="?logout=true">退出登录</a>
                     </li>
                 </ul>

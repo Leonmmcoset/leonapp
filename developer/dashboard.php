@@ -145,11 +145,14 @@ if (!($conn instanceof mysqli)) {
                         <a class="nav-link active" aria-current="page" href="dashboard.php">应用仪表盘</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="upload_app.php">上传应用</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">退出登录</a>
-                    </li>
+                    <a class="nav-link" href="upload_app.php">上传应用</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.php">更改信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">退出登录</a>
+                </li>
                 </ul>
             </div>
         </div>

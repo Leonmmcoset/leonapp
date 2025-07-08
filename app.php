@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
     <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 本地 Chart.js -->
     <script src="js/charts.js"></script>
     <!-- 自定义CSS -->
@@ -116,11 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                 <p>适用平台: <?php
                     $platforms = json_decode($app['platforms'], true) ?? [];
                     $platformIcons = [
-                        'Windows' => '<i class="fab fa-windows"></i>',
-                        'Mac' => '<i class="fab fa-apple"></i>',
-                        'Linux' => '<i class="fab fa-linux"></i>',
-                        'Android' => '<i class="fab fa-android"></i>',
-                        'iOS' => '<i class="fab fa-app-store-ios"></i>'
+                        'windows' => '<i class="fab fa-windows"></i>',
+                        'macos' => '<i class="fab fa-apple"></i>',
+                        'linux' => '<i class="fab fa-linux"></i>',
+                        'android' => '<i class="fab fa-android"></i>',
+                        'ios' => '<i class="fab fa-app-store-ios"></i>'
                     ];
                     $platformMap = [
                         'android' => 'Android',
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                     
                     $platformTexts = [];
                     foreach ($platforms as $platform) {
-                        $icon = $platformIcons[ucfirst($platform)] ?? '';
+                        $icon = $platformIcons[strtolower($platform)] ?? '';
                         $readableName = $platformMap[strtolower($platform)] ?? ucfirst($platform);
                         $platformTexts[] = $icon . ' ' . $readableName;
                     }

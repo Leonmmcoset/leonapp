@@ -198,6 +198,10 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 SET @exist_fk = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'apps' AND COLUMN_NAME = 'developer_id' AND CONSTRAINT_NAME = 'fk_apps_developers');
+
+-- 添加 social_links 字段到 developers 表
+ALTER TABLE developers
+ADD COLUMN social_links VARCHAR(255) DEFAULT '' AFTER password;
 SET @sql = IF(@exist_fk = 0, 'ALTER TABLE apps ADD CONSTRAINT fk_apps_developers FOREIGN KEY (developer_id) REFERENCES developers(id) ON DELETE SET NULL', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
