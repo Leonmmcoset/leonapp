@@ -1,17 +1,31 @@
 <?php
-// Define SMTP constants if not already defined
-if (!defined('SMTP_USERNAME')) define('SMTP_USERNAME', '');
-if (!defined('SMTP_ENCRYPTION')) define('SMTP_ENCRYPTION', 'tls');
-if (!defined('SMTP_FROM_EMAIL')) define('SMTP_FROM_EMAIL', 'noreply@example.com');
+// 引入配置文件
+// 检查配置文件是否存在并加载
+$configFile = 'd:\app2\config.php';
+if (!file_exists($configFile)) {
+    die('配置文件缺失: ' . $configFile . '，无法继续执行');
+}
+require_once $configFile;
+
+// 引入日志工具
+require_once 'd:\app2\includes\logger.php';
+
+// 配置文件加载后日志记录和常量检查
+log_error('配置文件已成功加载: ' . $configFile);
+// 验证关键常量是否定义
+log_error('配置加载后常量检查 - SMTP_HOST: ' . (defined('SMTP_HOST') ? SMTP_HOST : '未定义'));
+log_error('配置加载后常量检查 - SMTP_USERNAME: ' . (defined('SMTP_USERNAME') ? SMTP_USERNAME : '未定义'));
+log_error('配置加载后常量检查 - SMTP_PASSWORD: ' . (defined('SMTP_PASSWORD') ? '已设置' : '未定义'));
+log_error('配置加载后常量检查 - SMTP_PORT: ' . (defined('SMTP_PORT') ? SMTP_PORT : '未定义'));
+log_error('配置文件加载后 - SMTP_USERNAME: ' . (defined('SMTP_USERNAME') ? SMTP_USERNAME : '未定义') . ', SMTP_PORT: ' . (defined('SMTP_PORT') ? SMTP_PORT : '未定义'));
+
+
 
 
 // 引入PHPMailer命名空间
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-
-// 引入配置文件
-require_once '../config.php';
 
 // 引入Composer自动加载器
 require_once '../vendor/autoload.php';
@@ -78,10 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // 生成验证令牌
                     $verificationToken = bin2hex(random_bytes(32));
                     $insertStmt = $conn->prepare('INSERT INTO developers (username, email, password, verification_token) VALUES (?, ?, ?, ?)');
-                    if (!$insertStmt) {
-                        log_error('插入准备失败: ' . $conn->error, __FILE__, __LINE__);
-                        $error = '系统错误，请稍后再试';
-                } else {
+                        $insertStmt->bind_param('ssss', $username, $email, $hashedPassword, $verificationToken);
+                        if (!$insertStmt->execute()) {
+                            log_error('插入执行失败: ' . $insertStmt->error, __FILE__, __LINE__);
+                            $error = '系统错误，请稍后再试';
+                        } else {
                         // 生成验证链接
                         $verificationLink = 'https://' . $_SERVER['HTTP_HOST'] . '/developer/verify_email.php?token=' . urlencode($verificationToken);
 
@@ -92,6 +107,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $templateContent = str_replace('{username}', htmlspecialchars($username), $templateContent);
                             $templateContent = str_replace('{verification_link}', $verificationLink, $templateContent);
 
+                            // 调试日志测试
+                            $testLogDir = 'd:\\app2\\logs';
+                            $testLogFile = $testLogDir . '\\test.log';
+                            if (!is_dir($testLogDir)) {
+                                mkdir($testLogDir, 0755, true);
+                            }
+                            file_put_contents($testLogFile, date('[Y-m-d H:i:s] ') . '邮件发送代码开始执行' . PHP_EOL, FILE_APPEND);
+
+                            // 添加SMTP配置调试日志
+                            log_error('SMTP配置参数 - HOST: ' . (defined('SMTP_HOST') ? SMTP_HOST : '未定义') . ', PORT: ' . (defined('SMTP_PORT') ? SMTP_PORT : '未定义') . ', USERNAME: ' . (defined('SMTP_USERNAME') ? SMTP_USERNAME : '未定义') . ', ENCRYPTION: ' . (defined('SMTP_ENCRYPTION') ? SMTP_ENCRYPTION : '未定义'), __FILE__, __LINE__);
+                            log_error('开始执行邮件发送流程', __FILE__, __LINE__);
+
                             // 配置SMTP邮件发送
                             require_once '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
                             require_once '../vendor/phpmailer/phpmailer/src/SMTP.php';
@@ -101,11 +128,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
                             try {
                                 $mail->isSMTP();
+                                $mail->SMTPDebug = 4;
+// 输出当前SMTP配置参数用于调试
+log_error('SMTP配置参数: HOST=' . SMTP_HOST . ', PORT=' . SMTP_PORT . ', USERNAME=' . SMTP_USERNAME . ', ENCRYPTION=' . SMTP_ENCRYPTION);
+// 检查openssl扩展是否启用
+log_error('OpenSSL扩展状态: ' . (extension_loaded('openssl') ? '已启用' : '未启用')); // 启用详细调试
+                                $mail->Debugoutput = function($str, $level) {
+                                     $logDir = 'd:\\app2\\logs';
+                                     if (!is_dir($logDir)) {
+                                         mkdir($logDir, 0755, true);
+                                     }
+                                     file_put_contents($logDir . '\\smtp_debug.log', date('[Y-m-d H:i:s] ') . $str . PHP_EOL, FILE_APPEND);
+                                 };
                                 $mail->Host = defined('SMTP_HOST') ? SMTP_HOST : 'smtp.example.com';
                                 $mail->SMTPAuth = true;
                                 $mail->Username = defined('SMTP_USERNAME') ? SMTP_USERNAME : ''; // Ensure SMTP_USERNAME is defined in config.php
                                 $mail->Password = defined('SMTP_PASSWORD') ? SMTP_PASSWORD : '';
                                 $mail->SMTPSecure = defined('SMTP_ENCRYPTION') ? SMTP_ENCRYPTION : 'tls'; // Ensure SMTP_ENCRYPTION is defined in config.php
+$mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
                                 $mail->Port = defined('SMTP_PORT') ? SMTP_PORT : 587;
 
                                 $mail->setFrom(defined('SMTP_FROM_EMAIL') ? SMTP_FROM_EMAIL : 'noreply@example.com', defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : 'App Store'); // Ensure SMTP_FROM_EMAIL is defined in config.php

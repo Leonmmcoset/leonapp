@@ -1,16 +1,21 @@
 <?php
+require_once('../includes/logger.php');
+
 // 引入配置文件
 require_once '../config.php';
 
 session_start();
 
 // 检查开发者是否已登录
-if (!isset($_SESSION['developer_id'])) {
+if (!isset($_SESSION['developer_id']) || !is_numeric($_SESSION['developer_id'])) {
+    log_error('开发者会话ID不存在或无效', __FILE__, __LINE__);
     header('Location: login.php');
     exit;
 }
 
-$developerId = $_SESSION['developer_id'];
+$developerId = (int)$_SESSION['developer_id'];
+log_info("上传应用的开发者ID: $developerId", __FILE__, __LINE__);
+log_info("上传应用的开发者ID: $developerId", __FILE__, __LINE__);
 $error = '';
 $success = '';
 
@@ -26,7 +31,10 @@ if (!$stmt) {
     $developer = $result->fetch_assoc();
     $stmt->close();
 
-    if (!$developer || !$developer['is_verified']) {
+    log_info("开发者验证状态: " . ($developer ? ($developer['is_verified'] ? "已验证" : "未验证") : "开发者不存在"), __FILE__, __LINE__);
+    if (!$developer) {
+        $error = '开发者账号不存在，请重新登录。';
+    } elseif (!$developer['is_verified']) {
         $error = '您的邮箱尚未验证，请先验证邮箱后再上传应用。';
     }
 }
@@ -89,6 +97,29 @@ if (!($conn instanceof mysqli)) {
                             $error = '应用文件上传失败';
                         }
                     } else {
+            // 验证标签ID是否存在
+            if (!empty($tags)) {
+                $tagIds = implode(',', array_map('intval', $tags));
+                $tagCheckStmt = $conn->prepare("SELECT id FROM tags WHERE id IN ($tagIds)");
+                if (!$tagCheckStmt) {
+                    log_error('标签验证查询准备失败: ' . $conn->error, __FILE__, __LINE__);
+                    $error = '系统错误，请稍后再试';
+                } else {
+                    $tagCheckStmt->execute();
+                    $tagResult = $tagCheckStmt->get_result();
+                    $validTagIds = [];
+                    while ($tag = $tagResult->fetch_assoc()) {
+                        $validTagIds[] = $tag['id'];
+                    }
+                    $tagCheckStmt->close();
+                    
+                    $invalidTags = array_diff($tags, $validTagIds);
+                    if (!empty($invalidTags)) {
+                        log_error('无效的标签ID: ' . implode(',', $invalidTags), __FILE__, __LINE__);
+                        $error = '选择了无效的标签，请刷新页面重试';
+                    }
+                }
+            }
                         $error = '应用文件上传错误: ' . ($appFile ? $appFile['error'] : '未找到文件');
                     }
 
@@ -111,7 +142,7 @@ if (!($conn instanceof mysqli)) {
                 mkdir($target_dir, 0755, true);
             }
                     if (move_uploaded_file($tmpName, $imagePath)) {
-                        $imagePaths[] = $imagePath;
+                        $imagePaths[] = $imageRelativePath;
                     } else {
                         log_error('图片文件移动失败: ' . $images['name'][$key], __FILE__, __LINE__);
                     }
@@ -147,13 +178,15 @@ if (!($conn instanceof mysqli)) {
                 // 移除多余的$status参数，匹配SQL中9个占位符
                 // 修正age_rating_description类型为字符串，并确保9个参数与占位符匹配
                 // 修复变量名错误：使用已验证的$appFilePath替换未定义的$file_path
-                $stmt->bind_param('ssissssss', $appName, $appDescription, $developerId, $platforms_json, $ageRating, $ageRatingDescription, $version, $changelog, $filePath);
+                $stmt->bind_param('ssissssss', $appName, $appDescription, $developerId, $platforms_json, $ageRating, $ageRatingDescription, $version, $changelog, $appRelativePath);
                 if (!$stmt->execute()) {
                     throw new Exception('应用基本信息查询执行失败: ' . $stmt->error);
                 }
                 $appId = $stmt->insert_id;
+                log_info("应用已插入数据库: ID=$appId, 状态=pending", __FILE__, __LINE__);
                 $stmt->close();
 
+                log_info("开始处理应用关联数据: ID=$appId", __FILE__, __LINE__);
                 // 插入应用标签关联
                 foreach ($tags as $tagId) {
                     $tagStmt = $conn->prepare('INSERT INTO app_tags (app_id, tag_id) VALUES (?, ?)');
@@ -168,7 +201,7 @@ if (!($conn instanceof mysqli)) {
                 }
 
                 // 插入应用图片
-                foreach ($imagePaths as $imagePath) {
+                foreach ($imagePaths as $imageRelativePath) {
                     $imageStmt = $conn->prepare('INSERT INTO app_images (app_id, image_path) VALUES (?, ?)');
                     if (!$imageStmt) {
                         throw new Exception('图片关联查询准备失败: ' . $conn->error);
@@ -191,13 +224,15 @@ if (!($conn instanceof mysqli)) {
                 }
                 $versionStmt->close();
 
+                log_info("所有关联数据处理完成，准备提交事务: ID=$appId", __FILE__, __LINE__);
                 // 提交事务
                 $conn->commit();
+                log_info("应用上传成功: ID=$appId, 状态=pending", __FILE__, __LINE__);
                 $success = '应用上传成功，请等待管理员审核';
             } catch (Exception $e) {
                 // 回滚事务
                 $conn->rollback();
-                log_error('应用上传事务失败: ' . $e->getMessage(), __FILE__, __LINE__);
+                log_error('应用上传事务失败(ID=$appId): ' . $e->getMessage(), __FILE__, __LINE__);
                 $error = '上传应用时发生错误，请稍后再试';
             }
         }

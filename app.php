@@ -28,6 +28,35 @@ if (!$app) {
     die("<h1>错误：应用不存在</h1><p>找不到ID为 $appId 的应用。请检查ID是否正确。</p>");
 }
 
+// 处理评价加载请求
+if (isset($_GET['action']) && $_GET['action'] === 'load_reviews') {
+    header('Content-Type: text/html; charset=UTF-8');
+    while ($review = $resultReviews->fetch_assoc()) {
+?>
+    <div class="card mb-3 blur-bg">
+        <div class="card-body">
+            <?php
+            $rating = $review['rating'] !== null ? $review['rating'] : 0;
+            echo '<p class="card-text">评分: ';
+            for ($i = 1; $i <= 5; $i++) {
+                if ($i <= floor($rating)) {
+                    echo '<span class="fas fa-star text-warning"></span>';
+                } elseif ($i - $rating <= 0.5) {
+                    echo '<span class="fas fa-star-half-alt text-warning"></span>';
+                } else {
+                    echo '<span class="far fa-star text-warning"></span>';
+                }
+            }
+            echo '</p>';
+            ?>
+            <p class="card-text"><small class="text-muted">评价时间: <?php echo $review['created_at']; ?></small></p>
+        </div>
+    </div>
+<?php
+    }
+    exit;
+}
+
 // 获取App版本信息
 $sqlVersions = "SELECT * FROM app_versions WHERE app_id = $appId ORDER BY created_at DESC"; 
 $resultVersions = $conn->query($sqlVersions);
@@ -36,8 +65,19 @@ $resultVersions = $conn->query($sqlVersions);
 $sqlImages = "SELECT * FROM app_images WHERE app_id = $appId"; 
 $resultImages = $conn->query($sqlImages);
 
+// 获取评价总数
+$sqlReviewCount = "SELECT COUNT(*) as total FROM reviews WHERE app_id = $appId";
+$resultReviewCount = $conn->query($sqlReviewCount);
+$reviewCount = $resultReviewCount->fetch_assoc()['total'];
+
+// 分页参数
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 10;
+$offset = ($page - 1) * $limit;
+$hasMore = ($page * $limit) < $reviewCount;
+
 // 获取评价信息
-$sqlReviews = "SELECT * FROM reviews WHERE app_id = $appId ORDER BY created_at DESC"; 
+$sqlReviews = "SELECT * FROM reviews WHERE app_id = $appId ORDER BY created_at DESC LIMIT $limit OFFSET $offset"; 
 $resultReviews = $conn->query($sqlReviews);
 
 // 获取评分分布
@@ -188,33 +228,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
         <div class="row mt-4">
             <div class="col-md-6">
                     <h2>评价</h2>
-                    <?php while ($review = $resultReviews->fetch_assoc()): ?>
-                        <div class="card mb-3 blur-bg">
-                            <div class="card-body">
-                                <?php
-                                $rating = $review['rating'] !== null ? $review['rating'] : 0;
-                                echo '<p class="card-text">评分: ';
-                                for ($i = 1; $i <= 5; $i++) {
-                                    if ($i <= floor($rating)) {
-                                        echo '<span class="fas fa-star text-warning"></span>';
-                                    } elseif ($i - $rating <= 0.5) {
-                                        echo '<span class="fas fa-star-half-alt text-warning"></span>';
-                                    } else {
-                                        echo '<span class="far fa-star text-warning"></span>';
+                    <div id="reviews-container">
+                        <?php while ($review = $resultReviews->fetch_assoc()): ?>
+                            <div class="card mb-3 blur-bg">
+                                <div class="card-body">
+                                    <?php
+                                    $rating = $review['rating'] !== null ? $review['rating'] : 0;
+                                    echo '<p class="card-text">评分: ';
+                                    for ($i = 1; $i <= 5; $i++) {
+                                        if ($i <= floor($rating)) {
+                                            echo '<span class="fas fa-star text-warning"></span>';
+                                        } elseif ($i - $rating <= 0.5) {
+                                            echo '<span class="fas fa-star-half-alt text-warning"></span>';
+                                        } else {
+                                            echo '<span class="far fa-star text-warning"></span>';
+                                        }
                                     }
-                                }
-                                echo '</p>';
-                                ?>
-                                <p class="card-text"><small class="text-muted">评价时间: <?php echo $review['created_at']; ?></small></p>
+                                    echo '</p>';
+                                    ?>
+                                    <p class="card-text"><small class="text-muted">评价时间: <?php echo $review['created_at']; ?></small></p>
+                                </div>
                             </div>
-                        </div>
-                    <?php endwhile; ?>
+                        <?php endwhile; ?>
+                    </div>
+                    <?php if ($hasMore): ?>
+                        <button id="load-more" class="btn btn-secondary" data-page="<?php echo $page + 1; ?>">加载更多</button>
+                    <?php endif; ?>
                 </div>
                 <div class="col-md-6">
                     <h2>评分分布</h2>
                     <div id="ratingChartSkeleton" class="skeleton-chart"></div>
                     <canvas id="ratingChart" width="400" height="200"></canvas>
                     <script>
+                        // 加载更多评价功能
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const loadMoreBtn = document.getElementById('load-more');
+                            if (loadMoreBtn) {
+                                loadMoreBtn.addEventListener('click', function() {
+                                    const button = this;
+                                    const page = button.getAttribute('data-page');
+                                    const appId = <?php echo $appId; ?>;
+                                    
+                                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
+                                    button.disabled = true;
+                                    
+                                    fetch(`app.php?id=${appId}&page=${page}&action=load_reviews`)
+                                        .then(response => response.text())
+                                        .then(html => {
+                                            if (html.trim() === '') {
+                                                button.style.display = 'none';
+                                                return;
+                                            }
+                                            document.getElementById('reviews-container').insertAdjacentHTML('beforeend', html);
+                                            button.setAttribute('data-page', parseInt(page) + 1);
+                                            button.innerHTML = '加载更多';
+                                            button.disabled = false;
+                                        })
+                                        .catch(error => {
+                                            console.error('加载评价失败:', error);
+                                            button.innerHTML = '加载更多';
+                                            button.disabled = false;
+                                        });
+                                });
+                            }
+                        });
+
+                        // 评分图表
                         const ctx = document.getElementById('ratingChart').getContext('2d');
                         new Chart(ctx).Bar({
                             labels: ['5星', '4星', '3星', '2星', '1星'],

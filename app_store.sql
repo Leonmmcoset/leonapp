@@ -14,8 +14,11 @@ CREATE TABLE IF NOT EXISTS apps (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     version VARCHAR(20) NOT NULL,
     changelog TEXT NOT NULL,
-    file_path VARCHAR(255) NOT NULL
+    file_path VARCHAR(255) NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'
 );
+
+-- 确保状态列存在（用于现有数据库）
 
 -- 创建APP版本表
 CREATE TABLE IF NOT EXISTS app_versions (
