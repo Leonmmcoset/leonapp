@@ -28,7 +28,7 @@ if (isset($_GET['action'])) {
     
     // 处理应用列表请求
     if ($action === 'list' && $requestMethod === 'GET') {
-        $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, apps.platform, AVG(reviews.rating) as avg_rating 
+        $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, AVG(reviews.rating) as avg_rating 
                 FROM apps 
                 LEFT JOIN reviews ON apps.id = reviews.app_id";
 
@@ -48,7 +48,7 @@ if (isset($_GET['action'])) {
         // 平台过滤
         if (isset($_GET['platform'])) {
             $platform = $_GET['platform'];
-            $conditions[] = "apps.platform = ?";
+            // Removed platform condition - column does not exist
             $stmtParams[] = &$platform;
             $paramTypes .= 's';
         }
@@ -79,7 +79,7 @@ if (isset($_GET['action'])) {
         }
 
         // 添加分页
-        $sql .= " GROUP BY apps.id, apps.name, apps.description, apps.age_rating, apps.platform ORDER BY apps.created_at DESC LIMIT ? OFFSET ?";
+        $sql .= " GROUP BY apps.id, apps.name, apps.description, apps.age_rating ORDER BY apps.created_at DESC LIMIT ? OFFSET ?";
         $stmtParams[] = &$limit;
         $stmtParams[] = &$offset;
         $paramTypes .= 'ii';
@@ -137,11 +137,11 @@ if (isset($_GET['action'])) {
         $appId = $_GET['id'];
         error_log("Requesting app details for ID: $appId");
 
-        $sqlApp = "SELECT apps.id, apps.name, apps.description, apps.age_rating, apps.platform, apps.created_at, AVG(reviews.rating) as avg_rating 
+        $sqlApp = "SELECT apps.id, apps.name, apps.description, apps.age_rating, apps.created_at, AVG(reviews.rating) as avg_rating 
                    FROM apps 
                    LEFT JOIN reviews ON apps.id = reviews.app_id 
                    WHERE apps.id = ? 
-                   GROUP BY apps.id, apps.name, apps.description, apps.age_rating, apps.platform, apps.created_at";
+                   GROUP BY apps.id, apps.name, apps.description, apps.age_rating, apps.created_at";
         $stmt = $conn->prepare($sqlApp);
         $stmt->bind_param("i", $appId);
         $stmt->execute();

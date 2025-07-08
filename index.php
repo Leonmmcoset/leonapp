@@ -239,7 +239,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
 
               // 平台筛选
               if (!empty($_GET['platform'])) {
-                  $conditions[] = "apps.platform = ?";
+                  // Removed platform condition - column does not exist
                   $platform = $_GET['platform'];
                   $params[] = &$platform;
                   $paramTypes .= 's';

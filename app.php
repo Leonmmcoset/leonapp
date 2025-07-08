@@ -31,6 +31,18 @@ if (!$app) {
 // 处理评价加载请求
 if (isset($_GET['action']) && $_GET['action'] === 'load_reviews') {
     header('Content-Type: text/html; charset=UTF-8');
+    // 获取评论数据
+    $sqlReviews = "SELECT * FROM reviews WHERE app_id = ? ORDER BY created_at DESC, id DESC LIMIT 10 OFFSET ?";
+    $stmt = $conn->prepare($sqlReviews);
+    $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+    $stmt->bind_param("ii", $appId, $offset);
+    $stmt->execute();
+    $resultReviews = $stmt->get_result();
+    
+    if (!$resultReviews) {
+        die("Error fetching reviews: " . htmlspecialchars($conn->error));
+    }
+    
     while ($review = $resultReviews->fetch_assoc()) {
 ?>
     <div class="card mb-3 blur-bg">
@@ -77,7 +89,7 @@ $offset = ($page - 1) * $limit;
 $hasMore = ($page * $limit) < $reviewCount;
 
 // 获取评价信息
-$sqlReviews = "SELECT * FROM reviews WHERE app_id = $appId ORDER BY created_at DESC LIMIT $limit OFFSET $offset"; 
+$sqlReviews = "SELECT * FROM reviews WHERE app_id = $appId ORDER BY created_at DESC, id DESC LIMIT 10 OFFSET $offset"; 
 $resultReviews = $conn->query($sqlReviews);
 
 // 获取评分分布
@@ -266,13 +278,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                             if (loadMoreBtn) {
                                 loadMoreBtn.addEventListener('click', function() {
                                     const button = this;
-                                    const page = button.getAttribute('data-page');
-                                    const appId = <?php echo $appId; ?>;
+                                    const page = parseInt(button.getAttribute('data-page'));
+            const offset = (page - 1) * 10;
+            const appId = <?php echo $appId; ?>;
                                     
                                     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
                                     button.disabled = true;
                                     
-                                    fetch(`app.php?id=${appId}&page=${page}&action=load_reviews`)
+                                    fetch(`app.php?id=${appId}&offset=${offset}&action=load_reviews`)
                                         .then(response => response.text())
                                         .then(html => {
                                             if (html.trim() === '') {
@@ -280,9 +293,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                                                 return;
                                             }
                                             document.getElementById('reviews-container').insertAdjacentHTML('beforeend', html);
-                                            button.setAttribute('data-page', parseInt(page) + 1);
                                             button.innerHTML = '加载更多';
-                                            button.disabled = false;
+                                              button.disabled = false;
+                                              button.setAttribute('data-page', parseInt(page) + 1);
                                         })
                                         .catch(error => {
                                             console.error('加载评价失败:', error);
