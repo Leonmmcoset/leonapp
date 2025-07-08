@@ -4,6 +4,24 @@ header('Content-Type: application/json');
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+// API根路径处理 - 返回可用端点信息
+if (!isset($_GET['action'])) {
+    http_response_code(200);
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'App Store API',
+        'version' => '1.0',
+        'endpoints' => [
+            '/api?action=list' => '获取应用列表，支持search、platform、age_rating、tag、page、limit参数',
+            '/api?action=app&id=1' => '获取指定ID的应用详情',
+            '/api?action=favorite' => '收藏应用（POST方法，需app_id和user_id参数）'
+        ],
+        'example' => 'GET /api?action=list&platform=windows&limit=20'
+    ]);
+    exit;
+}
+
+
 // 支持查询参数路由模式（不依赖URL重写）
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
@@ -85,6 +103,11 @@ if (isset($_GET['action'])) {
 
         // 执行主查询
         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Database error: ' . $conn->error]);
+            exit;
+        }
         call_user_func_array([$stmt, 'bind_param'], array_merge([$paramTypes], $stmtParams));
         $stmt->execute();
         $result = $stmt->get_result();

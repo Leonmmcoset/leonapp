@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $error = '系统错误，请稍后再试';
                         } else {
                         // 生成验证链接
-                        $verificationLink = 'https://' . $_SERVER['HTTP_HOST'] . '/developer/verify_email.php?token=' . urlencode($verificationToken);
+                        $verificationLink = 'http://' . $_SERVER['HTTP_HOST'] . '/developer/verify_email.php?token=' . urlencode($verificationToken);
 
                         // 加载邮件模板
                         $templatePath = __DIR__ . '/../mail/verification_template.php';
