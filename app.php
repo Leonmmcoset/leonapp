@@ -239,6 +239,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
 
         <div class="row mt-4">
             <div class="col-md-6">
+                    <h2>提交评价</h2>
+                    <form method="post" action="">
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">评分</label>
+                            <select class="form-select" id="rating" name="rating" required>
+                                <option value="1">1星</option>
+                                <option value="2">2星</option>
+                                <option value="3">3星</option>
+                                <option value="4">4星</option>
+                                <option value="5">5星</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">提交评价</button>
+                    </form>
                     <h2>评价</h2>
                     <div id="reviews-container">
                         <?php while ($review = $resultReviews->fetch_assoc()): ?>
@@ -393,22 +407,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                         document.getElementById('ratingChartSkeleton').style.display = 'none';
                     </script>
                 </div>
-            <div class="col-md-6">
-                <h2>提交评价</h2>
-                <form method="post">
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">评分 (1-5星)</label>
-                        <select class="form-select" id="rating" name="rating" required>
-                            <option value="1">1星</option>
-                            <option value="2">2星</option>
-                            <option value="3">3星</option>
-                            <option value="4">4星</option>
-                            <option value="5">5星</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">提交评价</button>
-                </form>
-            </div>
         </div>
     </div>
 
