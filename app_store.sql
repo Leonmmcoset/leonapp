@@ -1,7 +1,5 @@
 -- 创建数据库
 -- CREATE DATABASE IF NOT EXISTS app_store;
-USE awa;
-
 -- 创建APP表
 CREATE TABLE IF NOT EXISTS apps (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -104,41 +102,41 @@ CREATE TABLE IF NOT EXISTS app_categories (
 );
 
 -- 修改评价表，支持文字评论并关联用户
-SET @exist_ip_address = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'awa' AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'ip_address');
+SET @exist_ip_address = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'ip_address');
 SET @sql = IF(@exist_ip_address > 0, 'ALTER TABLE reviews DROP COLUMN ip_address', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 -- 检查并删除unique_review索引（如果存在）
-SET @exist_unique_review = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = 'awa' AND TABLE_NAME = 'reviews' AND INDEX_NAME = 'unique_review');
+SET @exist_unique_review = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reviews' AND INDEX_NAME = 'unique_review');
 SET @sql = IF(@exist_unique_review > 0, 'ALTER TABLE reviews DROP INDEX unique_review', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 -- 检查并添加user_id列（如果不存在）
-SET @exist_user_id = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'awa' AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'user_id');
+SET @exist_user_id = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'user_id');
 SET @sql = IF(@exist_user_id = 0, 'ALTER TABLE reviews ADD COLUMN user_id INT', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 -- 检查并添加comment列（如果不存在）
-SET @exist_comment = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'awa' AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'comment');
+SET @exist_comment = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'comment');
 SET @sql = IF(@exist_comment = 0, 'ALTER TABLE reviews ADD COLUMN comment TEXT', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 -- 添加外键约束（如果不存在）
-SET @exist_fk = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = 'awa' AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'user_id' AND CONSTRAINT_NAME = 'fk_reviews_users');
+SET @exist_fk = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reviews' AND COLUMN_NAME = 'user_id' AND CONSTRAINT_NAME = 'fk_reviews_users');
 SET @sql = IF(@exist_fk = 0, 'ALTER TABLE reviews ADD CONSTRAINT fk_reviews_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 -- 检查并添加唯一索引（如果不存在）
-SET @exist_unique_index = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = 'awa' AND TABLE_NAME = 'reviews' AND INDEX_NAME = 'unique_user_app_review');
+SET @exist_unique_index = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'reviews' AND INDEX_NAME = 'unique_user_app_review');
 SET @sql = IF(@exist_unique_index = 0, 'ALTER TABLE reviews ADD UNIQUE KEY unique_user_app_review (user_id, app_id)', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
@@ -267,7 +265,7 @@ CREATE TABLE IF NOT EXISTS user_feedback (
 );
 
 -- 修改app_versions表，添加最后更新时间戳用于热门排行
-SET @exist_last_updated = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'app_versions' AND COLUMN_NAME = 'last_updated');
+SET @exist_last_updated = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'app_versions' AND COLUMN_NAME = 'last_updated');
 SET @sql = IF(@exist_last_updated = 0, 'ALTER TABLE app_versions ADD COLUMN last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
