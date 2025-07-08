@@ -177,6 +177,25 @@ CREATE TABLE IF NOT EXISTS developers (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 添加开发者邮箱验证字段（条件性）
+SET @exist_verification_token = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'developers' AND COLUMN_NAME = 'verification_token');
+SET @sql = IF(@exist_verification_token = 0, 'ALTER TABLE developers ADD COLUMN verification_token VARCHAR(255) NULL', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @exist_is_verified = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'developers' AND COLUMN_NAME = 'is_verified');
+SET @sql = IF(@exist_is_verified = 0, 'ALTER TABLE developers ADD COLUMN is_verified BOOLEAN DEFAULT FALSE', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @exist_verified_at = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'developers' AND COLUMN_NAME = 'verified_at');
+SET @sql = IF(@exist_verified_at = 0, 'ALTER TABLE developers ADD COLUMN verified_at TIMESTAMP NULL', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
 -- 修改 apps 表，添加 developer_id 和 status 字段
 SET @exist_developer_id = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'apps' AND COLUMN_NAME = 'developer_id');
 SET @sql = IF(@exist_developer_id = 0, 'ALTER TABLE apps ADD COLUMN developer_id INT', 'SELECT 1');
@@ -199,9 +218,12 @@ DEALLOCATE PREPARE stmt;
 
 SET @exist_fk = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'apps' AND COLUMN_NAME = 'developer_id' AND CONSTRAINT_NAME = 'fk_apps_developers');
 
--- 添加 social_links 字段到 developers 表
-ALTER TABLE developers
-ADD COLUMN social_links VARCHAR(255) DEFAULT '' AFTER password;
+-- 添加 social_links 字段到 developers 表（条件性）
+SET @exist_social_links = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'developers' AND COLUMN_NAME = 'social_links');
+SET @sql = IF(@exist_social_links = 0, 'ALTER TABLE developers ADD social_links VARCHAR(255) DEFAULT '''' AFTER password', 'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 SET @sql = IF(@exist_fk = 0, 'ALTER TABLE apps ADD CONSTRAINT fk_apps_developers FOREIGN KEY (developer_id) REFERENCES developers(id) ON DELETE SET NULL', 'SELECT 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
@@ -246,4 +268,7 @@ SET @sql = IF(@exist_last_updated = 0, 'ALTER TABLE app_versions ADD COLUMN last
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
+
+-- 创建验证令牌索引
+CREATE INDEX idx_verification_token ON developers(verification_token);
 

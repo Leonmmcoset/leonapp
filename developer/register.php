@@ -1,6 +1,20 @@
 <?php
+// Define SMTP constants if not already defined
+if (!defined('SMTP_USERNAME')) define('SMTP_USERNAME', '');
+if (!defined('SMTP_ENCRYPTION')) define('SMTP_ENCRYPTION', 'tls');
+if (!defined('SMTP_FROM_EMAIL')) define('SMTP_FROM_EMAIL', 'noreply@example.com');
+
+
+// 引入PHPMailer命名空间
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 // 引入配置文件
 require_once '../config.php';
+
+// 引入Composer自动加载器
+require_once '../vendor/autoload.php';
 
 // 顶栏样式
 echo '<style>
@@ -61,25 +75,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = '用户名或邮箱已被注册';
                 } else {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    $insertStmt = $conn->prepare('INSERT INTO developers (username, email, password) VALUES (?, ?, ?)');
+                    // 生成验证令牌
+                    $verificationToken = bin2hex(random_bytes(32));
+                    $insertStmt = $conn->prepare('INSERT INTO developers (username, email, password, verification_token) VALUES (?, ?, ?, ?)');
                     if (!$insertStmt) {
                         log_error('插入准备失败: ' . $conn->error, __FILE__, __LINE__);
                         $error = '系统错误，请稍后再试';
-                    } else {
-                        $insertStmt->bind_param('sss', $username, $email, $hashedPassword);
-                        if (!$insertStmt->execute()) {
-                            log_error('插入执行失败: ' . $insertStmt->error, __FILE__, __LINE__);
-                            $error = '系统错误，请稍后再试';
-                        }
-                    }
+                } else {
+                        // 生成验证链接
+                        $verificationLink = 'https://' . $_SERVER['HTTP_HOST'] . '/developer/verify_email.php?token=' . urlencode($verificationToken);
 
-                    header('Location: login.php?register_success=1');
-                    exit;
+                        // 加载邮件模板
+                        $templatePath = __DIR__ . '/../mail/verification_template.php';
+                        if (file_exists($templatePath)) {
+                            $templateContent = file_get_contents($templatePath);
+                            $templateContent = str_replace('{username}', htmlspecialchars($username), $templateContent);
+                            $templateContent = str_replace('{verification_link}', $verificationLink, $templateContent);
+
+                            // 配置SMTP邮件发送
+                            require_once '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+                            require_once '../vendor/phpmailer/phpmailer/src/SMTP.php';
+
+
+                            /** @var \PHPMailer\PHPMailer\PHPMailer $mail */
+                            $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+                            try {
+                                $mail->isSMTP();
+                                $mail->Host = defined('SMTP_HOST') ? SMTP_HOST : 'smtp.example.com';
+                                $mail->SMTPAuth = true;
+                                $mail->Username = defined('SMTP_USERNAME') ? SMTP_USERNAME : ''; // Ensure SMTP_USERNAME is defined in config.php
+                                $mail->Password = defined('SMTP_PASSWORD') ? SMTP_PASSWORD : '';
+                                $mail->SMTPSecure = defined('SMTP_ENCRYPTION') ? SMTP_ENCRYPTION : 'tls'; // Ensure SMTP_ENCRYPTION is defined in config.php
+                                $mail->Port = defined('SMTP_PORT') ? SMTP_PORT : 587;
+
+                                $mail->setFrom(defined('SMTP_FROM_EMAIL') ? SMTP_FROM_EMAIL : 'noreply@example.com', defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : 'App Store'); // Ensure SMTP_FROM_EMAIL is defined in config.php
+                                $mail->addAddress($email, $username);
+
+                                $mail->isHTML(true);
+                                $mail->Subject = '邮箱验证 - ' . (defined('APP_STORE_NAME') ? APP_STORE_NAME : 'App Store');
+                                $mail->Body = $templateContent;
+
+                                $mail->send();
+                            } catch (\PHPMailer\PHPMailer\Exception $e) {
+                                log_error('邮件发送失败: ' . $mail->ErrorInfo, __FILE__, __LINE__);
+                            }
+                        } else {
+                            log_error('验证邮件模板不存在: ' . $templatePath, __FILE__, __LINE__);
+                        }
+
+                        header('Location: login.php?register_success=1&verify_email_sent=1');
+                        exit;
+                    }
                 }
             } catch (PDOException $e) {
                 $error = '注册时发生错误，请稍后再试';
             }
-        }
+          }
     }
 }
 ?>

@@ -8,6 +8,14 @@ define('DB_PASSWORD', 'ewewew');
 // App Store 名称
 define('APP_STORE_NAME', 'LeonAPP');
 
+// SMTP邮件配置
+define('SMTP_HOST', 'smtp.163.com');
+define('SMTP_PORT', 25);
+define('SMTP_USER', 'leonmmcoset@qq.com');
+define('SMTP_PASSWORD', 'CXaWtRdekFAabUWZ');
+define('SMTP_FROM', 'leonmmcoset@qq.com');
+define('SMTP_FROM_NAME', 'LeonAPP 验证系统');
+
 // 管理员账号
 define('ADMIN_USERNAME', 'Admin');
 define('ADMIN_PASSWORD', '123456');

@@ -14,6 +14,23 @@ $developerId = $_SESSION['developer_id'];
 $error = '';
 $success = '';
 
+// 检查开发者邮箱是否已验证
+$stmt = $conn->prepare('SELECT is_verified FROM developers WHERE id = ?');
+if (!$stmt) {
+    log_error('准备验证状态查询失败: ' . $conn->error, __FILE__, __LINE__);
+    $error = '系统错误，请稍后再试';
+} else {
+    $stmt->bind_param('i', $developerId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $developer = $result->fetch_assoc();
+    $stmt->close();
+
+    if (!$developer || !$developer['is_verified']) {
+        $error = '您的邮箱尚未验证，请先验证邮箱后再上传应用。';
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 创建上传目录（如果不存在）
     $uploadDirs = ['../uploads/apps', '../uploads/images'];

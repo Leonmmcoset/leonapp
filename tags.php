@@ -157,7 +157,7 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
     </div>
 
     <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <script>
         // 导航栏滚动效果
         window.addEventListener('scroll', function() {
