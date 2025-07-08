@@ -18,7 +18,7 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['review_action'])) {
     $appId = $_POST['app_id'];
     $action = $_POST['review_action'];
-    $rejectionReason = $_POST['rejection_reason'] ?? '';
+    $rejectionReason = urldecode($_POST['rejection_reason'] ?? '');
 
     // 验证应用ID
     if (!is_numeric($appId)) {
