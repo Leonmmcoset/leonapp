@@ -147,6 +147,7 @@ log_error('OpenSSL扩展状态: ' . (extension_loaded('openssl') ? '已启用' :
                                 $mail->SMTPSecure = defined('SMTP_ENCRYPTION') ? SMTP_ENCRYPTION : 'tls'; // Ensure SMTP_ENCRYPTION is defined in config.php
 $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
                                 $mail->Port = defined('SMTP_PORT') ? SMTP_PORT : 587;
+                                $mail->CharSet = 'UTF-8';
 
                                 $mail->setFrom(defined('SMTP_FROM_EMAIL') ? SMTP_FROM_EMAIL : 'noreply@example.com', defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : 'App Store'); // Ensure SMTP_FROM_EMAIL is defined in config.php
                                 $mail->addAddress($email, $username);

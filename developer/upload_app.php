@@ -159,10 +159,21 @@ if (!($conn instanceof mysqli)) {
                     throw new Exception('缺少必要的上传参数');
                 }
 
+                // 获取开发者邮箱
+                $userStmt = $conn->prepare('SELECT email FROM developers WHERE id = ?');
+                $userStmt->bind_param('i', $developerId);
+                $userStmt->execute();
+                $userResult = $userStmt->get_result();
+                $user = $userResult->fetch_assoc();
+                $developerEmail = $user['email'] ?? '';
+                $userStmt->close();
+
+                if (empty($developerEmail)) {
+                    throw new Exception('无法获取开发者邮箱信息');
+                }
+
                 // 插入应用基本信息
-                $filePath = ''; // 初始化file_path为空字符串以满足数据库要求
-                // 添加created_at字段并设置为当前时间戳
-                $stmt = $conn->prepare('INSERT INTO apps (name, description, developer_id, platforms, status, age_rating, age_rating_description, version, changelog, file_path, created_at) VALUES (?, ?, ?, ?, \'pending\', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)');
+                $stmt = $conn->prepare('INSERT INTO apps (name, description, platforms, status, age_rating, age_rating_description, version, changelog, file_path, developer_email, created_at) VALUES (?, ?, ?, \'pending\', ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)');
                 if (!$stmt) {
                     throw new Exception('应用基本信息查询准备失败: ' . $conn->error);
                 }
@@ -178,7 +189,7 @@ if (!($conn instanceof mysqli)) {
                 // 移除多余的$status参数，匹配SQL中9个占位符
                 // 修正age_rating_description类型为字符串，并确保9个参数与占位符匹配
                 // 修复变量名错误：使用已验证的$appFilePath替换未定义的$file_path
-                $stmt->bind_param('ssissssss', $appName, $appDescription, $developerId, $platforms_json, $ageRating, $ageRatingDescription, $version, $changelog, $appRelativePath);
+                $stmt->bind_param('sssssssss', $appName, $appDescription, $platforms_json, $ageRating, $ageRatingDescription, $version, $changelog, $appRelativePath, $developerEmail);
                 if (!$stmt->execute()) {
                     throw new Exception('应用基本信息查询执行失败: ' . $stmt->error);
                 }

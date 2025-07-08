@@ -1,5 +1,8 @@
 <?php
 require_once '../config.php';
+require_once '../vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 session_start();
 // 检查管理员登录状态
@@ -34,7 +37,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['review_action'])) {
             } else {
                 $stmt->bind_param("ssi", $status, $rejectionReason, $appId);
                 if ($stmt->execute()) {
+                    // 获取应用信息和开发者邮箱
+                    $getAppStmt = $conn->prepare("SELECT name, developer_email FROM apps WHERE id = ?");
+                    $getAppStmt->bind_param("i", $appId);
+                    $getAppStmt->execute();
+                    $appResult = $getAppStmt->get_result();
+                    $appInfo = $appResult->fetch_assoc();
+                    $getAppStmt->close();
+
                     $success = '应用审核已更新';
+                    $appName = $appInfo['name'] ?? '未知应用';
+                    $devEmail = $appInfo['developer_email'] ?? '';
+
+                    // 发送邮件通知
+                    if (!empty($devEmail)) {
+                        $mail = new PHPMailer(true);
+                        try {
+                            // 服务器配置
+                            $mail->isSMTP();
+                            $mail->Host = SMTP_HOST;
+                            $mail->Port = SMTP_PORT;
+                            $mail->SMTPSecure = SMTP_ENCRYPTION;
+                            $mail->SMTPAuth = true;
+                            $mail->Username = SMTP_USERNAME;
+                            $mail->Password = SMTP_PASSWORD;
+                        $mail->CharSet = 'UTF-8';
+                        $mail->isHTML(true);
+                        $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+                            $mail->addAddress($devEmail);
+
+                            // 邮件内容
+                            if ($status === 'approved') {
+                                $mail->Subject = '应用审核通过通知';
+                                $mail->Body = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;'>
+                                    <h2 style='color: #2c3e50;'>应用审核通过通知</h2>
+                                    <p>您好，</p>
+                                    <p>您的应用 <strong>{$appName}</strong> 已成功通过审核！</p>
+                                    <p>现在可以在应用商店中查看您的应用。</p>
+                                    <p style='margin-top: 20px; color: #666;'>此致<br>应用商店团队</p>
+                                </div>";
+                            } else {
+                                $mail->Subject = '应用审核未通过通知';
+                                $mail->Body = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;'>
+                                    <h2 style='color: #e74c3c;'>应用审核未通过通知</h2>
+                                    <p>您好，</p>
+                                    <p>您的应用 <strong>{$appName}</strong> 未通过审核。</p>
+                                    <p>原因：<br>{$rejectionReason}</p>
+                                    <p style='margin-top: 20px; color: #666;'>此致<br>应用商店团队</p>
+                                </div>";
+                            }
+
+                            $mail->send();
+                            $success .= '，邮件通知已发送';
+                        } catch (Exception $e) {
+                            log_error("邮件发送失败: {$mail->ErrorInfo}", __FILE__, __LINE__);
+                            $error = "审核状态已更新，但邮件发送失败: {$mail->ErrorInfo}";
+                        }
+                    }
                 } else {
                     $error = '更新审核状态失败: ' . $conn->error;
                 }

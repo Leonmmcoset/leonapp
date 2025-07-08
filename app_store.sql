@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS apps (
     version VARCHAR(20) NOT NULL,
     changelog TEXT NOT NULL,
     file_path VARCHAR(255) NOT NULL,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    developer_email VARCHAR(255) NOT NULL
 );
 
 -- 确保状态列存在（用于现有数据库）
