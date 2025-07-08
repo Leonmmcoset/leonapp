@@ -72,6 +72,8 @@ if (!($conn instanceof mysqli)) {
     <title>应用审核 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- Fluent Design 模糊效果 -->
@@ -165,38 +167,44 @@ if (!($conn instanceof mysqli)) {
                                     <input type="hidden" name="app_id" value="<?php echo $app['id']; ?>">
                                     <div class="d-flex gap-2">
                                         <button type="submit" name="review_action" value="approve" class="btn btn-success flex-grow-1">通过</button>
-                                        <button type="button" class="btn btn-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#rejectModal<?php echo $app['id']; ?>">拒绝</button>
+                                        <button type="button" class="btn btn-danger flex-grow-1" onclick="showRejectReason(<?php echo $app['id']; ?>, '<?php echo addslashes(htmlspecialchars($app['name'])); ?>')">拒绝</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 拒绝原因模态框 -->
-                    <div class="modal fade" id="rejectModal<?php echo $app['id']; ?>" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="rejectModalLabel">拒绝应用: <?php echo htmlspecialchars($app['name']); ?></h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form method="post">
-                                    <div class="modal-body">
-                                        <input type="hidden" name="app_id" value="<?php echo $app['id']; ?>">
-                                        <div class="form-floating mb-3">
-                                            <textarea class="form-control" id="rejection_reason<?php echo $app['id']; ?>" name="rejection_reason" rows="3" required></textarea>
-                                            <label for="rejection_reason<?php echo $app['id']; ?>">拒绝原因</label>
-                                            <div class="form-text">请详细说明拒绝原因，帮助开发者改进应用</div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                        <button type="submit" name="review_action" value="reject" class="btn btn-danger">确认拒绝</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <script>
+function showRejectReason(appId, appName) {
+    Swal.fire({
+        title: '拒绝应用: ' + appName,
+        html: '<textarea id="rejectionReason" class="swal2-textarea" rows="3" placeholder="请详细说明拒绝原因，帮助开发者改进应用"></textarea>',
+        confirmButtonText: '确认拒绝',
+        cancelButtonText: '取消',
+        showCancelButton: true,
+        validationMessage: '请输入拒绝原因',
+        preConfirm: () => {
+            const reason = document.getElementById('rejectionReason').value;
+            if (!reason) {
+                Swal.showValidationMessage('请输入拒绝原因');
+            }
+            return reason;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.innerHTML = `
+                <input type="hidden" name="app_id" value="${appId}">
+                <input type="hidden" name="review_action" value="reject">
+                <input type="hidden" name="rejection_reason" value="${encodeURIComponent(result.value)}">
+            `;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
+</script>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -204,5 +212,7 @@ if (!($conn instanceof mysqli)) {
 
     <!-- Bootstrap JS with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>
