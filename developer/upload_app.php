@@ -173,7 +173,7 @@ if (!($conn instanceof mysqli)) {
                 }
 
                 // 插入应用基本信息
-                $stmt = $conn->prepare('INSERT INTO apps (name, description, platforms, status, age_rating, age_rating_description, version, changelog, file_path, developer_email, created_at) VALUES (?, ?, ?, \'pending\', ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)');
+                $stmt = $conn->prepare('INSERT INTO apps (name, description, platforms, status, age_rating, age_rating_description, version, changelog, file_path, developer_id, developer_email, created_at) VALUES (?, ?, ?, \'pending\', ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)');
                 if (!$stmt) {
                     throw new Exception('应用基本信息查询准备失败: ' . $conn->error);
                 }
@@ -189,7 +189,7 @@ if (!($conn instanceof mysqli)) {
                 // 移除多余的$status参数，匹配SQL中9个占位符
                 // 修正age_rating_description类型为字符串，并确保9个参数与占位符匹配
                 // 修复变量名错误：使用已验证的$appFilePath替换未定义的$file_path
-                $stmt->bind_param('sssssssss', $appName, $appDescription, $platforms_json, $ageRating, $ageRatingDescription, $version, $changelog, $appRelativePath, $developerEmail);
+                $stmt->bind_param('ssssssssis', $appName, $appDescription, $platforms_json, $ageRating, $ageRatingDescription, $version, $changelog, $appRelativePath, $developerId, $developerEmail);
                 if (!$stmt->execute()) {
                     throw new Exception('应用基本信息查询执行失败: ' . $stmt->error);
                 }
