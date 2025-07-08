@@ -52,11 +52,19 @@ app2/
    ```bash
    composer install
    ```
-4. 执行 `app_store.sql` 文件，创建数据库和表结构（确保数据库名为'awa'）：
+4. 登录 MySQL 数据库，创建名为'awa'的数据库：
+   ```sql
+   CREATE DATABASE awa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+5. 执行 `app_store.sql` 文件导入数据库结构：
    ```sql
    mysql -u your_username -p awa < app_store.sql
    ```
-4. 创建 `files` 和 `images` 目录，并确保 Web 服务器对这些目录有写入权限。
+6. 创建 `files` 和 `images` 目录，并设置正确权限：
+   ```bash
+   mkdir -p files images
+   chmod 755 files images
+   ```
 
 ## 功能说明
 - **首页**：展示最新 App 列表，包含基本信息和评分。
@@ -67,6 +75,12 @@ app2/
 
 ## 管理员登录
 默认管理员账号信息在 `config.php` 中配置，登录后可访问管理页面。
+
+## 故障排除
+- **数据库导入错误**：确保数据库名称为'awa'且已创建，检查SQL文件路径是否正确
+- **权限问题**：确认 `files` 和 `images` 目录权限设置为755
+- **邮件发送失败**：检查 `config.php` 中的SMTP配置，确保端口（通常465或587）和加密方式正确
+- **类找不到错误**：运行 `composer install` 确保所有依赖已正确安装
 
 ## 注意事项
 - 请确保 `files`、`images` 目录以及其子目录有足够的写入权限（推荐设置权限为755）。
