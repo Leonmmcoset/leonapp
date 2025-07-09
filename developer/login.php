@@ -41,23 +41,23 @@ if (isset($_GET['register_success']) && $_GET['register_success'] == 1) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']);
+    $loginId = trim($_POST['login_id']);
     $password = $_POST['password'];
 
-    if (empty($email) || empty($password)) {
-        $error = '邮箱和密码不能为空';
+    if (empty($loginId) || empty($password)) {
+        $error = '邮箱/用户名和密码不能为空';
     } else {
         // 检查数据库连接是否为 MySQLi 对象
 if (!($conn instanceof mysqli)) {
     log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
     $error = '数据库连接错误，请检查配置';
 } else {
-    $stmt = $conn->prepare('SELECT id, username, password FROM developers WHERE email = ?');
+    $stmt = $conn->prepare('SELECT id, username, password FROM developers WHERE email = ? OR username = ?');
     if (!$stmt) {
         log_error('登录查询准备失败: ' . $conn->error, __FILE__, __LINE__);
         $error = '登录时发生错误，请稍后再试';
     } else {
-        $stmt->bind_param('s', $email);
+        $stmt->bind_param('ss', $loginId, $loginId);
         if (!$stmt->execute()) {
             log_error('登录查询执行失败: ' . $stmt->error, __FILE__, __LINE__);
             $error = '登录时发生错误，请稍后再试';
@@ -70,7 +70,7 @@ if (!($conn instanceof mysqli)) {
                 header('Location: dashboard.php');
                 exit;
             } else {
-                $error = '邮箱或密码错误';
+                $error = '邮箱/用户名或密码错误';
             }
         }
     }
@@ -104,8 +104,8 @@ if (!($conn instanceof mysqli)) {
         <?php endif; ?>
         <form method="post">
             <div class="mb-3">
-                <label for="email" class="form-label">邮箱</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+                <label for="login_id" class="form-label">邮箱/用户名</label>
+                <input type="text" id="login_id" name="login_id" class="form-control" placeholder="请输入邮箱或用户名" required>
             </div>
             <div class="form-group">
                 <label for="password" class="form-label">密码</label>

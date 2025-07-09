@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS apps (
     changelog TEXT NOT NULL,
     file_path VARCHAR(255) NOT NULL,
     status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    is_approved TINYINT(1) DEFAULT 0 COMMENT '应用是否已审核',
     developer_email VARCHAR(255) NOT NULL
 );
 

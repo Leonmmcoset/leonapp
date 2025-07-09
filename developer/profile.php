@@ -167,9 +167,7 @@ if (!($conn instanceof mysqli)) {
                 <label for="username">用户名</label>
                 <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($developer['username']); ?>" placeholder="请输入用户名">
             </div>
-            <button type="submit" class="btn btn-primary">保存更改</button>
-        ?>" required>
-            </div>
+
             <div class="form-group">
                 <label for="email">邮箱</label>
                 <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($developer['email']); ?>" required>

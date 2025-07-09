@@ -28,6 +28,24 @@ if (!$app) {
     die("<h1>错误：应用不存在</h1><p>找不到ID为 $appId 的应用。请检查ID是否正确。</p>");
 }
 
+// 检查应用审核状态
+if ($app['status'] != 'approved') {
+    echo '<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        Swal.fire({
+            title: "应用审核中",
+            text: "该应用正在审核中，暂时无法访问。",
+            icon: "info",
+            confirmButtonText: "确定"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.history.back();
+            }
+        });
+    });
+    </script>';
+}
+
 // 处理评价加载请求
 if (isset($_GET['action']) && $_GET['action'] === 'load_reviews') {
     header('Content-Type: text/html; charset=UTF-8');
@@ -118,6 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <!-- 本地 Chart.js -->
     <script src="js/charts.js"></script>
     <!-- 自定义CSS -->
