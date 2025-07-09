@@ -8,7 +8,13 @@ def fetch_apps(search_term=None):
     try:
         response = requests.get(url)
         response.raise_for_status()
-        return response.json()
+        data = response.json()
+        # 确保返回的是字典类型
+        if isinstance(data, dict):
+            return data
+        else:
+            print(f"获取公告失败: 无效的数据格式")
+            return None
     except requests.exceptions.RequestException as e:
         print(f"获取应用列表失败: {e}")
         return []

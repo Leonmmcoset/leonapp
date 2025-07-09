@@ -55,8 +55,14 @@ class AppStoreGUI:
             url += f'&search={search_term}'
         try:
             response = requests.get(url)
-            response.raise_for_status()
-            return response.json()
+        response.raise_for_status()
+        data = response.json()
+        # 确保返回的是字典类型
+        if isinstance(data, dict):
+            return data
+        else:
+            messagebox.showerror("错误", "获取公告失败: 无效的数据格式")
+            return None
         except requests.exceptions.RequestException as e:
             messagebox.showerror('错误', f'获取应用列表失败: {str(e)}')
             return []
@@ -98,7 +104,13 @@ class AppStoreGUI:
         try:
             response = requests.get(url)
             response.raise_for_status()
-            return response.json()
+            data = response.json()
+            # 确保返回的是字典类型
+            if isinstance(data, dict):
+                return data
+            else:
+                messagebox.showerror("错误", "获取公告失败: 无效的数据格式")
+                return None
         except requests.exceptions.RequestException as e:
             messagebox.showerror("错误", f"获取公告失败: {str(e)}")
             return None
