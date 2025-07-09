@@ -1,6 +1,8 @@
 <?php
 require_once '../config.php';
 
+// 设置会话cookie路径为根目录以确保跨目录访问
+session_set_cookie_params(0, '/');
 session_start();
 // 检查管理员登录状态
 if (!isset($_SESSION['admin'])) {
@@ -99,10 +101,25 @@ if (isset($_GET['logout'])) {
 if (isset($_POST['delete_user'])) {
     $userId = $_POST['user_id'];
     $stmt = $conn->prepare("DELETE FROM users WHERE id = ? AND role = 'developer'");
+    if (!$stmt) {
+        error_log('Database prepare failed: ' . $conn->error);
+        header('Location: manage_developers.php?error=delete');
+        exit;
+    }
     $stmt->bind_param("i", $userId);
-    $stmt->execute();
+    if (!$stmt->execute()) {
+        error_log('Delete query execution failed: ' . $stmt->error);
+        header('Location: manage_developers.php?error=delete');
+        exit;
+    }
+    $affected_rows = $stmt->affected_rows;
     $stmt->close();
-    header("Location: manage_developers.php?deleted=true");
+    if ($affected_rows > 0) {
+        header("Location: manage_developers.php?deleted=true");
+    } else {
+        error_log('No user deleted with ID: ' . $userId);
+        header('Location: manage_developers.php?error=delete&user_id=' . $userId);
+    }
     exit;
 }
 
