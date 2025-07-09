@@ -47,7 +47,7 @@
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="/index.html"><?php echo APP_STORE_NAME; ?></a>
+            <a class="navbar-brand" href="/index.php"><?php echo APP_STORE_NAME; ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

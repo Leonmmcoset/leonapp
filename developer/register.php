@@ -71,6 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = '用户名、邮箱和密码不能为空';
     } elseif (empty($_POST['agree'])) {
         $error = '必须同意 APP 审核标准才能注册';
+    } elseif (empty($_POST['agree_privacy'])) {
+        $error = '必须同意隐私政策才能注册';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = '请输入有效的邮箱地址';
     } else {
@@ -212,6 +214,12 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="agree" name="agree" required>
                 <label class="form-check-label" for="agree">我已阅读并同意 <a href="/docs/app_review_standards.php" target="_blank">APP 审核标准</a></label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="privacy_policy" name="agree_privacy">
+                <label class="form-check-label" for="privacy_policy">
+                    我已阅读并同意 <a href="../docs/privacy_policy.php" target="_blank">隐私政策</a>
+                </label>
             </div>
             <button type="submit" class="btn btn-primary w-100">注册</button>
         </form>
