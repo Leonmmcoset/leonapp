@@ -1,37 +1,36 @@
 <?php
 require_once '../config.php';
-
 session_start();
-
-if (!isset($conn) || !$conn instanceof mysqli) {
-    die('数据库连接失败，请检查配置文件。');
-}
-
-// 获取最新公告
-$sql = 'SELECT title, content FROM announcements ORDER BY created_at DESC LIMIT 1';
-$result = $conn->query($sql);
-$announcement = $result ? $result->fetch_assoc() : null;
 // 检查管理员登录状态
-if (!isset($_SESSION['admin'])) {
+if (!isset($_SESSION['admin']) || !isset($_SESSION['admin']['id'])) {
     header('Location: login.php');
     exit;
 }
 
-// 处理退出登录
-if (isset($_GET['logout'])) {
-    unset($_SESSION['admin']);
-    header('Location: login.php');
-    exit;
+// 处理公告发布
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'] ?? '';
+    $content = $_POST['content'] ?? '';
+    $admin_id = $_SESSION['admin']['id'];
+
+    if (!empty($title) && !empty($content)) {
+        $stmt = $conn->prepare('INSERT INTO announcements (title, content, admin_id) VALUES (?, ?, ?)');
+        $stmt->bind_param('ssi', $title, $content, $admin_id);
+        if ($stmt->execute()) {
+            header('Location: announcements.php?success=公告发布成功');
+            exit;
+        } else {
+            $error = '公告发布失败: ' . $conn->error;
+        }
+        $stmt->close();
+    } else {
+        $error = '标题和内容不能为空';
+    }
 }
 
-// 获取App列表
-$sqlApps = "SELECT * FROM apps WHERE status = 'approved' ORDER BY created_at DESC";
-$resultApps = $conn->query($sqlApps);
-
-if (!$resultApps) {
-    error_log("Database query failed: " . $conn->error);
-    echo '<div class="alert alert-danger">获取App列表失败，请联系管理员。</div>';
-} else {
+// 获取公告列表
+$sql = 'SELECT a.*, ad.username FROM announcements a JOIN admins ad ON a.admin_id = ad.id ORDER BY a.created_at DESC';
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <style>
@@ -54,7 +53,7 @@ if (!$resultApps) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App管理 - <?php echo APP_STORE_NAME; ?></title>
+    <title>公告管理 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
@@ -78,12 +77,12 @@ if (!$resultApps) {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">App列表</a>
+                        <a class="nav-link" href="index.php">App列表</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="addapp.php">添加App</a>
-                </li>
-                <li class="nav-item">
+                        <a class="nav-link" href="addapp.php">添加App</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="review_apps.php">审核APP</a>
                     </li>
                     <li class="nav-item">
@@ -104,39 +103,54 @@ if (!$resultApps) {
     </nav>
 
     <div class="container mt-4">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
         <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success"><?php echo $_GET['success']; ?></div>
+            Swal.fire({
+                icon: "success",
+                title: "成功",
+                text: "<?php echo addslashes($_GET['success']); ?>",
+            });
         <?php endif; ?>
-        <?php if (isset($_GET['error'])): ?>
-            <div class="alert alert-danger"><?php echo $_GET['error']; ?></div>
+        <?php if (isset($error)): ?>
+            Swal.fire({
+                icon: "error",
+                title: "错误",
+                text: "<?php echo addslashes($error); ?>",
+            });
         <?php endif; ?>
-    
-        <h2>App列表</h2>
-        <div class="mb-3">
-            <a href="manage_tags.php" class="btn btn-info">标签管理</a>
-        </div>
+        </script>
+
+        <h2>发布公告</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="title" class="form-label">标题</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">内容</label>
+                <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">发布</button>
+        </form>
+
+        <h2 class="mt-4">公告列表</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>名称</th>
-                    <th>年龄分级</th>
-                    <th>创建时间</th>
-                    <th>操作</th>
+                    <th>标题</th>
+                    <th>发布者</th>
+                    <th>发布时间</th>
                 </tr>
             </thead>
             <tbody>
-                <?php while ($app = $resultApps->fetch_assoc()): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td><?php echo $app['id']; ?></td>
-                        <td><?php echo htmlspecialchars($app['name']); ?></td>
-                        <td><?php echo $app['age_rating']; ?></td>
-                        <td><?php echo $app['created_at']; ?></td>
-                        <td>
-                            <a href="editapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-primary">编辑</a>
-                            <a href="manage_versions.php?app_id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-secondary">版本管理</a>
-                            <a href="deleteapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除吗?');">删除</a>
-                        </td>
+                        <td><?php echo $row['id']; ?></td>
+                        <td><?php echo htmlspecialchars($row['title']); ?></td>
+                        <td><?php echo htmlspecialchars($row['username']); ?></td>
+                        <td><?php echo $row['created_at']; ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -163,6 +177,3 @@ if (!$resultApps) {
     </script>
 </body>
 </html>
-<?php 
-}
-?>

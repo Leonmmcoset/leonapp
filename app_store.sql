@@ -171,6 +171,16 @@ CREATE TABLE IF NOT EXISTS user_favorites (
     FOREIGN KEY (app_id) REFERENCES apps(id) ON DELETE CASCADE
 );
 
+-- 创建公告表
+CREATE TABLE IF NOT EXISTS announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    admin_id INT NOT NULL,
+    FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE CASCADE
+);
+
 -- 创建开发者表
 CREATE TABLE IF NOT EXISTS developers (
     id INT AUTO_INCREMENT PRIMARY KEY,

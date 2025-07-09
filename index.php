@@ -79,6 +79,21 @@ if (!isset($conn) || !$conn instanceof mysqli) {
         </div>
     </nav>
 
+    <?php
+// 获取最新公告
+$announcementQuery = "SELECT title, content FROM announcements ORDER BY created_at DESC LIMIT 1";
+$announcementResult = $conn->query($announcementQuery);
+$announcement = $announcementResult && $announcementResult->num_rows > 0 ? $announcementResult->fetch_assoc() : null;
+?>
+<?php if ($announcement): ?>
+        <div class="container mt-3">
+            <div class="alert alert-info blur-bg">
+                <h4 class="alert-heading"><?php echo htmlspecialchars($announcement['title']); ?></h4>
+                <p><?php echo nl2br(htmlspecialchars($announcement['content'])); ?></p>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="container mt-4">
         <form method="get" action="index.php" class="mb-4" onsubmit="return validateSearch();">
     <script>

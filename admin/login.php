@@ -40,9 +40,12 @@ if (!isset($_SESSION['admin'])) {
         $password = $_POST['password'];
 
         if ($username === ADMIN_USERNAME && $password === ADMIN_PASSWORD) {
-            $_SESSION['admin'] = true;
+            $_SESSION['admin'] = [
+                'id' => 1, // 配置文件中未定义管理员ID，使用默认值1
+                'username' => $username
+            ];
             header('Location: index.php');
-            exit;
+            exit();
         } else {
             $error = '用户名或密码错误';
         }
@@ -75,7 +78,14 @@ if (!isset($_SESSION['admin'])) {
     echo '                    <div class="card-header">管理员登录</div>';
     echo '                    <div class="card-body">';
     if (isset($error)) {
-        echo '                        <div class="alert alert-danger">'. $error . '</div>';
+        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+        echo '<script>
+            Swal.fire({
+                icon: "error",
+                title: "错误",
+                text: "'. addslashes($error) . '",
+            });
+        </script>';
     }
     echo '                        <form method="post">';
     echo '                            <div class="mb-3">';
