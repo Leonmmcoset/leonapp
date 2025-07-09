@@ -239,148 +239,80 @@ if (!($conn instanceof mysqli)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>编辑应用</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 500px;
-        }
-        h2 {
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            resize: vertical;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        .error {
-            color: red;
-            margin-bottom: 10px;
-        }
-        .success {
-            color: green;
-            margin-bottom: 10px;
-        }
-        .back-link {
-            text-align: center;
-            margin-top: 10px;
-        }
-        .back-link a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h2>编辑应用</h2>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">编辑应用</h2>
         <?php if (!empty($error)): ?>
-            <div class="error"><?php echo $error; ?></div>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
         <?php endif; ?>
         <?php if (!empty($success)): ?>
-            <div class="success"><?php echo $success; ?></div>
+            <div class="alert alert-success"><?php echo $success; ?></div>
         <?php endif; ?>
         <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="name">应用名称</label>
-                <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($app['name']); ?>" required>
+            <div class="mb-3">
+                <label for="name" class="form-label">应用名称</label>
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($app['name']); ?>" required>
             </div>
-            <div class="form-group">
-                <label for="description">应用描述</label>
-                <textarea id="description" name="description" rows="5" required><?php echo htmlspecialchars($app['description']); ?></textarea>
+            <div class="mb-3">
+                <label for="description" class="form-label">应用描述</label>
+                <textarea class="form-control" id="description" name="description" rows="5" required><?php echo htmlspecialchars($app['description']); ?></textarea>
             </div>
-            <div class="form-group">
-                <label for="version">版本号</label>
-                <input type="text" id="version" name="version" value="<?php echo htmlspecialchars($app['version']); ?>" required>
+            <div class="mb-3">
+                <label for="version" class="form-label">版本号</label>
+                <input type="text" class="form-control" id="version" name="version" value="<?php echo htmlspecialchars($app['version']); ?>" required>
             </div>
-            <div class="form-group">
-                <label for="changelog">更新日志</label>
-                <textarea id="changelog" name="changelog" rows="3" required><?php echo htmlspecialchars($app['changelog']); ?></textarea>
+            <div class="mb-3">
+                <label for="changelog" class="form-label">更新日志</label>
+                <textarea class="form-control" id="changelog" name="changelog" rows="3" required><?php echo htmlspecialchars($app['changelog']); ?></textarea>
             </div>
-            <div class="form-group">
-                <label for="age_rating">年龄分级</label>
-                <select id="age_rating" name="age_rating" required>
+            <div class="mb-3">
+                <label for="age_rating" class="form-label">年龄分级</label>
+                <select class="form-select" id="age_rating" name="age_rating" required>
                     <option value="3+" <?php echo $app['age_rating'] === '3+' ? 'selected' : ''; ?>>3+</option>
                     <option value="7+" <?php echo $app['age_rating'] === '7+' ? 'selected' : ''; ?>>7+</option>
                     <option value="12+" <?php echo $app['age_rating'] === '12+' ? 'selected' : ''; ?>>12+</option>
                     <option value="17+" <?php echo $app['age_rating'] === '17+' ? 'selected' : ''; ?>>17+</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="age_rating_description">年龄分级说明</label>
-                <input type="text" id="age_rating_description" name="age_rating_description" value="<?php echo htmlspecialchars($app['age_rating_description']); ?>" required>
+            <div class="mb-3">
+                <label for="age_rating_description" class="form-label">年龄分级说明</label>
+                <input type="text" class="form-control" id="age_rating_description" name="age_rating_description" value="<?php echo htmlspecialchars($app['age_rating_description']); ?>" required>
             </div>
-            <div class="form-group">
-                <label>适用平台</label>
+            <div class="mb-3">
+                <label class="form-label">适用平台</label>
                 <?php $platforms = json_decode($app['platforms'], true) ?? []; ?>
-                <div>
-                    <input type="checkbox" id="platform_android" name="platforms[]" value="Android" <?php echo in_array('Android', $platforms) ? 'checked' : ''; ?>>
-                    <label for="platform_android">Android</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="platform_android" name="platforms[]" value="Android" <?php echo in_array('Android', $platforms) ? 'checked' : ''; ?>>
+                    <label class="form-check-label" for="platform_android">Android</label>
                 </div>
-                <div>
-                    <input type="checkbox" id="platform_ios" name="platforms[]" value="iOS" <?php echo in_array('iOS', $platforms) ? 'checked' : ''; ?>>
-                    <label for="platform_ios">iOS</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="platform_ios" name="platforms[]" value="iOS" <?php echo in_array('iOS', $platforms) ? 'checked' : ''; ?>>
+                    <label class="form-check-label" for="platform_ios">iOS</label>
                 </div>
             </div>
-            <div class="form-group">
-                <label>应用标签 (至少选择1个)</label>
-                <div class="d-flex flex-wrap gap-3">
+            <div class="mb-3">
+                <label class="form-label">应用标签 (至少选择1个)</label>
+                <div class="row">
                     <?php foreach ($tags as $tag): ?>
-                    <div>
-                        <input type="checkbox" id="tag_<?php echo $tag['id']; ?>" name="tags[]" value="<?php echo $tag['id']; ?>" <?php echo in_array($tag['id'], $appTags) ? 'checked' : ''; ?>>
-                        <label for="tag_<?php echo $tag['id']; ?>"><?php echo htmlspecialchars($tag['name']); ?></label>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="tag_<?php echo $tag['id']; ?>" name="tags[]" value="<?php echo $tag['id']; ?>" <?php echo in_array($tag['id'], $appTags) ? 'checked' : ''; ?>>
+                            <label class="form-check-label" for="tag_<?php echo $tag['id']; ?>"><?php echo htmlspecialchars($tag['name']); ?></label>
+                        </div>
                     </div>
                     <?php endforeach; ?>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="app_file">更新应用文件</label>
-                <input type="file" id="app_file" name="app_file">
-                <small>当前文件: <?php echo basename($app['file_path']); ?></small>
+            <div class="mb-3">
+                <label for="app_file" class="form-label">更新应用文件</label>
+                <input class="form-control" type="file" id="app_file" name="app_file">
+                <div class="form-text">当前文件: <?php echo basename($app['file_path']); ?></div>
             </div>
-            <div class="form-group">
-                <label>应用图片 (最多5张)</label>
+            <div class="mb-3">
+                <label class="form-label">应用图片 (最多5张)</label>
                 <?php
                 // 获取现有图片
                 $existingImages = [];
@@ -412,10 +344,10 @@ if (!($conn instanceof mysqli)) {
                 <small>支持jpg、png格式，最多上传5张图片</small>
             </div>
             <input type="hidden" name="removed_images" id="removed_images" value="">
-            <input type="submit" value="保存更改">
+            <button type="submit" class="btn btn-primary w-100">保存更改</button>
         </form>
-        <div class="back-link">
-            <a href="dashboard.php">返回仪表盘</a>
+        <div class="text-center mt-3">
+            <a href="dashboard.php" class="btn btn-secondary">返回仪表盘</a>
         </div>
     </div>
 <script>
