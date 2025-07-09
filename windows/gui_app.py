@@ -19,6 +19,7 @@ class AppStoreGUI:
         self.search_entry = ttk.Entry(self.search_frame, width=50)
         self.search_entry.pack(side=tk.LEFT, padx=5)
         ttk.Button(self.search_frame, text="搜索", command=self.on_search).pack(side=tk.LEFT, padx=5)
+        ttk.Button(self.search_frame, text="查看最新公告", command=self.show_latest_announcement).pack(side=tk.LEFT, padx=5)
 
         # 创建主框架
         self.main_frame = ttk.Frame(root)
@@ -44,6 +45,9 @@ class AppStoreGUI:
 
         # 加载应用列表
         self.load_apps()
+        
+        # 创建公告对话框
+        self.create_announcement_dialog()
 
     def fetch_apps(self, search_term=None):
         url = 'http://localhost:3232/api.php?action=list'
@@ -57,6 +61,28 @@ class AppStoreGUI:
             messagebox.showerror('错误', f'获取应用列表失败: {str(e)}')
             return []
 
+    def create_announcement_dialog(self):
+        self.announcement_window = tk.Toplevel(self.root)
+        self.announcement_window.title("最新公告")
+        self.announcement_window.geometry("500x300")
+        self.announcement_window.withdraw()  # 初始隐藏
+        
+        # 公告标题
+        self.announcement_title = ttk.Label(self.announcement_window, text="", font=('SimHei', 14, 'bold'))
+        self.announcement_title.pack(pady=10)
+        
+        # 公告内容
+        self.announcement_content = tk.Text(self.announcement_window, wrap=tk.WORD, width=60, height=10)
+        self.announcement_content.pack(padx=10, pady=5)
+        self.announcement_content.config(state=tk.DISABLED)
+        
+        # 公告时间
+        self.announcement_time = ttk.Label(self.announcement_window, text="")
+        self.announcement_time.pack(pady=5)
+        
+        # 关闭按钮
+        ttk.Button(self.announcement_window, text="关闭", command=self.announcement_window.withdraw).pack(pady=10)
+
     def fetch_app_details(self, app_id):
         url = f'http://localhost:3232/api.php?action=app&id={app_id}'
         try:
@@ -66,6 +92,30 @@ class AppStoreGUI:
         except requests.exceptions.RequestException as e:
             messagebox.showerror('错误', f'获取应用详情失败: {str(e)}')
             return None
+
+    def fetch_latest_announcement(self):
+        url = 'http://localhost:3232/api.php?action=latest_announcement'
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            messagebox.showerror("错误", f"获取公告失败: {str(e)}")
+            return None
+
+    def show_latest_announcement(self):
+        def thread_func():
+            announcement = self.fetch_latest_announcement()
+            if announcement:
+                self.announcement_title.config(text=announcement.get('title', '无标题'))
+                self.announcement_content.config(state=tk.NORMAL)
+                self.announcement_content.delete(1.0, tk.END)
+                self.announcement_content.insert(tk.END, announcement.get('content', '无内容'))
+                self.announcement_content.config(state=tk.DISABLED)
+                self.announcement_time.config(text=f"发布时间: {announcement.get('created_at', '未知')}")
+                self.announcement_window.deiconify()
+        
+        threading.Thread(target=thread_func).start()
 
     def download_version(self, version_id):
         url = f'http://localhost:3232/api.php?action=download&version_id={version_id}'

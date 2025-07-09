@@ -34,6 +34,16 @@ def get_app_details(app_id):
         print(f"获取应用详情失败: {e}")
         return None
 
+def fetch_latest_announcement():
+    url = 'http://localhost:3232/api.php?action=latest_announcement'
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"获取最新公告失败: {e}")
+        return None
+
 def download_app(version_id):
     url = f'http://localhost:3232/api.php?action=download&version_id={version_id}'
     try:
@@ -73,9 +83,10 @@ if __name__ == "__main__":
         print("2. 搜索应用")
         print("3. 查看应用详情")
         print("4. 下载应用")
-        print("5. 退出")
+        print("5. 查看最新公告")
+        print("6. 退出")
         
-        choice = input("请选择操作 (1-5): ")
+        choice = input("请选择操作 (1-6): ")
         
         if choice == "1":
             apps = fetch_apps()
@@ -102,6 +113,15 @@ if __name__ == "__main__":
             version_id = input("请输入版本ID: ")
             download_app(version_id)
         elif choice == "5":
+            announcement = fetch_latest_announcement()
+            if announcement:
+                print("\n=== 最新公告 ===")
+                print(f"标题: {announcement.get('title')}")
+                print(f"内容: {announcement.get('content')}")
+                print(f"发布时间: {announcement.get('created_at')}")
+            else:
+                print("获取公告失败或暂无公告")
+        elif choice == "6":
             print("谢谢使用，再见！")
             break
         else:

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config.php';
 header('Content-Type: application/json');
 
@@ -342,6 +343,138 @@ if (isset($_GET['action'])) {
         } else {
             http_response_code(404);
             echo json_encode(['error' => 'Version not found']);
+        }
+        $stmt->close();
+        exit;
+    }
+    
+    // 获取公告列表（支持分页）
+    elseif ($action === 'announcements' && $requestMethod === 'GET') {
+        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+        $perPage = isset($_GET['per_page']) && is_numeric($_GET['per_page']) ? (int)$_GET['per_page'] : 10;
+        $offset = ($page - 1) * $perPage;
+        
+        // 获取总数
+        $countSql = "SELECT COUNT(*) as total FROM announcements";
+        $countResult = $conn->query($countSql);
+        $total = $countResult->fetch_assoc()['total'];
+        
+        // 获取分页数据
+        $sql = "SELECT * FROM announcements ORDER BY created_at DESC LIMIT ?, ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $offset, $perPage);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $announcements = [];
+        while ($row = $result->fetch_assoc()) {
+            $announcements[] = $row;
+        }
+        
+        // 返回分页数据和元信息
+        echo json_encode([
+            'data' => $announcements,
+            'pagination' => [
+                'total' => $total,
+                'page' => $page,
+                'per_page' => $perPage,
+                'total_pages' => ceil($total / $perPage)
+            ]
+        ]);
+        $stmt->close();
+        exit;
+    }
+    
+    // 获取最新公告
+    elseif ($action === 'latest_announcement' && $requestMethod === 'GET') {
+        $sql = "SELECT * FROM announcements ORDER BY created_at DESC LIMIT 1";
+        $result = $conn->query($sql);
+        
+        $announcement = $result->fetch_assoc();
+        echo json_encode($announcement);
+        exit;
+    }
+    
+    // 添加公告
+    elseif ($action === 'add_announcement' && $requestMethod === 'POST') {
+        if (!isset($_SESSION['admin']['id'])) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Unauthorized']);
+            exit;
+        }
+        
+        $title = $_POST['title'] ?? '';
+        $content = $_POST['content'] ?? '';
+        $adminId = $_SESSION['admin']['id'];
+        
+        if (empty($title) || empty($content)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Title and content are required']);
+            exit;
+        }
+        
+        $stmt = $conn->prepare("INSERT INTO announcements (title, content, admin_id) VALUES (?, ?, ?)");
+        $stmt->bind_param("ssi", $title, $content, $adminId);
+        
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 'success', 'message' => 'Announcement added successfully']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to add announcement']);
+        }
+        $stmt->close();
+        exit;
+    }
+    
+    // 删除公告
+    elseif ($action === 'delete_announcement' && isset($_GET['id']) && is_numeric($_GET['id']) && $requestMethod === 'DELETE') {
+        if (!isset($_SESSION['admin']['id'])) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Unauthorized']);
+            exit;
+        }
+        
+        $id = $_GET['id'];
+        $stmt = $conn->prepare("DELETE FROM announcements WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 'success', 'message' => 'Announcement deleted successfully']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to delete announcement']);
+        }
+        $stmt->close();
+        exit;
+    }
+    
+    // 更新公告
+    elseif ($action === 'update_announcement' && isset($_GET['id']) && is_numeric($_GET['id']) && $requestMethod === 'PUT') {
+        if (!isset($_SESSION['admin']['id'])) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Unauthorized']);
+            exit;
+        }
+        
+        parse_str(file_get_contents('php://input'), $putData);
+        $id = $_GET['id'];
+        $title = $putData['title'] ?? '';
+        $content = $putData['content'] ?? '';
+        
+        if (empty($title) || empty($content)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Title and content are required']);
+            exit;
+        }
+        
+        $stmt = $conn->prepare("UPDATE announcements SET title = ?, content = ? WHERE id = ?");
+        $stmt->bind_param("ssi", $title, $content, $id);
+        
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 'success', 'message' => 'Announcement updated successfully']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to update announcement']);
         }
         $stmt->close();
         exit;
