@@ -200,7 +200,8 @@ if (!($conn instanceof mysqli)) {
                                 <?php endif; ?>
                             </p>
                             <div class="action-buttons">
-                                <a href="edit_app.php?id=<?php echo $app['id']; ?>" class="btn btn-primary">编辑</a>
+                                <a href="edit_app.php?id=<?php echo $app['id']; ?>", class="btn btn-primary">编辑</a>
+                                <a href="version_control.php?id=<?php echo $app['id']; ?>", class="btn btn-secondary">版本控制</a>
                             </div>
                         </div>
                     </div>
