@@ -90,10 +90,19 @@ $resultApps = $conn->query($sqlApps);
     </nav>
 
     <div class="container mt-4">
-        <div class="mb-3 form-floating">
-            <input type="text" class="form-control" id="searchApp" placeholder="搜索应用">
-            <label for="searchApp">搜索应用</label>
-        </div>
+        <form id="searchForm" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-10">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="searchApp" placeholder="搜索应用" value="">
+                        <label for="searchApp">搜索应用</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" style="width: calc(3.5rem + calc(var(--bs-border-width) * 2)); height: calc(3.5rem + calc(var(--bs-border-width) * 2))" type="submit" id="searchButton">搜索</button>
+                </div>
+            </div>
+        </form>
         <h1><?php echo $developerName; ?> 的应用</h1>
         <hr>
         <?php if (isset($developer['social_links']) && !empty($developer['social_links'])): ?>
@@ -157,6 +166,39 @@ $resultApps = $conn->query($sqlApps);
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('page-transition');
+
+            // 搜索功能实现
+            function performSearch(event) {
+                event.preventDefault();
+                const searchTerm = document.getElementById('searchApp').value.toLowerCase();
+                const appCards = document.querySelectorAll('.col-md-4.mb-4');
+                let hasResults = false;
+
+                appCards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent.toLowerCase();
+                    const description = card.querySelector('.card-text').textContent.toLowerCase();
+
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = '';
+                        hasResults = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // 如果没有搜索结果，显示提示
+                if (!hasResults) {
+                    Swal.fire({
+                        title: '未找到结果',
+                        text: '没有找到与 "' + searchTerm + '" 匹配的应用',
+                        icon: 'info',
+                        confirmButtonText: '确定'
+                    });
+                }
+            }
+
+            // 添加表单提交事件监听
+            document.getElementById('searchForm').addEventListener('submit', performSearch);
         });
     </script>
 </body>
