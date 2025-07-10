@@ -1,1 +1,6 @@
-LimitRequestBody 10485760
+# 增加请求体大小限制
+LimitRequestBody 524288000
+
+# 错误处理
+ErrorDocument 500 /error_pages/500.html
+ErrorDocument 404 /error_pages/404.html
