@@ -1,0 +1,150 @@
+Date : 2025-07-09 15:40:50
+Directory : c:\web\app2
+Total : 105 files,  12779 codes, 4573 comments, 1852 blanks, all 19204 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| PHP        |         93 |      6,965 |      3,916 |      1,091 |     11,972 |
+| JavaScript |          1 |      5,053 |        655 |        598 |      6,306 |
+| Markdown   |          5 |        467 |          0 |        155 |        622 |
+| JSON       |          4 |        275 |          0 |          4 |        279 |
+| MS SQL     |          2 |         19 |          2 |          4 |         25 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                   | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                      |        105 |     12,779 |      4,573 |      1,852 |     19,204 |
+| . (Files)                                                              |         10 |        515 |         16 |         71 |        602 |
+| .trae                                                                  |          1 |          4 |          0 |          3 |          7 |
+| .trae\rules                                                            |          1 |          4 |          0 |          3 |          7 |
+| admin                                                                  |          2 |         77 |          5 |          4 |         86 |
+| developer                                                              |          7 |        340 |         32 |         44 |        416 |
+| docs                                                                   |          2 |        233 |          0 |         27 |        260 |
+| includes                                                               |          1 |         30 |         18 |          8 |         56 |
+| js                                                                     |          1 |      5,053 |        655 |        598 |      6,306 |
+| mail                                                                   |          1 |         33 |          6 |          0 |         39 |
+| vendor                                                                 |         80 |      6,494 |      3,841 |      1,097 |     11,432 |
+| vendor (Files)                                                         |          1 |         20 |          1 |          5 |         26 |
+| vendor\composer                                                        |         10 |        677 |        377 |        145 |      1,199 |
+| vendor\phpmailer                                                       |         69 |      5,797 |      3,463 |        947 |     10,207 |
+| vendor\phpmailer\phpmailer                                             |         69 |      5,797 |      3,463 |        947 |     10,207 |
+| vendor\phpmailer\phpmailer (Files)                                     |          5 |        412 |         48 |        124 |        584 |
+| vendor\phpmailer\phpmailer\language                                    |         57 |      1,263 |        336 |        171 |      1,770 |
+| vendor\phpmailer\phpmailer\src                                         |          7 |      4,122 |      3,079 |        652 |      7,853 |
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                               | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\web\app2\.trae\rules\project_rules.md                                   | Markdown   |          4 |          0 |          3 |          7 |
+| c:\web\app2\README.md                                                      | Markdown   |        248 |          0 |         47 |        295 |
+| c:\web\app2\admin\manage_developers.php                                    | PHP        |         16 |          1 |          0 |         17 |
+| c:\web\app2\admin\review_apps.php                                          | PHP        |         61 |          4 |          4 |         69 |
+| c:\web\app2\api.php                                                        | PHP        |         19 |          2 |          2 |         23 |
+| c:\web\app2\app.php                                                        | PHP        |         95 |          7 |          9 |        111 |
+| c:\web\app2\app_store.sql                                                  | MS SQL     |         21 |          3 |          4 |         28 |
+| c:\web\app2\app_store_update.sql                                           | MS SQL     |         -2 |         -1 |          0 |         -3 |
+| c:\web\app2\composer.json                                                  | JSON       |          5 |          0 |          1 |          6 |
+| c:\web\app2\composer.lock                                                  | JSON       |        100 |          0 |          1 |        101 |
+| c:\web\app2\config.php                                                     | PHP        |         -4 |          1 |          2 |         -1 |
+| c:\web\app2\developer\dashboard.php                                        | PHP        |          1 |          0 |          0 |          1 |
+| c:\web\app2\developer\edit_app.php                                         | PHP        |        -68 |          0 |          0 |        -68 |
+| c:\web\app2\developer\profile.php                                          | PHP        |         -3 |          0 |          1 |         -2 |
+| c:\web\app2\developer\register.php                                         | PHP        |         69 |         15 |         16 |        100 |
+| c:\web\app2\developer\upload_app.php                                       | PHP        |         55 |          2 |          6 |         63 |
+| c:\web\app2\developer\verify_email.php                                     | PHP        |         77 |          5 |          8 |         90 |
+| c:\web\app2\developer\version_control.php                                  | PHP        |        209 |         10 |         13 |        232 |
+| c:\web\app2\developer_apps.php                                             | PHP        |         34 |          3 |          5 |         42 |
+| c:\web\app2\docs\app_review_standards.php                                  | PHP        |        196 |          0 |         18 |        214 |
+| c:\web\app2\docs\privacy_policy.php                                        | PHP        |         37 |          0 |          9 |         46 |
+| c:\web\app2\includes\logger.php                                            | PHP        |         30 |         18 |          8 |         56 |
+| c:\web\app2\index.php                                                      | PHP        |         -1 |          1 |          0 |          0 |
+| c:\web\app2\js\bootstrap.bundle.js                                         | JavaScript |      5,053 |        655 |        598 |      6,306 |
+| c:\web\app2\mail\verification_template.php                                 | PHP        |         33 |          6 |          0 |         39 |
+| c:\web\app2\vendor\autoload.php                                            | PHP        |         20 |          1 |          5 |         26 |
+| c:\web\app2\vendor\composer\ClassLoader.php                                | PHP        |        286 |        235 |         59 |        580 |
+| c:\web\app2\vendor\composer\InstalledVersions.php                          | PHP        |        178 |        133 |         49 |        360 |
+| c:\web\app2\vendor\composer\autoload_classmap.php                          | PHP        |          6 |          1 |          4 |         11 |
+| c:\web\app2\vendor\composer\autoload_namespaces.php                        | PHP        |          5 |          1 |          4 |         10 |
+| c:\web\app2\vendor\composer\autoload_psr4.php                              | PHP        |          6 |          1 |          4 |         11 |
+| c:\web\app2\vendor\composer\autoload_real.php                              | PHP        |         25 |          4 |         10 |         39 |
+| c:\web\app2\vendor\composer\autoload_static.php                            | PHP        |         28 |          1 |          8 |         37 |
+| c:\web\app2\vendor\composer\installed.json                                 | JSON       |         90 |          0 |          1 |         91 |
+| c:\web\app2\vendor\composer\installed.php                                  | PHP        |         32 |          0 |          1 |         33 |
+| c:\web\app2\vendor\composer\platform_check.php                             | PHP        |         21 |          1 |          5 |         27 |
+| c:\web\app2\vendor\phpmailer\phpmailer\README.md                           | Markdown   |        169 |          0 |         64 |        233 |
+| c:\web\app2\vendor\phpmailer\phpmailer\SECURITY.md                         | Markdown   |         19 |          0 |         19 |         38 |
+| c:\web\app2\vendor\phpmailer\phpmailer\SMTPUTF8.md                         | Markdown   |         27 |          0 |         22 |         49 |
+| c:\web\app2\vendor\phpmailer\phpmailer\composer.json                       | JSON       |         80 |          0 |          1 |         81 |
+| c:\web\app2\vendor\phpmailer\phpmailer\get_oauth_token.php                 | PHP        |        117 |         48 |         18 |        183 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-af.php      | PHP        |         20 |          4 |          3 |         27 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ar.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-as.php      | PHP        |         28 |          5 |          3 |         36 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-az.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ba.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-be.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-bg.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-bn.php      | PHP        |         28 |          5 |          3 |         36 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ca.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-cs.php      | PHP        |         22 |          4 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-da.php      | PHP        |         27 |          7 |          3 |         37 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-de.php      | PHP        |         22 |          4 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-el.php      | PHP        |         27 |          4 |          3 |         34 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-eo.php      | PHP        |         20 |          4 |          3 |         27 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-es.php      | PHP        |         27 |          7 |          3 |         37 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-et.php      | PHP        |         20 |          6 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-fa.php      | PHP        |         20 |          6 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-fi.php      | PHP        |         13 |         12 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-fo.php      | PHP        |         13 |         12 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-fr.php      | PHP        |         27 |          7 |          3 |         37 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-gl.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-he.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-hi.php      | PHP        |         27 |          6 |          3 |         36 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-hr.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-hu.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-hy.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-id.php      | PHP        |         22 |          7 |          3 |         32 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-it.php      | PHP        |         20 |          6 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ja.php      | PHP        |         27 |          8 |          3 |         38 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ka.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ko.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ku.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-lt.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-lv.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-mg.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-mn.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ms.php      | PHP        |         20 |          5 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-nb.php      | PHP        |         27 |          4 |          3 |         34 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-nl.php      | PHP        |         27 |          5 |          3 |         35 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-pl.php      | PHP        |         27 |          4 |          3 |         34 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-pt.php      | PHP        |         27 |          5 |          3 |         35 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-pt_br.php   | PHP        |         27 |          9 |          3 |         39 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ro.php      | PHP        |         27 |          4 |          3 |         34 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ru.php      | PHP        |         27 |          7 |          3 |         37 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-si.php      | PHP        |         27 |          5 |          3 |         35 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-sk.php      | PHP        |         22 |          6 |          3 |         31 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-sl.php      | PHP        |         27 |          7 |          3 |         37 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-sr.php      | PHP        |         20 |          6 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-sr_latn.php | PHP        |         20 |          6 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-sv.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-tl.php      | PHP        |         20 |          6 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-tr.php      | PHP        |         27 |          9 |          3 |         39 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-uk.php      | PHP        |         20 |          6 |          3 |         29 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-ur.php      | PHP        |         23 |          5 |          3 |         31 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-vi.php      | PHP        |         19 |          6 |          3 |         28 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-zh.php      | PHP        |         20 |          7 |          3 |         30 |
+| c:\web\app2\vendor\phpmailer\phpmailer\language\phpmailer.lang-zh_cn.php   | PHP        |         27 |          7 |          3 |         37 |
+| c:\web\app2\vendor\phpmailer\phpmailer\src\DSNConfigurator.php             | PHP        |        136 |         80 |         30 |        246 |
+| c:\web\app2\vendor\phpmailer\phpmailer\src\Exception.php                   | PHP        |          9 |         28 |          4 |         41 |
+| c:\web\app2\vendor\phpmailer\phpmailer\src\OAuth.php                       | PHP        |         46 |         79 |         15 |        140 |
+| c:\web\app2\vendor\phpmailer\phpmailer\src\OAuthTokenProvider.php          | PHP        |          6 |         35 |          4 |         45 |
+| c:\web\app2\vendor\phpmailer\phpmailer\src\PHPMailer.php                   | PHP        |      2,985 |      1,979 |        399 |      5,363 |
+| c:\web\app2\vendor\phpmailer\phpmailer\src\POP3.php                        | PHP        |        183 |        234 |         53 |        470 |
+| c:\web\app2\vendor\phpmailer\phpmailer\src\SMTP.php                        | PHP        |        757 |        644 |        147 |      1,548 |
+| Total                                                                  |            |     12,779 |      4,573 |      1,852 |     19,204 |
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
