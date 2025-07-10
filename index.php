@@ -227,13 +227,13 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
         </div>
         <?php endif; ?>
 
-        <h1>最新应用</h1>
-        <div class="row">
+        <h1>应用列表</h1>
+        <div class="row" id="app-list">
             <!-- 这里将通过PHP动态加载应用列表 -->
             <?php
             $search = isset($_GET['search']) ? $_GET['search'] : '';
-            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 12;
-            $offset = isset($_GET['page']) ? (intval($_GET['page']) - 1) * $limit : 0;
+            $limit = 10; // 默认每页显示10个应用
+            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
             $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, AVG(reviews.rating) as avg_rating 
                     FROM apps 
                     LEFT JOIN reviews ON apps.id = reviews.app_id ";
@@ -330,6 +330,28 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
                 }
             }
             ?>
+            <div class="text-center mt-4">
+                <button id="load-more" class="btn btn-primary" onclick="loadMoreApps()">加载更多</button>
+            </div>
+            <script>
+                function loadMoreApps() {
+                    const currentOffset = parseInt(new URLSearchParams(window.location.search).get('offset')) || 0;
+                    const newOffset = currentOffset + <?php echo $limit; ?>;
+                    
+                    fetch(`index.php?search=<?php echo urlencode($search); ?>&tag=<?php echo urlencode($_GET['tag'] ?? ''); ?>&age_rating=<?php echo urlencode($_GET['age_rating'] ?? ''); ?>&offset=${newOffset}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(data, 'text/html');
+                            const newApps = doc.querySelectorAll('#app-list .col-md-3');
+                            const appList = document.querySelector('#app-list');
+                            
+                            newApps.forEach(app => {
+                                appList.appendChild(app.cloneNode(true));
+                            });
+                        });
+                }
+            </script>
         </div>
     </div>
 
