@@ -349,6 +349,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
                             newApps.forEach(app => {
                                 appList.appendChild(app.cloneNode(true));
                             });
+                            document.getElementById('load-more').style.display = 'none';
                         });
                 }
             </script>
