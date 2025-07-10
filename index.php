@@ -58,7 +58,6 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                             <a class="nav-link" href="/admin/">管理</a>
                         </li>
                     <?php endif; ?>
-</li>
                     <li class="nav-item">
                         <a class="nav-link" href="tags.php">标签</a>
                     </li>
@@ -232,8 +231,6 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
             <!-- 这里将通过PHP动态加载应用列表 -->
             <?php
             $search = isset($_GET['search']) ? $_GET['search'] : '';
-            $limit = 10; // 默认每页显示10个应用
-            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
             $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, AVG(reviews.rating) as avg_rating 
                     FROM apps 
                     LEFT JOIN reviews ON apps.id = reviews.app_id ";
@@ -287,15 +284,8 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
             }
             
             $sql .= "GROUP BY apps.id 
-                     ORDER BY apps.created_at DESC 
-                     LIMIT ? OFFSET ?";
-            $limitVal = $limit;
-            $offsetVal = $offset;
-            $params[] = &$limitVal;
-            $params[] = &$offsetVal;
-            // 添加分页参数类型
-              $paramTypes .= 'ii';
-                      
+                     ORDER BY apps.created_at DESC";            
+            
             // 执行查询
             if (!empty($params)) {
                 $stmt = $conn->prepare($sql);
@@ -316,7 +306,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    echo '<div class="col-md-3 mb-4">';
+                    echo '<div class="col-md-3 mb-4 lazy-load" data-src="app.php?id='. $row['id'] . '">';
                     echo '<div class="card blur-bg">';
                     
                     echo '<div class="card-body">';
@@ -329,30 +319,28 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
                     echo '</div>';
                 }
             }
+        ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const lazyLoadItems = document.querySelectorAll(".lazy-load");
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            // 这里可以添加加载动画或其他操作
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                lazyLoadItems.forEach((item) => {
+                    observer.observe(item);
+                });
+            });
+        </script>
+        <?php 
             ?>
-            <div class="text-center mt-4">
-                <button id="load-more" class="btn btn-primary" onclick="loadMoreApps()">加载更多</button>
-            </div>
-            <script>
-                function loadMoreApps() {
-                    const currentOffset = parseInt(new URLSearchParams(window.location.search).get('offset')) || 0;
-                    const newOffset = currentOffset + <?php echo $limit; ?>;
-                    
-                    fetch(`index.php?search=<?php echo urlencode($search); ?>&tag=<?php echo urlencode($_GET['tag'] ?? ''); ?>&age_rating=<?php echo urlencode($_GET['age_rating'] ?? ''); ?>&offset=${newOffset}`)
-                        .then(response => response.text())
-                        .then(data => {
-                            const parser = new DOMParser();
-                            const doc = parser.parseFromString(data, 'text/html');
-                            const newApps = doc.querySelectorAll('#app-list .col-md-3');
-                            const appList = document.querySelector('#app-list');
-                            
-                            newApps.forEach(app => {
-                                appList.appendChild(app.cloneNode(true));
-                            });
-                            document.getElementById('load-more').style.display = 'none';
-                        });
-                }
-            </script>
+
         </div>
     </div>
 

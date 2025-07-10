@@ -91,6 +91,108 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_version'])) {
     }
 }
 
+// 处理版本修改请求
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['version_id'])) {
+    $versionId = $_POST['version_id'];
+    $version = $_POST['version'];
+    $changelog = $_POST['changelog'] ?? '';
+    
+    // 检查是否有新文件上传
+    if (!empty($_FILES['new_app_file']['name'])) {
+        $uploadDir = '../files/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        $fileName = basename($_FILES['new_app_file']['name']);
+        $newFilePath = $uploadDir . $fileName;
+        
+        if (move_uploaded_file($_FILES['new_app_file']['tmp_name'], $newFilePath)) {
+            // 获取旧文件路径并删除
+            $getOldPathSql = "SELECT file_path FROM app_versions WHERE id = ?";
+            $getOldPathStmt = $conn->prepare($getOldPathSql);
+            if (!$getOldPathStmt) {
+                log_error("获取旧文件路径查询准备失败: " . $conn->error, __FILE__, __LINE__);
+                $error = '版本修改失败，请稍后再试';
+                unlink($newFilePath);
+            } else {
+                $getOldPathStmt->bind_param("i", $versionId);
+                $getOldPathStmt->execute();
+                $oldPathResult = $getOldPathStmt->get_result();
+                if ($oldPathResult->num_rows > 0) {
+                    $oldPathRow = $oldPathResult->fetch_assoc();
+                    $oldFilePath = $oldPathRow['file_path'];
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+                
+                // 更新版本信息
+                $updateVersionSql = "UPDATE app_versions SET version = ?, changelog = ?, file_path = ? WHERE id = ?";
+                $updateVersionStmt = $conn->prepare($updateVersionSql);
+                if (!$updateVersionStmt) {
+                    log_error("版本更新查询准备失败: " . $conn->error, __FILE__, __LINE__);
+                    $error = '版本修改失败，请稍后再试';
+                    unlink($newFilePath);
+                } else {
+                    $updateVersionStmt->bind_param("sssi", $version, $changelog, $newFilePath, $versionId);
+                    if ($updateVersionStmt->execute()) {
+                        $success = '版本修改成功';
+                    } else {
+                        $error = '版本修改失败: ' . $conn->error;
+                        unlink($newFilePath);
+                    }
+                }
+            }
+        } else {
+            $error = '文件上传失败';
+        }
+    } else {
+        // 仅更新版本号和更新日志
+        $updateVersionSql = "UPDATE app_versions SET version = ?, changelog = ? WHERE id = ?";
+        $updateVersionStmt = $conn->prepare($updateVersionSql);
+        if (!$updateVersionStmt) {
+            log_error("版本更新查询准备失败: " . $conn->error, __FILE__, __LINE__);
+            $error = '版本修改失败，请稍后再试';
+        } else {
+            $updateVersionStmt->bind_param("ssi", $version, $changelog, $versionId);
+            if ($updateVersionStmt->execute()) {
+                $success = '版本修改成功';
+            } else {
+                $error = '版本修改失败: ' . $conn->error;
+            }
+        }
+    }
+}
+
+// 处理版本删除请求
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_version'])) {
+    $versionId = $_POST['version_id'];
+    $filePath = $_POST['file_path'];
+    
+    // 删除文件
+    if (file_exists($filePath)) {
+        if (!unlink($filePath)) {
+            log_error("文件删除失败: " . $filePath, __FILE__, __LINE__);
+            $error = '版本删除失败，请稍后再试';
+        }
+    }
+    
+    // 从数据库删除版本记录
+    $deleteVersionSql = "DELETE FROM app_versions WHERE id = ?";
+    $deleteVersionStmt = $conn->prepare($deleteVersionSql);
+    if (!$deleteVersionStmt) {
+        log_error("版本删除查询准备失败: " . $conn->error, __FILE__, __LINE__);
+        $error = '版本删除失败，请稍后再试';
+    } else {
+        $deleteVersionStmt->bind_param("i", $versionId);
+        if ($deleteVersionStmt->execute()) {
+            $success = '版本删除成功';
+        } else {
+            $error = '版本删除失败: ' . $conn->error;
+        }
+    }
+}
+
 // 获取现有版本列表
 $versions = [];
 $getVersionsSql = "SELECT * FROM app_versions WHERE app_id = ? ORDER BY id DESC";
@@ -213,6 +315,8 @@ if (!$verStmt) {
                                     <td><?php echo nl2br(htmlspecialchars($ver['changelog'] ?: '无')); ?></td>
                                     <td>
                                         <a href="../download.php?id=<?php echo $ver['id']; ?>&type=version" class="btn btn-sm btn-outline-primary">下载</a>
+                                        <a href="#" class="btn btn-sm btn-outline-warning ms-2" onclick="openEditModal(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['version']); ?>', '<?php echo htmlspecialchars($ver['changelog']); ?>')">修改</a>
+                                        <a href="#" class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDelete(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['file_path']); ?>')">删除</a>
                                         <?php if ($ver['is_current'] == 1): ?>
                                             <span class="badge bg-success">当前版本</span>
                                         <?php endif; ?>
@@ -228,5 +332,111 @@ if (!$verStmt) {
     </div>
 
     <script src="../js/bootstrap.bundle.js"></script>
+    <script>
+        function openEditModal(versionId, version, changelog) {
+            const modal = `
+                <div class="modal fade" id="editVersionModal" tabindex="-1" aria-labelledby="editVersionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editVersionModalLabel">修改版本</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="editVersionForm" method="post" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <input type="hidden" name="version_id" value="${versionId}">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="editVersion" name="version" value="${version}" required>
+                                        <label for="editVersion">版本号</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <textarea class="form-control" id="editChangelog" name="changelog" rows="3">${changelog}</textarea>
+                                        <label for="editChangelog">更新日志</label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="new_app_file" class="form-label">更新App文件 (可选)</label>
+                                        <input class="form-control" type="file" id="new_app_file" name="new_app_file">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                    <button type="submit" class="btn btn-primary">保存修改</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>`;
+            
+            document.body.insertAdjacentHTML('beforeend', modal);
+            const editModal = new bootstrap.Modal(document.getElementById('editVersionModal'));
+            editModal.show();
+
+            document.getElementById('editVersionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch('version_control.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    editModal.hide();
+                    Swal.fire({
+                        title: '成功',
+                        text: '版本修改成功',
+                        icon: 'success'
+                    }).then(() => window.location.reload());
+                })
+                .catch(error => {
+                    editModal.hide();
+                    Swal.fire({
+                        title: '错误',
+                        text: '版本修改失败: ' + error.message,
+                        icon: 'error'
+                    });
+                });
+            });
+        }
+
+        function confirmDelete(versionId, filePath) {
+            Swal.fire({
+                title: '确认删除',
+                text: '确定要删除这个版本吗？删除后无法恢复！',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: '确定删除'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('delete_version', 'true');
+                    formData.append('version_id', versionId);
+                    formData.append('file_path', filePath);
+                    
+                    fetch('version_control.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        Swal.fire({
+                            title: '成功',
+                            text: '版本删除成功',
+                            icon: 'success'
+                        }).then(() => window.location.reload());
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: '错误',
+                            text: '版本删除失败: ' + error.message,
+                            icon: 'error'
+                        });
+                    });
+                }
+            });
+        }
+    </script>
 </body>
 </html>

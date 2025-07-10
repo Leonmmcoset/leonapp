@@ -1,6 +1,7 @@
 <?php
 require_once '../config.php';
 require_once '../vendor/autoload.php';
+require_once '../includes/logger.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -198,6 +199,46 @@ if (!($conn instanceof mysqli)) {
                                 <h5 class="card-title mb-0"><?php echo htmlspecialchars($app['name']); ?></h5>
                             </div>
                             <div class="card-body">
+                                <p class="card-text"><?php echo htmlspecialchars($app['description']); ?></p>
+                                <?php 
+                                    $appId = $app['id'];
+                                    // 获取下载链接，假设在 app_versions 表中
+                                    $getDownloadLinkStmt = $conn->prepare("SELECT file_path FROM app_versions WHERE app_id = ? ORDER BY created_at DESC LIMIT 1");
+                                    if ($getDownloadLinkStmt) {
+                                        $getDownloadLinkStmt->bind_param("i", $appId);
+                                        $getDownloadLinkStmt->execute();
+                                        $downloadLinkResult = $getDownloadLinkStmt->get_result();
+                                        $downloadLinkInfo = $downloadLinkResult->fetch_assoc();
+                                        $downloadLink = $downloadLinkInfo ? $downloadLinkInfo['file_path'] : '';
+                                        $getDownloadLinkStmt->close();
+                                    } else {
+                                        $downloadLink = '';
+                                        log_error('数据库准备语句错误: ' . $conn->error, __FILE__, __LINE__);
+                                    }
+
+                                    // 获取应用标签
+                                    $getTagsStmt = $conn->prepare("SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?");
+                                    if ($getTagsStmt) {
+                                        $getTagsStmt->bind_param("i", $appId);
+                                        $getTagsStmt->execute();
+                                        $tagsResult = $getTagsStmt->get_result();
+                                        $tags = [];
+                                        while ($tag = $tagsResult->fetch_assoc()) {
+                                            $tags[] = $tag['name'];
+                                        }
+                                        $tagString = implode(', ', $tags);
+                                        $getTagsStmt->close();
+                                    } else {
+                                        $tagString = '';
+                                        log_error('数据库准备语句错误: ' . $conn->error, __FILE__, __LINE__);
+                                    }
+                                ?>
+                                <?php if (!empty($downloadLink)): ?>
+                                    <p class="card-text"><strong>下载链接:</strong> <a href="<?php echo htmlspecialchars('../' . $downloadLink); ?>" target="_blank">点击下载</a></p>
+                                <?php endif; ?>
+                                <?php if (!empty($tagString)): ?>
+                                    <p class="card-text"><strong>标签:</strong> <?php echo htmlspecialchars($tagString); ?></p>
+                                <?php endif; ?>
                                 <p class="card-text"><strong>开发者:</strong> <?php echo htmlspecialchars($app['username']); ?></p>
                                 <p class="card-text"><strong>提交时间:</strong> <?php echo htmlspecialchars($app['created_at']); ?></p>
                                 <p class="card-text"><strong>描述:</strong> <?php echo nl2br(htmlspecialchars($app['description'])); ?></p>
