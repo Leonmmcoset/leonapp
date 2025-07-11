@@ -285,13 +285,65 @@ if (!($conn instanceof mysqli)) {
             </div>
             <div class="mb-3">
                 <label class="form-label">适用平台</label>
-                <?php $platforms = json_decode($app['platforms'], true) ?? []; ?>
+                <?php $platforms = json_decode($app['platforms'], true) ?? [];
+                // 解析平台值，提取主平台和子选项
+                $mainPlatforms = [];
+                $subOptions = [];
+                foreach($platforms as $platform){
+                    if(strpos($platform, 'windows_') === 0){
+                        $mainPlatforms[] = 'windows';
+                        $subOptions['windows'] = $platform;
+                    } elseif(strpos($platform, 'linux_') === 0){
+                        $mainPlatforms[] = 'linux';
+                        $subOptions['linux'] = $platform;
+                    } else{
+                        $mainPlatforms[] = $platform;
+                    }
+                }
+                $mainPlatforms = array_unique($mainPlatforms);
+                ?>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="platform_android" name="platforms[]" value="Android" <?php echo in_array('Android', $platforms) ? 'checked' : ''; ?>>
+                    <input class="form-check-input" type="checkbox" value="windows" id="windows" name="platforms[]" <?php echo in_array('windows', $mainPlatforms) ? 'checked' : ''; ?>>
+                    <label class="form-check-label" for="windows">Windows</label>
+                </div>
+                <div id="windows_suboptions" class="ms-4 mt-2" style="display: <?php echo in_array('windows', $mainPlatforms) ? 'block' : 'none'; ?>">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="windows_version" id="windows_xp" value="windows_xp" <?php echo isset($subOptions['windows']) && $subOptions['windows'] === 'windows_xp' ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="windows_xp">XP以前</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="windows_version" id="windows_win7" value="windows_win7" <?php echo isset($subOptions['windows']) && $subOptions['windows'] === 'windows_win7' ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="windows_win7">Win7以后</label>
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="macos" id="macos" name="platforms[]" <?php echo in_array('macos', $mainPlatforms) ? 'checked' : ''; ?>>
+                    <label class="form-check-label" for="macos">macOS</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="linux" id="linux" name="platforms[]" <?php echo in_array('linux', $mainPlatforms) ? 'checked' : ''; ?>>
+                    <label class="form-check-label" for="linux">Linux</label>
+                </div>
+                <div id="linux_suboptions" class="ms-4 mt-2" style="display: <?php echo in_array('linux', $mainPlatforms) ? 'block' : 'none'; ?>">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="linux_distribution" id="linux_ubuntu" value="linux_ubuntu" <?php echo isset($subOptions['linux']) && $subOptions['linux'] === 'linux_ubuntu' ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="linux_ubuntu">Ubuntu</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="linux_distribution" id="linux_arch" value="linux_arch" <?php echo isset($subOptions['linux']) && $subOptions['linux'] === 'linux_arch' ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="linux_arch">Arch Linux</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="linux_distribution" id="linux_centos" value="linux_centos" <?php echo isset($subOptions['linux']) && $subOptions['linux'] === 'linux_centos' ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="linux_centos">CentOS</label>
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="platform_android" name="platforms[]" value="Android" <?php echo in_array('Android', $mainPlatforms) ? 'checked' : ''; ?>>
                     <label class="form-check-label" for="platform_android">Android</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="platform_ios" name="platforms[]" value="iOS" <?php echo in_array('iOS', $platforms) ? 'checked' : ''; ?>>
+                    <input class="form-check-input" type="checkbox" id="platform_ios" name="platforms[]" value="iOS" <?php echo in_array('iOS', $mainPlatforms) ? 'checked' : ''; ?>>
                     <label class="form-check-label" for="platform_ios">iOS</label>
                 </div>
             </div>
@@ -361,6 +413,65 @@ function removeImage(imageId) {
     // 从DOM中移除图片元素
     event.target.closest('.position-relative').remove();
 }
+
+        // 平台子选项显示控制
+        document.getElementById('windows').addEventListener('change', function() {
+            const suboptions = document.getElementById('windows_suboptions');
+            suboptions.style.display = this.checked ? 'block' : 'none';
+            if (!this.checked) {
+                document.querySelectorAll('input["windows_version"]').forEach(radio => radio.checked = false);
+            }
+        });
+
+        document.getElementById('linux').addEventListener('change', function() {
+            const suboptions = document.getElementById('linux_suboptions');
+            suboptions.style.display = this.checked ? 'block' : 'none';
+            if (!this.checked) {
+                document.querySelectorAll('input[name="linux_distribution"]').forEach(radio => radio.checked = false);
+            }
+        });
+
+        // 表单提交验证
+        document.querySelector('form').addEventListener('submit', function(e) {
+            // 验证Windows子选项
+            if (document.getElementById('windows').checked && !document.querySelector('input[name="windows_version"]:checked')) {
+                e.preventDefault();
+                Swal.fire({
+                title: '提示',
+                text: '请选择Windows版本（XP以前或Win7以后）',
+                icon: 'warning',
+                confirmButtonText: '确定'
+            });
+                return;
+            }
+
+            // 验证Linux子选项
+            if (document.getElementById('linux').checked && !document.querySelector('input[name="linux_distribution"]:checked')) {
+                e.preventDefault();
+                Swal.fire({
+                title: '提示',
+                text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
+                icon: 'warning',
+                confirmButtonText: '确定'
+            });
+                return;
+            }
+
+            // 更新平台值包含子选项信息
+            const platforms = [];
+            if (document.getElementById('android').checked) platforms.push('Android');
+            if (document.getElementById('ios').checked) platforms.push('iOS');
+            if (document.getElementById('macos').checked) platforms.push('macos');
+            if (document.getElementById('windows').checked) {
+                platforms.push(document.querySelector('input[name="windows_version"]:checked').value);
+            }
+            if (document.getElementById('linux').checked) {
+                platforms.push(document.querySelector('input[name="linux_distribution"]:checked').value);
+            }
+
+            // 设置隐藏字段值
+            document.getElementById('platforms_hidden').value = JSON.stringify(platforms);
+        });
 </script>
 </body>
 </html>
