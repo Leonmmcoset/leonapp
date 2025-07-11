@@ -82,6 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $platforms_json = json_encode($platforms);
     $appFilePath = $app['file_path']; // 默认使用现有文件路径
 
+    // 获取选中的标签
+    $selectedTags = $_POST['tags'] ?? [];
+
     // 处理应用文件上传
     if (!empty($_FILES['app_file']['tmp_name'])) {
         $uploadDir = '../uploads/apps/';
@@ -196,7 +199,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // 验证标签选择
-    $selectedTags = $_POST['tags'] ?? [];
     if (empty($selectedTags)) {
         $error = '至少需要选择一个应用标签';
     }
@@ -294,17 +296,15 @@ if (!($conn instanceof mysqli)) {
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label">应用标签 (至少选择1个)</label>
-                <div class="row">
+                <label for="tags" class="form-label">应用标签 (至少选择1个)</label>
+                <select id="tags" name="tags[]" multiple class="form-control">
                     <?php foreach ($tags as $tag): ?>
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="tag_<?php echo $tag['id']; ?>" name="tags[]" value="<?php echo $tag['id']; ?>" <?php echo in_array($tag['id'], $appTags) ? 'checked' : ''; ?>>
-                            <label class="form-check-label" for="tag_<?php echo $tag['id']; ?>"><?php echo htmlspecialchars($tag['name']); ?></label>
-                        </div>
-                    </div>
+                    <option value="<?php echo $tag['id']; ?>" <?php echo in_array($tag['id'], $appTags) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($tag['name']); ?>
+                    </option>
                     <?php endforeach; ?>
-                </div>
+                </select>
+                <small class="form-text text-muted">按住Ctrl键可选择多个标签</small>
             </div>
             <div class="mb-3">
                 <label for="app_file" class="form-label">更新应用文件</label>

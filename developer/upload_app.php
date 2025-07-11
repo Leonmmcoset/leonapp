@@ -433,6 +433,9 @@ if (!($conn instanceof mysqli)) {
             </div>
         <?php endif; ?>
         <form method="post" enctype="multipart/form-data">
+            <div class="alert alert-warning mb-3">
+                <strong>警告：</strong>如果该应用非您本人开发，请务必添加"转载"标签。
+            </div>
             <div class="form-group mb-3">
                 <label for="name" class="form-label">应用名称</label>
                 <input type="text" id="name" name="name" class="form-control" required>
