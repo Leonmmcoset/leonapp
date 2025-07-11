@@ -191,6 +191,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_version'])) {
             $error = '版本删除失败: ' . $conn->error;
         }
     }
+
+    if (!empty($success)) {
+        echo $success;
+    } else {
+        echo $error;
+    }
+    exit;
 }
 
 // 获取现有版本列表
@@ -256,10 +263,10 @@ if (!$verStmt) {
 
     <div class="container mt-4">
         <?php if (!empty($success)): ?>
-            <script>Swal.fire('成功', '<?php echo addslashes($success); ?>', 'success');</script>
+            <!-- <script>Swal.fire('成功', '<?php echo addslashes($success); ?>', 'success');</script> -->
         <?php endif; ?>
         <?php if (!empty($error)): ?>
-            <script>Swal.fire('错误', '<?php echo addslashes($error); ?>', 'error');</script>
+            <!-- <script>Swal.fire('错误', '<?php echo addslashes($error); ?>', 'error');</script> -->
         <?php endif; ?>
 
         <div class="card blur-bg mb-4">
@@ -382,59 +389,28 @@ if (!$verStmt) {
                 .then(response => response.text())
                 .then(data => {
                     editModal.hide();
-                    Swal.fire({
-                        title: '成功',
-                        text: '版本修改成功',
-                        icon: 'success'
-                    }).then(() => window.location.reload());
+                    window.location.reload();
                 })
                 .catch(error => {
                     editModal.hide();
-                    Swal.fire({
-                        title: '错误',
-                        text: '版本修改失败: ' + error.message,
-                        icon: 'error'
-                    });
+                    window.location.reload();
                 });
             });
         }
 
         function confirmDelete(versionId, filePath) {
-            Swal.fire({
-                title: '确认删除',
-                text: '确定要删除这个版本吗？删除后无法恢复！',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: '确定删除'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const formData = new FormData();
-                    formData.append('delete_version', 'true');
-                    formData.append('version_id', versionId);
-                    formData.append('file_path', filePath);
-                    
-                    fetch('version_control.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        Swal.fire({
-                            title: '成功',
-                            text: '版本删除成功',
-                            icon: 'success'
-                        }).then(() => window.location.reload());
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            title: '错误',
-                            text: '版本删除失败: ' + error.message,
-                            icon: 'error'
-                        });
-                    });
-                }
+            const formData = new FormData();
+            formData.append('delete_version', 'true');
+            formData.append('version_id', versionId);
+            formData.append('file_path', filePath);
+            
+            fetch('version_control.php', { method: 'POST', body: formData })
+            .then(response => response.text())
+            .then(data => {
+                window.location.reload();
+            })
+            .catch(error => {
+                window.location.reload();
             });
         }
     </script>

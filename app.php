@@ -215,6 +215,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                 ?></p>
                 <p>评分: <?php echo round($app['avg_rating'], 1); ?>/5</p>
                 <p>开发者: <?php if ($developerId == 0 || empty($developerName)): ?>管理员<?php else: ?><a href="developer_apps.php?id=<?php echo $developerId; ?>"><?php echo htmlspecialchars($developerName); ?></a><?php endif; ?></p>
+
+                <?php
+                // 获取应用标签
+                $sqlTags = "SELECT tags.name FROM app_tags JOIN tags ON app_tags.tag_id = tags.id WHERE app_tags.app_id = ?"; 
+                $stmtTags = $conn->prepare($sqlTags); 
+                $stmtTags->bind_param("i", $appId); 
+                $stmtTags->execute(); 
+                $resultTags = $stmtTags->get_result(); 
+                $tags = []; 
+                while ($tag = $resultTags->fetch_assoc()) { 
+                    $tags[] = $tag['name']; 
+                }
+                if (!empty($tags)): ?>
+                    <p>标签: <?php echo implode(', ', $tags); ?></p>
+                <?php endif; ?>
             </div>
             <div class="col-md-6">
                 <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
