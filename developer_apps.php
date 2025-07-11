@@ -100,7 +100,7 @@ $resultApps = $conn->query($sqlApps);
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-primary w-100" style="width: calc(3.5rem + calc(var(--bs-border-width) * 2)); height: calc(3.5rem + calc(var(--bs-border-width) * 2))" type="submit" id="searchButton">搜索</button>
+                    <button class="btn btn-primary w-100" type="submit" id="searchButton">搜索</button>
                 </div>
             </div>
         </form>
@@ -183,6 +183,8 @@ $resultApps = $conn->query($sqlApps);
     </div>
 
 
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('page-transition');

@@ -132,6 +132,8 @@ while ($row = $result->fetch_assoc()) {
         <?php endif; ?>
     </div>
 
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <!-- 收藏功能逻辑 -->
     <script>
         function toggleFavorite(appId, appName) {

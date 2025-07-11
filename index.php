@@ -96,6 +96,8 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
 
     <div class="container mt-4">
         <form method="get" action="index.php" class="mb-4" onsubmit="return validateSearch();">
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script>
     function validateSearch() {
         const searchInput = document.querySelector('input[name="search"]');

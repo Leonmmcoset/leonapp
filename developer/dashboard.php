@@ -191,6 +191,8 @@ if (!($conn instanceof mysqli)) {
                                 状态: 
                                 <?php if ($app['status'] === 'approved'): ?>
                                     <span class="badge bg-success">已通过</span>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="../js/bootstrap.bundle.min.js"></script>
                                 <?php elseif ($app['status'] === 'rejected'): ?>
                                     <span class="badge bg-danger">未通过</span>
                                     <div class="alert alert-warning mt-2">

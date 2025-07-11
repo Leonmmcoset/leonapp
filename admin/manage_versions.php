@@ -270,7 +270,9 @@ if (isset($_GET['success'])) {
                                         echo '文件不存在';
                                     }
                                 ?></small>
-                                <div>                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn" data-bs-toggle="modal" data-bs-target="#editVersionModal_<?php echo $version['id']; ?>">                                        编辑                                    </button>                                    <a href="../<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-sm btn-primary action-btn" download>下载</a>                                    <a href="?app_id=<?php echo $appId; ?>&delete_id=<?php echo $version['id']; ?>" class="btn btn-sm btn-outline-danger action-btn" onclick="return confirm('确定要删除此版本吗?');">                                        删除                                    </a>                                </div>
+                                <div>                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editVersionModal_<?php echo $version['id']; ?>">编辑</button>
+                                    <a href="../<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-sm btn-primary" download>下载</a>
+                                    <a href="?app_id=<?php echo $appId; ?>&delete_id=<?php echo $version['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除此版本吗?');">删除</a>                                </div>
                             </div>
                         </div>
                     </div>

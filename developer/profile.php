@@ -183,6 +183,8 @@ if (!($conn instanceof mysqli)) {
             </div>
             <button type="submit" class="btn btn-primary">保存更改</button>
         </form>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="../js/bootstrap.bundle.min.js"></script>
     </div>
 </body>
 </html>

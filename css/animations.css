@@ -82,3 +82,89 @@
     transform: scale(1);
   }
 }
+
+/* Button click animation */
+.btn-click {
+  transition: transform 0.1s ease;
+}
+
+.btn-click:active {
+  transform: scale(0.95);
+}
+
+/* Input focus animation */
+.input-focus {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-focus:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Card hover animation */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Button wave touch animation */
+.btn-wave-touch {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-wave-touch::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-wave-touch:active::after {
+  animation: waveTouch 0.6s ease-out;
+}
+
+@keyframes waveTouch {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(20);
+  }
+}
+
+/* Apply wave touch animation to Bootstrap buttons */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn:active::after {
+  animation: waveTouch 0.6s ease-out;
+}

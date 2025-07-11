@@ -113,9 +113,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
                             <td><?php echo $tag['created_at']; ?></td>
                             <td>
                                 <!-- 编辑按钮触发模态框 -->
-                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $tag['id']; ?>">
-                                    编辑
-                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $tag['id']; ?>">编辑</button>
                                 <a href="manage_tags.php?delete=<?php echo $tag['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除这个标签吗？关联的应用标签也会被删除。');">删除</a>
                             </td>
                         </tr>
