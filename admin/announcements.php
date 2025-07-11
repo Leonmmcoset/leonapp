@@ -55,6 +55,7 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>公告管理 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/animations.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">

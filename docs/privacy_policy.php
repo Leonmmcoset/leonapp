@@ -12,6 +12,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>隐私政策</title>
     <style>        .page-transition {            animation: fadeIn 0.5s ease-in-out;        }                @keyframes fadeIn {            from {                opacity: 0;                transform: translateY(20px);            }            to {                opacity: 1;                transform: translateY(0);            }        }    </style>    <!-- Bootstrap CSS -->    <link href="../css/bootstrap.min.css" rel="stylesheet">    <!-- 自定义CSS -->
+    <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../styles.css">
     <!-- Fluent Design 模糊效果 -->
     <!-- Bootstrap JS Bundle with Popper -->

@@ -51,6 +51,7 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>邮箱验证 - <?= APP_STORE_NAME ?></title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/animations.css">
     <style>
         body { background-color: #f4f4f4; padding: 70px 0; }
         .container { max-width: 500px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }

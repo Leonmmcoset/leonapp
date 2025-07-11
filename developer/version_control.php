@@ -223,6 +223,7 @@ if (!$verStmt) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>版本控制 - <?php echo htmlspecialchars($app['name']); ?></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>

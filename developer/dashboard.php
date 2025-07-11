@@ -44,6 +44,7 @@ if (!($conn instanceof mysqli)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发者仪表盘 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/animations.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">

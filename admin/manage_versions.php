@@ -180,6 +180,7 @@ if (isset($_GET['success'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理版本 - <?php echo htmlspecialchars($app['name']); ?></title>
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/animations.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">

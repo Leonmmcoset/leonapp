@@ -13,6 +13,7 @@
     <title>邮箱验证 - <?= APP_STORE_NAME ?></title>
     <style>
         body { font-family: 'Microsoft YaHei', sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+    <link rel="stylesheet" href="../css/animations.css">
         .container { background-color: #f9f9f9; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { font-size: 24px; font-weight: bold; color: #2c3e50; margin-bottom: 20px; }
         .greeting { font-size: 18px; margin-bottom: 15px; }
