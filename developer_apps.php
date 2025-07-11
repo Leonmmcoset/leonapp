@@ -143,6 +143,25 @@ $resultApps = $conn->query($sqlApps);
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($app['name']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars(substr($app['description'], 0, 100)); ?>...</p>
+                                <?php
+                                // 获取应用标签
+                                $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?"; 
+                                $tagStmt = $conn->prepare($tagSql); 
+                                $tagStmt->bind_param('i', $app['id']); 
+                                $tagStmt->execute(); 
+                                $tagResult = $tagStmt->get_result(); 
+                                $tags = []; 
+                                while ($tag = $tagResult->fetch_assoc()) { 
+                                    $tags[] = htmlspecialchars($tag['name']); 
+                                } 
+                                $tagStmt->close(); 
+                                
+                                // 获取应用适用平台
+                                $platforms = json_decode($app['platforms'], true);
+                                
+                                echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
+                                echo '<p class="card-text">平台: '. implode(', ', $platforms) . '</p>';
+                                ?>
                                 <p class="card-text">
                                     <small class="text-muted">
                                         评分: <?php echo round($app['avg_rating'] ?? 0, 1); ?>/5

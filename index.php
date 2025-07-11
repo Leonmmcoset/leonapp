@@ -177,7 +177,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
             // 基于标签推荐应用
             if (!empty($tagIds)) {
                 $placeholders = implode(',', array_fill(0, count($tagIds), '?'));
-                $recommendSql = "SELECT a.id, a.name, a.description, a.age_rating, AVG(r.rating) as avg_rating
+                $recommendSql = "SELECT a.id, a.name, a.description, a.age_rating, a.platforms, AVG(r.rating) as avg_rating
                                 FROM apps a
                                 LEFT JOIN reviews r ON a.id = r.app_id
                                 JOIN app_tags at ON a.id = at.app_id
@@ -213,6 +213,23 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">'. htmlspecialchars($row['name']) . '</h5>';
                     echo '<p class="card-text">'. substr(htmlspecialchars($row['description']), 0, 100) . '...</p>';
+                    // 获取应用标签
+                    $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?"; 
+                    $tagStmt = $conn->prepare($tagSql); 
+                    $tagStmt->bind_param('i', $row['id']); 
+                    $tagStmt->execute(); 
+                    $tagResult = $tagStmt->get_result(); 
+                    $tags = []; 
+                    while ($tag = $tagResult->fetch_assoc()) { 
+                        $tags[] = htmlspecialchars($tag['name']); 
+                    } 
+                    $tagStmt->close(); 
+                    
+                    // 获取应用适用平台
+                    $platforms = json_decode($row['platforms'], true);
+                    if (!is_array($platforms)) $platforms = [];
+                    echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
+                    echo '<p class="card-text">平台: '. implode(', ', $platforms) . '</p>';
                     echo '<p class="card-text">评分: '. round($row['avg_rating'] ?? 0, 1) . '/5</p>';
                     echo '<a href="app.php?id='. $row['id'] . '" class="btn btn-primary">查看详情</a>';
                     echo '<button class="btn btn-outline-secondary mt-2" onclick="toggleFavorite('. $row['id'] . ', \''. htmlspecialchars($row['name']) . '\')">收藏</button>';
@@ -231,7 +248,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
             <!-- 这里将通过PHP动态加载应用列表 -->
             <?php
             $search = isset($_GET['search']) ? $_GET['search'] : '';
-            $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, AVG(reviews.rating) as avg_rating 
+            $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, apps.platforms, AVG(reviews.rating) as avg_rating 
                     FROM apps 
                     LEFT JOIN reviews ON apps.id = reviews.app_id ";
             
@@ -312,6 +329,24 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">'. $row['name'] . '</h5>';
                     echo '<p class="card-text">'. substr($row['description'], 0, 100) . '...</p>';
+                    
+                    // 获取应用标签
+                    $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?"; 
+                    $tagStmt = $conn->prepare($tagSql); 
+                    $tagStmt->bind_param('i', $row['id']); 
+                    $tagStmt->execute(); 
+                    $tagResult = $tagStmt->get_result(); 
+                    $tags = []; 
+                    while ($tag = $tagResult->fetch_assoc()) { 
+                        $tags[] = htmlspecialchars($tag['name']); 
+                    } 
+                    $tagStmt->close(); 
+                    
+                    // 获取应用适用平台
+                    $platforms = json_decode($row['platforms'], true);
+                    if (!is_array($platforms)) $platforms = [];
+                    echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
+                    echo '<p class="card-text">平台: '. implode(', ', $platforms) . '</p>';
                     echo '<p class="card-text">评分: '. round($row['avg_rating'], 1) . '/5</p>';
                     echo '<a href="app.php?id='. $row['id'] . '" class="btn btn-primary">查看详情</a>';
                     echo '</div>';

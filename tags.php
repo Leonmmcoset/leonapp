@@ -11,7 +11,7 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 12;
 $offset = isset($_GET['page']) ? (intval($_GET['page']) - 1) * $limit : 0;
 
-$sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, AVG(reviews.rating) as avg_rating 
+$sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, apps.platforms, AVG(reviews.rating) as avg_rating 
         FROM apps 
         LEFT JOIN reviews ON apps.id = reviews.app_id ";
 
@@ -142,7 +142,27 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $row['name']; ?></h5>
                                 <p class="card-text"><?php echo substr($row['description'], 0, 100); ?>...</p>
-                                <p class="card-text">评分: <?php echo round($row['avg_rating'], 1); ?>/5</p>
+                                <?php
+                                // 获取应用标签
+                                $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?"; 
+                                $tagStmt = $conn->prepare($tagSql); 
+                                $tagStmt->bind_param('i', $row['id']); 
+                                $tagStmt->execute(); 
+                                $tagResult = $tagStmt->get_result(); 
+                                $tags = [];
+                                while ($tag = $tagResult->fetch_assoc()) {
+                                    $tags[] = htmlspecialchars($tag['name']);
+                                }
+                                $tagStmt->close();
+
+                                // 获取应用适用平台
+                                $platforms = json_decode($row['platforms'], true);
+                                echo ' 标签: '. implode(', ', $tags) . '<br>';
+                                $platforms = $platforms ?? [];
+                                echo ' 平台: '. implode(', ', $platforms) . '<br>';
+                                echo ' 评分: '. round($row['avg_rating'], 1) . '/5<br>';
+                                echo '';
+                                ?>
                                 <a href="app.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">查看详情</a>
                             </div>
                         </div>
