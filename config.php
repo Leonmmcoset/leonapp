@@ -8,6 +8,9 @@ define('DB_PASSWORD', 'caocao123');
 // App Store 名称
 define('APP_STORE_NAME', 'LeonAPP');
 
+// 管理员邮箱
+define('ADMIN_EMAIL', 'leonmmcoset@outlook.com');
+
 // SMTP邮件配置
 define('SMTP_HOST', 'smtp.163.com');
 define('SMTP_PORT', 25); // 163邮箱推荐使用587端口

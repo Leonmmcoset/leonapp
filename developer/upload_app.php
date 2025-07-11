@@ -196,6 +196,34 @@ if (!($conn instanceof mysqli)) {
                 log_info("应用已插入数据库: ID=$appId, 状态=pending", __FILE__, __LINE__);
                 $stmt->close();
 
+                // 发送审核邮件给管理员
+                require_once '../vendor/autoload.php';
+                
+                $subject = '新应用待审核';
+                $body = "开发者提交了新应用，应用ID: $appId，名称: $appName，请及时审核。";
+                
+                $mail = new PHPMailer\PHPMailer\PHPMailer();
+                $mail->isSMTP();
+                $mail->Host       = SMTP_HOST;
+                $mail->SMTPAuth   = true;
+                $mail->Username   = SMTP_USERNAME;
+                $mail->Password   = SMTP_PASSWORD;
+                $mail->SMTPSecure = SMTP_ENCRYPTION;
+                $mail->Port       = SMTP_PORT;
+                
+                $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+                $mail->addAddress(ADMIN_EMAIL);
+                
+                $mail->isHTML(false);
+                $mail->Subject = $subject;
+                $mail->Body    = $body;
+                
+                if(!$mail->send()) {
+                    log_error('发送审核邮件失败: ' . $mail->ErrorInfo, __FILE__, __LINE__);
+                } else {
+                    log_info('已成功发送审核邮件给管理员', __FILE__, __LINE__);
+                }
+
                 log_info("开始处理应用关联数据: ID=$appId", __FILE__, __LINE__);
                 // 插入应用标签关联
                 foreach ($tags as $tagId) {
@@ -287,7 +315,7 @@ if (!($conn instanceof mysqli)) {
         }
     </style>
     <!-- Bootstrap JS with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
 </head>
 
     <!-- 导航栏 -->

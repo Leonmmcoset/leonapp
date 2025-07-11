@@ -104,7 +104,7 @@ if (!isset($_SESSION['admin'])) {
     echo '        </div>';
     echo '    </div>';
     echo '    <!-- Bootstrap JS Bundle with Popper -->';
-    echo '    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>';
+    echo '    <script src="/js/bootstrap.bundle.js"></script>';
     echo '</body>';
     echo '</html>';
     exit;

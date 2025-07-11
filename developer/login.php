@@ -117,6 +117,6 @@ if (!($conn instanceof mysqli)) {
             还没有账号？<a href="register.php" class="text-decoration-none">注册</a>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
 </body>
 </html>
