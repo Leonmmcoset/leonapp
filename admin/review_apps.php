@@ -2,6 +2,7 @@
 require_once '../config.php';
 require_once '../vendor/autoload.php';
 require_once '../includes/logger.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -62,9 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['review_action'])) {
                             $mail->SMTPAuth = true;
                             $mail->Username = SMTP_USERNAME;
                             $mail->Password = SMTP_PASSWORD;
-                        $mail->CharSet = 'UTF-8';
-                        $mail->isHTML(true);
-                        $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+                            $mail->CharSet = 'UTF-8';
+                            $mail->isHTML(true);
+                            $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
                             $mail->addAddress($devEmail);
 
                             // 邮件内容
@@ -126,6 +127,7 @@ if (!($conn instanceof mysqli)) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -143,14 +145,17 @@ if (!($conn instanceof mysqli)) {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
         }
+
         .app-card {
             transition: transform 0.2s;
         }
+
         .app-card:hover {
             transform: scale(1.02);
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
@@ -201,38 +206,38 @@ if (!($conn instanceof mysqli)) {
                             </div>
                             <div class="card-body">
                                 <p class="card-text"><?php echo htmlspecialchars($app['description']); ?></p>
-                                <?php 
-                                    $appId = $app['id'];
-                                    // 获取下载链接，假设在 app_versions 表中
-                                    $getDownloadLinkStmt = $conn->prepare("SELECT file_path FROM app_versions WHERE app_id = ? ORDER BY created_at DESC LIMIT 1");
-                                    if ($getDownloadLinkStmt) {
-                                        $getDownloadLinkStmt->bind_param("i", $appId);
-                                        $getDownloadLinkStmt->execute();
-                                        $downloadLinkResult = $getDownloadLinkStmt->get_result();
-                                        $downloadLinkInfo = $downloadLinkResult->fetch_assoc();
-                                        $downloadLink = $downloadLinkInfo ? $downloadLinkInfo['file_path'] : '';
-                                        $getDownloadLinkStmt->close();
-                                    } else {
-                                        $downloadLink = '';
-                                        log_error('数据库准备语句错误: ' . $conn->error, __FILE__, __LINE__);
-                                    }
+                                <?php
+                                $appId = $app['id'];
+                                // 获取下载链接，假设在 app_versions 表中
+                                $getDownloadLinkStmt = $conn->prepare("SELECT file_path FROM app_versions WHERE app_id = ? ORDER BY created_at DESC LIMIT 1");
+                                if ($getDownloadLinkStmt) {
+                                    $getDownloadLinkStmt->bind_param("i", $appId);
+                                    $getDownloadLinkStmt->execute();
+                                    $downloadLinkResult = $getDownloadLinkStmt->get_result();
+                                    $downloadLinkInfo = $downloadLinkResult->fetch_assoc();
+                                    $downloadLink = $downloadLinkInfo ? $downloadLinkInfo['file_path'] : '';
+                                    $getDownloadLinkStmt->close();
+                                } else {
+                                    $downloadLink = '';
+                                    log_error('数据库准备语句错误: ' . $conn->error, __FILE__, __LINE__);
+                                }
 
-                                    // 获取应用标签
-                                    $getTagsStmt = $conn->prepare("SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?");
-                                    if ($getTagsStmt) {
-                                        $getTagsStmt->bind_param("i", $appId);
-                                        $getTagsStmt->execute();
-                                        $tagsResult = $getTagsStmt->get_result();
-                                        $tags = [];
-                                        while ($tag = $tagsResult->fetch_assoc()) {
-                                            $tags[] = $tag['name'];
-                                        }
-                                        $tagString = implode(', ', $tags);
-                                        $getTagsStmt->close();
-                                    } else {
-                                        $tagString = '';
-                                        log_error('数据库准备语句错误: ' . $conn->error, __FILE__, __LINE__);
+                                // 获取应用标签
+                                $getTagsStmt = $conn->prepare("SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?");
+                                if ($getTagsStmt) {
+                                    $getTagsStmt->bind_param("i", $appId);
+                                    $getTagsStmt->execute();
+                                    $tagsResult = $getTagsStmt->get_result();
+                                    $tags = [];
+                                    while ($tag = $tagsResult->fetch_assoc()) {
+                                        $tags[] = $tag['name'];
                                     }
+                                    $tagString = implode(', ', $tags);
+                                    $getTagsStmt->close();
+                                } else {
+                                    $tagString = '';
+                                    log_error('数据库准备语句错误: ' . $conn->error, __FILE__, __LINE__);
+                                }
                                 ?>
                                 <?php if (!empty($downloadLink)): ?>
                                     <p class="card-text"><strong>下载链接:</strong> <a href="<?php echo htmlspecialchars('../' . $downloadLink); ?>" target="_blank">点击下载</a></p>
@@ -276,36 +281,36 @@ if (!($conn instanceof mysqli)) {
                     </div>
 
                     <script>
-function showRejectReason(appId, appName) {
-    Swal.fire({
-        title: '拒绝应用: ' + appName,
-        html: '<textarea id="rejectionReason" class="swal2-textarea" rows="3" placeholder="请详细说明拒绝原因，帮助开发者改进应用"></textarea>',
-        confirmButtonText: '确认拒绝',
-        cancelButtonText: '取消',
-        showCancelButton: true,
-        validationMessage: '请输入拒绝原因',
-        preConfirm: () => {
-            const reason = document.getElementById('rejectionReason').value;
-            if (!reason) {
-                Swal.showValidationMessage('请输入拒绝原因');
-            }
-            return reason;
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const form = document.createElement('form');
-            form.method = 'post';
-            form.innerHTML = `
+                        function showRejectReason(appId, appName) {
+                            Swal.fire({
+                                title: '拒绝应用: ' + appName,
+                                html: '<textarea id="rejectionReason" class="swal2-textarea" rows="3" placeholder="请详细说明拒绝原因，帮助开发者改进应用"></textarea>',
+                                confirmButtonText: '确认拒绝',
+                                cancelButtonText: '取消',
+                                showCancelButton: true,
+                                validationMessage: '请输入拒绝原因',
+                                preConfirm: () => {
+                                    const reason = document.getElementById('rejectionReason').value;
+                                    if (!reason) {
+                                        Swal.showValidationMessage('请输入拒绝原因');
+                                    }
+                                    return reason;
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    const form = document.createElement('form');
+                                    form.method = 'post';
+                                    form.innerHTML = `
                 <input type="hidden" name="app_id" value="${appId}">
                 <input type="hidden" name="review_action" value="reject">
                 <input type="hidden" name="rejection_reason" value="${encodeURIComponent(result.value)}">
             `;
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-}
-</script>
+                                    document.body.appendChild(form);
+                                    form.submit();
+                                }
+                            });
+                        }
+                    </script>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -316,4 +321,5 @@ function showRejectReason(appId, appName) {
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </body>
+
 </html>

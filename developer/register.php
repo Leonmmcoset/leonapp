@@ -41,7 +41,7 @@ echo '<style>
 // 导航栏
 echo '<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="../index.php">'. APP_STORE_NAME . '</a>
+        <a class="navbar-brand" href="../index.php">' . APP_STORE_NAME . '</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -78,14 +78,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // 检查数据库连接是否为 PDO 对象
         if (!($conn instanceof mysqli)) {
-              log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
-              $error = '数据库连接错误，请检查配置';
-          } else {
+            log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
+            $error = '数据库连接错误，请检查配置';
+        } else {
             try {
                 $stmt = $conn->prepare('SELECT id FROM developers WHERE username = ? OR email = ?');
-        $stmt->bind_param('ss', $username, $email);
-        $stmt->execute();
-        $stmt->store_result();
+                $stmt->bind_param('ss', $username, $email);
+                $stmt->execute();
+                $stmt->store_result();
 
                 if ($stmt->num_rows > 0) {
                     $error = '用户名或邮箱已被注册';
@@ -94,11 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // 生成验证令牌
                     $verificationToken = bin2hex(random_bytes(32));
                     $insertStmt = $conn->prepare('INSERT INTO developers (username, email, password, verification_token) VALUES (?, ?, ?, ?)');
-                        $insertStmt->bind_param('ssss', $username, $email, $hashedPassword, $verificationToken);
-                        if (!$insertStmt->execute()) {
-                            log_error('插入执行失败: ' . $insertStmt->error, __FILE__, __LINE__);
-                            $error = '系统错误，请稍后再试';
-                        } else {
+                    $insertStmt->bind_param('ssss', $username, $email, $hashedPassword, $verificationToken);
+                    if (!$insertStmt->execute()) {
+                        log_error('插入执行失败: ' . $insertStmt->error, __FILE__, __LINE__);
+                        $error = '系统错误，请稍后再试';
+                    } else {
                         // 生成验证链接
                         $verificationLink = 'http://' . $_SERVER['HTTP_HOST'] . '/developer/verify_email.php?token=' . urlencode($verificationToken);
 
@@ -131,23 +131,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             try {
                                 $mail->isSMTP();
                                 $mail->SMTPDebug = 4;
-// 输出当前SMTP配置参数用于调试
-log_error('SMTP配置参数: HOST=' . SMTP_HOST . ', PORT=' . SMTP_PORT . ', USERNAME=' . SMTP_USERNAME . ', ENCRYPTION=' . SMTP_ENCRYPTION);
-// 检查openssl扩展是否启用
-log_error('OpenSSL扩展状态: ' . (extension_loaded('openssl') ? '已启用' : '未启用')); // 启用详细调试
-                                $mail->Debugoutput = function($str, $level) {
-                                     $logDir = 'c:\\web\\app2\\logs';
-                                     if (!is_dir($logDir)) {
-                                         mkdir($logDir, 0755, true);
-                                     }
-                                     file_put_contents($logDir . '\\smtp_debug.log', date('[Y-m-d H:i:s] ') . $str . PHP_EOL, FILE_APPEND);
-                                 };
+                                // 输出当前SMTP配置参数用于调试
+                                log_error('SMTP配置参数: HOST=' . SMTP_HOST . ', PORT=' . SMTP_PORT . ', USERNAME=' . SMTP_USERNAME . ', ENCRYPTION=' . SMTP_ENCRYPTION);
+                                // 检查openssl扩展是否启用
+                                log_error('OpenSSL扩展状态: ' . (extension_loaded('openssl') ? '已启用' : '未启用')); // 启用详细调试
+                                $mail->Debugoutput = function ($str, $level) {
+                                    $logDir = 'c:\\web\\app2\\logs';
+                                    if (!is_dir($logDir)) {
+                                        mkdir($logDir, 0755, true);
+                                    }
+                                    file_put_contents($logDir . '\\smtp_debug.log', date('[Y-m-d H:i:s] ') . $str . PHP_EOL, FILE_APPEND);
+                                };
                                 $mail->Host = defined('SMTP_HOST') ? SMTP_HOST : 'smtp.example.com';
                                 $mail->SMTPAuth = true;
                                 $mail->Username = defined('SMTP_USERNAME') ? SMTP_USERNAME : ''; // Ensure SMTP_USERNAME is defined in config.php
                                 $mail->Password = defined('SMTP_PASSWORD') ? SMTP_PASSWORD : '';
                                 $mail->SMTPSecure = defined('SMTP_ENCRYPTION') ? SMTP_ENCRYPTION : 'tls'; // Ensure SMTP_ENCRYPTION is defined in config.php
-$mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
+                                $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
                                 $mail->Port = defined('SMTP_PORT') ? SMTP_PORT : 587;
                                 $mail->CharSet = 'UTF-8';
 
@@ -173,13 +173,14 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
             } catch (PDOException $e) {
                 $error = '注册时发生错误，请稍后再试';
             }
-          }
+        }
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -193,6 +194,7 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-5 col-md-4">
         <h2>开发者注册</h2>
@@ -227,4 +229,5 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

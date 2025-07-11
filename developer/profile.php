@@ -89,6 +89,7 @@ if (!($conn instanceof mysqli)) {
 
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -105,6 +106,7 @@ if (!($conn instanceof mysqli)) {
             margin: 0;
             padding: 20px;
         }
+
         .profile-container {
             max-width: 800px;
             margin: 0 auto;
@@ -113,20 +115,25 @@ if (!($conn instanceof mysqli)) {
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             text-align: center;
         }
+
         .form-group {
             margin-bottom: 1rem;
         }
+
         .error {
             color: red;
         }
+
         .success {
             color: green;
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
@@ -161,7 +168,7 @@ if (!($conn instanceof mysqli)) {
         <?php if (!empty($success)): ?>
             <div class="success"><?php echo $success; ?></div>
         <?php endif; ?>
-        
+
         <h1>开发者信息</h1>
         <form method="post">
             <div class="form-group">
@@ -183,8 +190,9 @@ if (!($conn instanceof mysqli)) {
             </div>
             <button type="submit" class="btn btn-primary">保存更改</button>
         </form>
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="../js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap JS Bundle with Popper -->
+        <script src="../js/bootstrap.bundle.min.js"></script>
     </div>
 </body>
+
 </html>

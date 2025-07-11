@@ -68,6 +68,7 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,6 +86,7 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
@@ -139,17 +141,17 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <div class="col-md-3 mb-4">
                         <div class="card blur-bg">
-                            
+
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $row['name']; ?></h5>
                                 <p class="card-text"><?php echo substr($row['description'], 0, 100); ?>...</p>
                                 <?php
                                 // 获取应用标签
-                                $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?"; 
-                                $tagStmt = $conn->prepare($tagSql); 
-                                $tagStmt->bind_param('i', $row['id']); 
-                                $tagStmt->execute(); 
-                                $tagResult = $tagStmt->get_result(); 
+                                $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?";
+                                $tagStmt = $conn->prepare($tagSql);
+                                $tagStmt->bind_param('i', $row['id']);
+                                $tagStmt->execute();
+                                $tagResult = $tagStmt->get_result();
                                 $tags = [];
                                 while ($tag = $tagResult->fetch_assoc()) {
                                     $tags[] = htmlspecialchars($tag['name']);
@@ -158,10 +160,10 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
 
                                 // 获取应用适用平台
                                 $platforms = json_decode($row['platforms'], true);
-                                echo ' 标签: '. implode(', ', $tags) . '<br>';
+                                echo ' 标签: ' . implode(', ', $tags) . '<br>';
                                 $platforms = $platforms ?? [];
-                                echo ' 平台: '. implode(', ', $platforms) . '<br>';
-                                echo ' 评分: '. round($row['avg_rating'], 1) . '/5<br>';
+                                echo ' 平台: ' . implode(', ', $platforms) . '<br>';
+                                echo ' 评分: ' . round($row['avg_rating'], 1) . '/5<br>';
                                 echo '';
                                 ?>
                                 <a href="app.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">查看详情</a>
@@ -191,4 +193,5 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
         });
     </script>
 </body>
+
 </html>

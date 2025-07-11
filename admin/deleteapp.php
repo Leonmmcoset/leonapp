@@ -35,7 +35,6 @@ if ($stmt->execute() === TRUE) {
 
     header('Location: index.php?success=App 删除成功');
 } else {
-    header('Location: index.php?error=App 删除失败: '. $conn->error);
+    header('Location: index.php?error=App 删除失败: ' . $conn->error);
 }
 exit;
-?>

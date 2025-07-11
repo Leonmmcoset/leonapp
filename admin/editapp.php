@@ -48,12 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
                 $errors[] = ucfirst($field) . ' 不能为空';
             }
         }
-    
+
         // 年龄分级验证
         if (($_POST['age_rating'] === '12+' || $_POST['age_rating'] === '17+') && empty($_POST['age_rating_description'])) {
             $errors[] = '年龄分级为12+或以上时，年龄分级说明不能为空';
         }
-    
+
         // 处理应用图标上传（如果有新上传）
         if (!empty($_FILES['images']['name'][0])) {
             $uploadDir = '../images/';
@@ -85,29 +85,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
         }
 
         // 更新标签关联
-            $stmt = $conn->prepare("DELETE FROM app_tags WHERE app_id = ?");
-            $stmt->bind_param("i", $appId);
-            $stmt->execute();
-            $stmt->close();
+        $stmt = $conn->prepare("DELETE FROM app_tags WHERE app_id = ?");
+        $stmt->bind_param("i", $appId);
+        $stmt->execute();
+        $stmt->close();
 
-            if (!empty($_POST['tags'])) {
-                $stmt = $conn->prepare("INSERT INTO app_tags (app_id, tag_id) VALUES (?, ?)");
-                foreach ($_POST['tags'] as $tagId) {
-                    $stmt->bind_param("ii", $appId, $tagId);
-                    $stmt->execute();
-                }
-                $stmt->close();
+        if (!empty($_POST['tags'])) {
+            $stmt = $conn->prepare("INSERT INTO app_tags (app_id, tag_id) VALUES (?, ?)");
+            foreach ($_POST['tags'] as $tagId) {
+                $stmt->bind_param("ii", $appId, $tagId);
+                $stmt->execute();
             }
-
-            header('Location: index.php?success=App 更新成功');
-            exit;
-        } else {
-            $error = 'App 更新失败: '. $conn->error;
+            $stmt->close();
         }
+
+        header('Location: index.php?success=App 更新成功');
+        exit;
+    } else {
+        $error = 'App 更新失败: ' . $conn->error;
+    }
 }
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -126,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
@@ -167,29 +169,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($app['name']); ?>" required>
                 <label for="name">App名称</label>
             </div>
-        <div class="mb-3">
-            <label for="tags" class="form-label">标签</label>
-            <select id="tags" name="tags[]" multiple class="form-control">
-                <?php
-                $selectedTags = [];
-                $tagQuery = $conn->prepare("SELECT tag_id FROM app_tags WHERE app_id = ?");
-                $tagQuery->bind_param("i", $appId);
-                $tagQuery->execute();
-                $tagResult = $tagQuery->get_result();
-                while ($tag = $tagResult->fetch_assoc()) {
-                    $selectedTags[] = $tag['tag_id'];
-                }
-                
-                $allTags = $conn->query("SELECT id, name FROM tags");
-                while ($tag = $allTags->fetch_assoc()):
-                $selected = in_array($tag['id'], $selectedTags) ? 'selected' : '';
-                ?>
-                <option value="<?php echo $tag['id']; ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($tag['name']); ?></option>
-                <?php endwhile; ?>
-            </select>
-            <div class="form-text">按住Ctrl键可选择多个标签</div>
-        </div>
-        <div class="form-floating mb-3">
+            <div class="mb-3">
+                <label for="tags" class="form-label">标签</label>
+                <select id="tags" name="tags[]" multiple class="form-control">
+                    <?php
+                    $selectedTags = [];
+                    $tagQuery = $conn->prepare("SELECT tag_id FROM app_tags WHERE app_id = ?");
+                    $tagQuery->bind_param("i", $appId);
+                    $tagQuery->execute();
+                    $tagResult = $tagQuery->get_result();
+                    while ($tag = $tagResult->fetch_assoc()) {
+                        $selectedTags[] = $tag['tag_id'];
+                    }
+
+                    $allTags = $conn->query("SELECT id, name FROM tags");
+                    while ($tag = $allTags->fetch_assoc()):
+                        $selected = in_array($tag['id'], $selectedTags) ? 'selected' : '';
+                    ?>
+                        <option value="<?php echo $tag['id']; ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($tag['name']); ?></option>
+                    <?php endwhile; ?>
+                </select>
+                <div class="form-text">按住Ctrl键可选择多个标签</div>
+            </div>
+            <div class="form-floating mb-3">
                 <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($app['description']); ?></textarea>
                 <label for="description">描述</label>
             </div>
@@ -201,12 +203,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
                     <option value="12+" <?php echo $app['age_rating'] === '12+' ? 'selected' : ''; ?>>12+</option>
                     <option value="17+" <?php echo $app['age_rating'] === '17+' ? 'selected' : ''; ?>>17+</option>
                 </select>
-          </div>
-          <div class="mb-3" id="ageRatingDescriptionGroup" style="display: none;">
-              <label for="age_rating_description" class="form-label">年龄分级说明</label>
-              <textarea class="form-control" id="age_rating_description" name="age_rating_description" rows="3" placeholder="请说明为何需要此年龄分级"><?php echo htmlspecialchars($app['age_rating_description'] ?? ''); ?></textarea>
-              <div class="form-text">当年龄分级为12+或以上时，此项为必填</div>
-          </div>
+            </div>
+            <div class="mb-3" id="ageRatingDescriptionGroup" style="display: none;">
+                <label for="age_rating_description" class="form-label">年龄分级说明</label>
+                <textarea class="form-control" id="age_rating_description" name="age_rating_description" rows="3" placeholder="请说明为何需要此年龄分级"><?php echo htmlspecialchars($app['age_rating_description'] ?? ''); ?></textarea>
+                <div class="form-text">当年龄分级为12+或以上时，此项为必填</div>
+            </div>
             <div class="mb-3">
                 <label class="form-label">适用平台</label>
                 <div class="form-check">
@@ -301,27 +303,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-          // 年龄分级说明显示控制
-          // 年龄分级说明显示控制
-          const ageRatingSelect = document.getElementById('age_rating');
-          const descriptionGroup = document.getElementById('ageRatingDescriptionGroup');
-          const descriptionInput = document.getElementById('age_rating_description');
-          
-          function toggleAgeDescription() {
-              const selectedRating = ageRatingSelect.value;
-              if (selectedRating === '12+' || selectedRating === '17+') {
-                  descriptionGroup.style.display = 'block';
-                  descriptionInput.required = true;
-              } else {
-                  descriptionGroup.style.display = 'none';
-                  descriptionInput.required = false;
-              }
-          }
-          
-          ageRatingSelect.addEventListener('change', toggleAgeDescription);
-          // 初始加载时检查
-          toggleAgeDescription();
-    
+        // 年龄分级说明显示控制
+        // 年龄分级说明显示控制
+        const ageRatingSelect = document.getElementById('age_rating');
+        const descriptionGroup = document.getElementById('ageRatingDescriptionGroup');
+        const descriptionInput = document.getElementById('age_rating_description');
+
+        function toggleAgeDescription() {
+            const selectedRating = ageRatingSelect.value;
+            if (selectedRating === '12+' || selectedRating === '17+') {
+                descriptionGroup.style.display = 'block';
+                descriptionInput.required = true;
+            } else {
+                descriptionGroup.style.display = 'none';
+                descriptionInput.required = false;
+            }
+        }
+
+        ageRatingSelect.addEventListener('change', toggleAgeDescription);
+        // 初始加载时检查
+        toggleAgeDescription();
+
         // 导航栏滚动效果
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
@@ -355,11 +357,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
             if (document.getElementById('windows').checked && !document.querySelector('input[name="windows_version"]:checked')) {
                 e.preventDefault();
                 Swal.fire({
-                title: '提示',
-                text: '请选择Windows版本（XP以前或Win7以后）',
-                icon: 'warning',
-                confirmButtonText: '确定'
-            });
+                    title: '提示',
+                    text: '请选择Windows版本（XP以前或Win7以后）',
+                    icon: 'warning',
+                    confirmButtonText: '确定'
+                });
                 return;
             }
 
@@ -367,11 +369,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
             if (document.getElementById('linux').checked && !document.querySelector('input[name="linux_distribution"]:checked')) {
                 e.preventDefault();
                 Swal.fire({
-                title: '提示',
-                text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
-                icon: 'warning',
-                confirmButtonText: '确定'
-            });
+                    title: '提示',
+                    text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
+                    icon: 'warning',
+                    confirmButtonText: '确定'
+                });
                 return;
             }
 
@@ -385,9 +387,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
         });
     </script>
 </body>
+
 </html>
 
-    <?php
+<?php
 // 更新应用数据
 $stmt = $conn->prepare("UPDATE apps SET name=?, description=?, age_rating=?, age_rating_description=?, platforms=?, updated_at=NOW() WHERE id=?");
 $stmt->bind_param("sssssi", $name, $description, $age_rating, $_POST['age_rating_description'], $platformsJson, $appId);

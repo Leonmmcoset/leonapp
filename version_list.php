@@ -34,6 +34,7 @@ while ($row = $result->fetch_assoc()) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,28 +48,32 @@ while ($row = $result->fetch_assoc()) {
         .version-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .version-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
+
         .download-btn {
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
+
         .download-btn:hover {
             background-color: #0b5ed7;
             border-color: #0a58ca;
         }
-        
+
         .page-transition {
             animation: fadeIn 0.5s ease-in-out;
         }
-        
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -76,6 +81,7 @@ while ($row = $result->fetch_assoc()) {
         }
     </style>
 </head>
+
 <body class="page-transition">
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -124,7 +130,7 @@ while ($row = $result->fetch_assoc()) {
                                 <p class="card-text"><?php echo nl2br(htmlspecialchars($version['changelog'])); ?></p>
                                 <button class="btn btn-outline-secondary mt-2" onclick="toggleFavorite(<?php echo $appId; ?>, '<?php echo addslashes(htmlspecialchars($app['name'])); ?>')">收藏</button>
                             </div>
-                            <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">                                <a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-primary" download>下载</a>                                <small class="text-muted">文件大小: <?php echo $fileSize; ?></small>                            </div>
+                            <div class="card-footer bg-transparent d-flex justify-content-between align-items-center"> <a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-primary" download>下载</a> <small class="text-muted">文件大小: <?php echo $fileSize; ?></small> </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -138,7 +144,7 @@ while ($row = $result->fetch_assoc()) {
     <script>
         function toggleFavorite(appId, appName) {
             let favorites = JSON.parse(localStorage.getItem('appFavorites')) || {};
-            
+
             if (favorites[appId]) {
                 delete favorites[appId];
                 alert('已取消收藏 ' + appName);
@@ -146,11 +152,11 @@ while ($row = $result->fetch_assoc()) {
                 favorites[appId] = appName;
                 alert('已收藏 ' + appName);
             }
-            
+
             localStorage.setItem('appFavorites', JSON.stringify(favorites));
         }
     </script>
-    
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -170,4 +176,5 @@ while ($row = $result->fetch_assoc()) {
         });
     </script>
 </body>
+
 </html>

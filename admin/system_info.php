@@ -3,7 +3,8 @@ session_start();
 require_once '../config.php';
 
 // 删除文件
-function delete_file($file_path) {
+function delete_file($file_path)
+{
     if (file_exists($file_path)) {
         return unlink($file_path);
     }
@@ -16,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         '../uploads/apps',
         '../uploads/images'
     ];
-    
+
     // 全量删除
     if (isset($_POST['delete_all'])) {
         foreach ($upload_dirs as $dir) {
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . $_SERVER['PHP_SELF']);
         exit;
     }
-    
+
     // 单个删除
     if (isset($_POST['delete_files'])) {
         foreach ($_POST['delete_files'] as $file_info) {
@@ -56,15 +57,16 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // 获取上传文件和图片信息
-function get_uploaded_files_info() {
+function get_uploaded_files_info()
+{
     $uploaded_files = [];
-    
+
     // 上传目录配置
     $upload_dirs = [
         '../uploads/apps',
         '../uploads/images'
     ];
-    
+
     foreach ($upload_dirs as $dir) {
         if (is_dir($dir)) {
             $files = scandir($dir);
@@ -83,7 +85,7 @@ function get_uploaded_files_info() {
             }
         }
     }
-    
+
     return $uploaded_files;
 }
 
@@ -91,6 +93,7 @@ $uploaded_files = get_uploaded_files_info();
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,6 +104,7 @@ $uploaded_files = get_uploaded_files_info();
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -125,71 +129,72 @@ $uploaded_files = get_uploaded_files_info();
     <div class="container mt-4">
         <form method="post">
             <h2>上传文件信息</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th><input type="checkbox" id="selectAll"></th>
-                    <th>文件名</th>
-                    <th>大小</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($uploaded_files as $file): ?>
-                    <?php if ($file['type'] === '文件'): ?>
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td><input type="checkbox" name="delete_files[]" value="<?php echo $file['type'] . '|' . $file['name']; ?>"></td>
-                        <td><?php echo htmlspecialchars($file['name']); ?></td>
-                        <td><?php echo round($file['size'] / 1024, 2); ?> KB</td>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th>文件名</th>
+                        <th>大小</th>
                     </tr>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($uploaded_files as $file): ?>
+                        <?php if ($file['type'] === '文件'): ?>
+                            <tr>
+                                <td><input type="checkbox" name="delete_files[]" value="<?php echo $file['type'] . '|' . $file['name']; ?>"></td>
+                                <td><?php echo htmlspecialchars($file['name']); ?></td>
+                                <td><?php echo round($file['size'] / 1024, 2); ?> KB</td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
 
-        <h2>上传图片信息</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th><input type="checkbox" id="selectAllImages"></th>
-                    <th>文件名</th>
-                    <th>大小</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($uploaded_files as $file): ?>
-                    <?php if ($file['type'] === '图片'): ?>
+            <h2>上传图片信息</h2>
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td><input type="checkbox" name="delete_files[]" value="<?php echo $file['type'] . '|' . $file['name']; ?>"></td>
-                        <td><?php echo htmlspecialchars($file['name']); ?></td>
-                        <td><?php echo round($file['size'] / 1024, 2); ?> KB</td>
+                        <th><input type="checkbox" id="selectAllImages"></th>
+                        <th>文件名</th>
+                        <th>大小</th>
                     </tr>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($uploaded_files as $file): ?>
+                        <?php if ($file['type'] === '图片'): ?>
+                            <tr>
+                                <td><input type="checkbox" name="delete_files[]" value="<?php echo $file['type'] . '|' . $file['name']; ?>"></td>
+                                <td><?php echo htmlspecialchars($file['name']); ?></td>
+                                <td><?php echo round($file['size'] / 1024, 2); ?> KB</td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
             <button type="submit" name="delete_all" class="btn btn-danger" onclick="return confirm('确定要删除所有文件吗？')">全量删除</button>
             <button type="submit" class="btn btn-danger ms-2" onclick="return confirm('确定要删除选中的文件吗？')">删除选中</button>
         </form>
     </div>
-        </form>
+    </form>
     </div>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.getElementById('selectAll').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('input[name="delete_files[]"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('input[name="delete_files[]"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
         });
-    });
 
-    document.getElementById('selectAllImages').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('input[name="delete_files[]"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
+        document.getElementById('selectAllImages').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('input[name="delete_files[]"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
         });
-    });
-</script>
+    </script>
 </body>
+
 </html>

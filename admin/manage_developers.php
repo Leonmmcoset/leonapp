@@ -49,52 +49,52 @@ if (isset($_GET['logout'])) {
 
 <?php
 // 检查管理员权限
-  // 设置会话cookie路径为根目录以确保跨目录访问
-  session_set_cookie_params(0, '/');
-  // 检查会话是否已启动，避免重复启动
-  if (session_status() == PHP_SESSION_NONE) {
-      if (!session_start()) {
-          error_log('会话启动失败');
-          header('Location: login.php');
-          exit;
-    
+// 设置会话cookie路径为根目录以确保跨目录访问
+session_set_cookie_params(0, '/');
+// 检查会话是否已启动，避免重复启动
+if (session_status() == PHP_SESSION_NONE) {
+    if (!session_start()) {
         error_log('会话启动失败');
-      header('Location: login.php');
-      exit;
-  // 从数据库验证用户角色，确保权限检查准确性
-  if (isset($_SESSION['user_id'])) {
-      $userId = $_SESSION['user_id'];
-      $stmt = $conn->prepare("SELECT role FROM users WHERE id = ?");
-      if (!$stmt) {
-          error_log('Database prepare failed: ' . $conn->error);
-          header('Location: login.php');
-          exit;
-      }
-      $stmt->bind_param("i", $userId);
-      if (!$stmt->execute()) {
-          error_log('Query execution failed: ' . $stmt->error);
-          header('Location: login.php');
-          exit;
-      }
-      $result = $stmt->get_result();
-      if (!$result) {
-          error_log('Failed to get result: ' . $stmt->error);
-          header('Location: login.php');
-          exit;
-      }
-      $user = $result->fetch_assoc();
-      
-      if (!$user || $user['role'] !== 'admin') {
-          error_log('用户 ' . $userId . ' 不是管理员，拒绝访问');
-          header('Location: login.php');
-          exit;
-      }
-  } else {
-      error_log('未找到用户会话，重定向到登录页');
-      header('Location: login.php');
-      exit;
+        header('Location: login.php');
+        exit;
+
+        error_log('会话启动失败');
+        header('Location: login.php');
+        exit;
+        // 从数据库验证用户角色，确保权限检查准确性
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+            $stmt = $conn->prepare("SELECT role FROM users WHERE id = ?");
+            if (!$stmt) {
+                error_log('Database prepare failed: ' . $conn->error);
+                header('Location: login.php');
+                exit;
+            }
+            $stmt->bind_param("i", $userId);
+            if (!$stmt->execute()) {
+                error_log('Query execution failed: ' . $stmt->error);
+                header('Location: login.php');
+                exit;
+            }
+            $result = $stmt->get_result();
+            if (!$result) {
+                error_log('Failed to get result: ' . $stmt->error);
+                header('Location: login.php');
+                exit;
+            }
+            $user = $result->fetch_assoc();
+
+            if (!$user || $user['role'] !== 'admin') {
+                error_log('用户 ' . $userId . ' 不是管理员，拒绝访问');
+                header('Location: login.php');
+                exit;
+            }
+        } else {
+            error_log('未找到用户会话，重定向到登录页');
+            header('Location: login.php');
+            exit;
+        }
     }
-}
 }
 
 // 处理删除用户请求
@@ -128,22 +128,22 @@ if (isset($_POST['update_user'])) {
     $userId = $_POST['user_id'];
     $username = $_POST['username'];
     $email = $_POST['email'];
-    
+
     // 使用mysqli语法更新用户信息
-$stmt = $conn->prepare("UPDATE developers SET username = ?, email = ? WHERE id = ?");
-if (!$stmt) {
-    $error = $conn->error ?? 'Unknown error';
-    error_log("Prepare failed: $error");
-    die("更新用户信息失败: $error");
-}
-$stmt->bind_param("ssi", $username, $email, $userId);
-if (!$stmt->execute()) {
-    $error = $stmt->error ?? 'Unknown error';
-    error_log("Execute failed: $error");
-    die("更新用户信息失败: $error");
-}
-$stmt->close();
-header("Location: manage_developers.php?updated=true");
+    $stmt = $conn->prepare("UPDATE developers SET username = ?, email = ? WHERE id = ?");
+    if (!$stmt) {
+        $error = $conn->error ?? 'Unknown error';
+        error_log("Prepare failed: $error");
+        die("更新用户信息失败: $error");
+    }
+    $stmt->bind_param("ssi", $username, $email, $userId);
+    if (!$stmt->execute()) {
+        $error = $stmt->error ?? 'Unknown error';
+        error_log("Execute failed: $error");
+        die("更新用户信息失败: $error");
+    }
+    $stmt->close();
+    header("Location: manage_developers.php?updated=true");
     exit;
 }
 
@@ -175,11 +175,11 @@ while ($row = $result->fetch_assoc()) {
 $editUser = null;
 if (isset($_GET['edit'])) {
     $editId = (int)$_GET['edit'];
-$stmt = $conn->prepare("SELECT id, username, email FROM developers WHERE id = ?");
-if (!$stmt) {
-    error_log('Prepare failed for edit user: ' . $conn->error);
-    die('获取编辑用户信息失败: ' . $conn->error);
-}
+    $stmt = $conn->prepare("SELECT id, username, email FROM developers WHERE id = ?");
+    if (!$stmt) {
+        error_log('Prepare failed for edit user: ' . $conn->error);
+        die('获取编辑用户信息失败: ' . $conn->error);
+    }
     $stmt->bind_param("i", $editId);
     $stmt->execute();
     $editUser = $stmt->get_result()->fetch_assoc();
@@ -188,6 +188,7 @@ if (!$stmt) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -204,39 +205,39 @@ if (!$stmt) {
             margin: 0 auto;
             padding: 20px;
         }
-
     </style>
 </head>
+
 <body>
-<!-- Bootstrap JS Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // 导航栏滚动效果
-    window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 10) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-</script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
     <div class="container">
         <h1>管理开发者用户</h1>
-<pre>调试信息:
+        <pre>调试信息:
 查询SQL: <?php echo $sql; ?>
 查询结果行数: <?php echo $rowCount; ?>
 数据表存在: <?php echo $tableExists ? '是' : '否'; ?>
 开发者数据: <?php print_r($developers); ?></pre>
-        
+
         <?php if (isset($_GET['deleted'])): ?>
             <div class="alert alert-success">用户已成功删除</div>
         <?php endif; ?>
-        
+
         <?php if (isset($_GET['updated'])): ?>
             <div class="alert alert-success">用户信息已成功更新</div>
         <?php endif; ?>
-        
+
         <?php if ($editUser): ?>
             <div class="card mb-4">
                 <div class="card-header">
@@ -246,20 +247,20 @@ if (!$stmt) {
                     <form method="post" action="manage_developers.php">
                         <input type="hidden" name="user_id" value="<?php echo $editUser['id']; ?>">
                         <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($editUser['username']); ?>" required>
-                <label for="username">用户名</label>
-            </div>
+                            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($editUser['username']); ?>" required>
+                            <label for="username">用户名</label>
+                        </div>
                         <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email']); ?>" required>
-                <label for="email">邮箱</label>
-            </div>
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email']); ?>" required>
+                            <label for="email">邮箱</label>
+                        </div>
                         <button type="submit" name="update_user" class="btn btn-primary me-2">更新用户</button>
                         <a href="manage_developers.php" class="btn btn-secondary">取消</a>
                     </form>
                 </div>
             </div>
         <?php endif; ?>
-        
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -295,4 +296,5 @@ if (!$stmt) {
         </table>
     </div>
 </body>
+
 </html>

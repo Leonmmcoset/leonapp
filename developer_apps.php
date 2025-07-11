@@ -33,6 +33,7 @@ $resultApps = $conn->query($sqlApps);
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,16 +51,17 @@ $resultApps = $conn->query($sqlApps);
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
         }
-        
+
         .page-transition {
             animation: fadeIn 0.5s ease-in-out;
         }
-        
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -67,6 +69,7 @@ $resultApps = $conn->query($sqlApps);
         }
     </style>
 </head>
+
 <body class="page-transition">
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
@@ -110,19 +113,19 @@ $resultApps = $conn->query($sqlApps);
             <div class="mb-4">
                 <h5>开发者链接</h5>
                 <div class="d-flex flex-wrap gap-2">
-                    <?php 
+                    <?php
                     $socialLinks = explode(',', $developer['social_links']);
                     foreach ($socialLinks as $link):
                         $link = trim($link);
                         if (!empty($link)):
                     ?>
-                        <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-link me-1"></i>
-                            <?php echo parse_url($link, PHP_URL_HOST) ?: $link; ?>
-                        </a>
-                    <?php 
+                            <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-link me-1"></i>
+                                <?php echo parse_url($link, PHP_URL_HOST) ?: $link; ?>
+                            </a>
+                    <?php
                         endif;
-                    endforeach; 
+                    endforeach;
                     ?>
                 </div>
             </div>
@@ -135,33 +138,33 @@ $resultApps = $conn->query($sqlApps);
                         <div class="card h-100 blur-bg">
                             <?php
                             // 获取应用的第一张图片
-                            $sqlImage = "SELECT image_path FROM app_images WHERE app_id = ". $app['id'] ." LIMIT 1";
+                            $sqlImage = "SELECT image_path FROM app_images WHERE app_id = " . $app['id'] . " LIMIT 1";
                             $resultImage = $conn->query($sqlImage);
                             $image = $resultImage ? $resultImage->fetch_assoc() : null;
                             $imagePath = $image ? $image['image_path'] : 'default-app.png';
                             ?>
-                            
+
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($app['name']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars(substr($app['description'], 0, 100)); ?>...</p>
                                 <?php
                                 // 获取应用标签
-                                $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?"; 
-                                $tagStmt = $conn->prepare($tagSql); 
-                                $tagStmt->bind_param('i', $app['id']); 
-                                $tagStmt->execute(); 
-                                $tagResult = $tagStmt->get_result(); 
-                                $tags = []; 
-                                while ($tag = $tagResult->fetch_assoc()) { 
-                                    $tags[] = htmlspecialchars($tag['name']); 
-                                } 
-                                $tagStmt->close(); 
-                                
+                                $tagSql = "SELECT t.name FROM tags t JOIN app_tags at ON t.id = at.tag_id WHERE at.app_id = ?";
+                                $tagStmt = $conn->prepare($tagSql);
+                                $tagStmt->bind_param('i', $app['id']);
+                                $tagStmt->execute();
+                                $tagResult = $tagStmt->get_result();
+                                $tags = [];
+                                while ($tag = $tagResult->fetch_assoc()) {
+                                    $tags[] = htmlspecialchars($tag['name']);
+                                }
+                                $tagStmt->close();
+
                                 // 获取应用适用平台
                                 $platforms = json_decode($app['platforms'], true);
-                                
-                                echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
-                                echo '<p class="card-text">平台: '. implode(', ', $platforms) . '</p>';
+
+                                echo '<p class="card-text">标签: ' . implode(', ', $tags) . '</p>';
+                                echo '<p class="card-text">平台: ' . implode(', ', $platforms) . '</p>';
                                 ?>
                                 <p class="card-text">
                                     <small class="text-muted">
@@ -224,4 +227,5 @@ $resultApps = $conn->query($sqlApps);
         });
     </script>
 </body>
+
 </html>

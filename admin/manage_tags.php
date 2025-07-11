@@ -55,6 +55,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,6 +63,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/animations.css">
 </head>
+
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">标签管理</h1>
@@ -107,41 +109,41 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
                     </thead>
                     <tbody>
                         <?php while ($tag = $tagsResult->fetch_assoc()): ?>
-                        <tr>
-                            <td><?php echo $tag['id']; ?></td>
-                            <td><?php echo htmlspecialchars($tag['name']); ?></td>
-                            <td><?php echo $tag['created_at']; ?></td>
-                            <td>
-                                <!-- 编辑按钮触发模态框 -->
-                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $tag['id']; ?>">编辑</button>
-                                <a href="manage_tags.php?delete=<?php echo $tag['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除这个标签吗？关联的应用标签也会被删除。');">删除</a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td><?php echo $tag['id']; ?></td>
+                                <td><?php echo htmlspecialchars($tag['name']); ?></td>
+                                <td><?php echo $tag['created_at']; ?></td>
+                                <td>
+                                    <!-- 编辑按钮触发模态框 -->
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $tag['id']; ?>">编辑</button>
+                                    <a href="manage_tags.php?delete=<?php echo $tag['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除这个标签吗？关联的应用标签也会被删除。');">删除</a>
+                                </td>
+                            </tr>
 
-                        <!-- 编辑标签模态框 -->
-                        <div class="modal fade" id="editModal<?php echo $tag['id']; ?>" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">编辑标签</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form method="post">
-                                            <input type="hidden" name="tag_id" value="<?php echo $tag['id']; ?>">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control" id="edit_tag_name<?php echo $tag['id']; ?>" name="tag_name" value="<?php echo htmlspecialchars($tag['name']); ?>" required>
-                                                <label for="edit_tag_name<?php echo $tag['id']; ?>">标签名称</label>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                                <button type="submit" name="edit_tag" class="btn btn-primary">保存修改</button>
-                                            </div>
-                                        </form>
+                            <!-- 编辑标签模态框 -->
+                            <div class="modal fade" id="editModal<?php echo $tag['id']; ?>" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">编辑标签</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post">
+                                                <input type="hidden" name="tag_id" value="<?php echo $tag['id']; ?>">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="edit_tag_name<?php echo $tag['id']; ?>" name="tag_name" value="<?php echo htmlspecialchars($tag['name']); ?>" required>
+                                                    <label for="edit_tag_name<?php echo $tag['id']; ?>">标签名称</label>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                                    <button type="submit" name="edit_tag" class="btn btn-primary">保存修改</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         <?php endwhile; ?>
                     </tbody>
                 </table>
@@ -151,4 +153,5 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

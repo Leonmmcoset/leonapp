@@ -1,158 +1,168 @@
 :root {
-    --primary-color: #0078d4;
-    --secondary-color: #f3f2f1;
-    --text-color: #333333;
-    --border-radius: 4px;
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.12);
+  --primary-color: #0078d4;
+  --secondary-color: #f3f2f1;
+  --text-color: #333333;
+  --border-radius: 4px;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .age-rating-description {
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-left: 4px solid #0d6efd;
-    border-radius: 4px;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #0d6efd;
+  border-radius: 4px;
 }
 
 .age-rating-description h4 {
-    margin-top: 0;
-    color: #0d6efd;
-    font-size: 1.2rem;
+  margin-top: 0;
+  color: #0d6efd;
+  font-size: 1.2rem;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--text-color);
-    background-color: #faf9f8;
-    overflow-x: hidden;
-    padding-top: 56px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+  background-color: #faf9f8;
+  overflow-x: hidden;
+  padding-top: 56px;
 }
 
 /* AppStore风格入场动画 */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .blur-bg {
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .card {
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: var(--card-shadow);
-    animation: fadeInUp 0.6s ease-out forwards;
-    opacity: 0;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: var(--card-shadow);
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
 }
 
 /* 卡片交错动画延迟 */
 .card:nth-child(2n) {
-    animation-delay: 0.1s;
+  animation-delay: 0.1s;
 }
 .card:nth-child(3n) {
-    animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--card-shadow-hover);
-    z-index: 10;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--card-shadow-hover);
+  z-index: 10;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    transform: translateZ(0);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  transform: translateZ(0);
 }
 
 .btn-primary:hover {
-    background-color: #005a9e;
-    border-color: #005a9e;
-    transform: translateY(-2px);
+  background-color: #005a9e;
+  border-color: #005a9e;
+  transform: translateY(-2px);
 }
 
 .btn-primary:active {
-    transform: translateY(1px) scale(0.98);
+  transform: translateY(1px) scale(0.98);
 }
 
 .navbar {
-    padding: 0.75rem 1rem;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1030;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1030;
 }
 
 .navbar.scrolled {
-    background-color: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nav-link {
-    color: var(--text-color);
-    padding: 0.5rem 1rem;
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
 }
 
 .nav-link:hover {
-    color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .form-control {
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
 }
 
 /* 年龄分级 SVG 样式 */
 .age-rating {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .age-rating svg {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 /* 骨架屏加载动画 */
 .skeleton-chart {
-    width: 400px;
-    height: 200px;
-    background: #f0f0f0;
-    border-radius: 4px;
-    position: relative;
-    overflow: hidden;
+  width: 400px;
+  height: 200px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
 }
 
 @keyframes shimmer {
-    0% { background-position: -468px 0 }
-    100% { background-position: 468px 0 }
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
 }
 
 .skeleton-chart::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateX(-100%);
-    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.5) 60%, rgba(255,255,255,0) 100%);
-    animation: shimmer 2s infinite;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 2s infinite;
 }

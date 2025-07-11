@@ -34,22 +34,24 @@ $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <style>
-        .page-transition {
-            animation: fadeIn 0.5s ease-in-out;
+    .page-transition {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-    </style>
+    }
+</style>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,6 +69,7 @@ $result = $conn->query($sql);
         }
     </style>
 </head>
+
 <body class="page-transition">
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
@@ -106,20 +109,20 @@ $result = $conn->query($sql);
     <div class="container mt-4">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-        <?php if (isset($_GET['success'])): ?>
-            Swal.fire({
-                icon: "success",
-                title: "成功",
-                text: "<?php echo addslashes($_GET['success']); ?>",
-            });
-        <?php endif; ?>
-        <?php if (isset($error)): ?>
-            Swal.fire({
-                icon: "error",
-                title: "错误",
-                text: "<?php echo addslashes($error); ?>",
-            });
-        <?php endif; ?>
+            <?php if (isset($_GET['success'])): ?>
+                Swal.fire({
+                    icon: "success",
+                    title: "成功",
+                    text: "<?php echo addslashes($_GET['success']); ?>",
+                });
+            <?php endif; ?>
+            <?php if (isset($error)): ?>
+                Swal.fire({
+                    icon: "error",
+                    title: "错误",
+                    text: "<?php echo addslashes($error); ?>",
+                });
+            <?php endif; ?>
         </script>
 
         <h2>发布公告</h2>
@@ -171,10 +174,11 @@ $result = $conn->query($sql);
             }
         });
     </script>
-<script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('page-transition');
         });
     </script>
 </body>
+
 </html>

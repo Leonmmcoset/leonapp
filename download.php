@@ -51,4 +51,3 @@ if (!readfile($filePath)) {
 }
 
 exit;
-?>

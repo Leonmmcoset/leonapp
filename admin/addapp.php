@@ -18,23 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
     $platforms = isset($_POST['platforms']) ? json_encode($_POST['platforms']) : json_encode([]);
 
     // 处理表单提交
-        // 验证必填字段
-        $required = ['name', 'description', 'age_rating', 'platforms'];
-        $errors = [];
-        foreach ($required as $field) {
-            if (empty($_POST[$field])) {
-                $errors[] = ucfirst($field) . ' 不能为空';
-            }
+    // 验证必填字段
+    $required = ['name', 'description', 'age_rating', 'platforms'];
+    $errors = [];
+    foreach ($required as $field) {
+        if (empty($_POST[$field])) {
+            $errors[] = ucfirst($field) . ' 不能为空';
         }
-    
-        // 年龄分级说明验证
-        if (($_POST['age_rating'] === '12+' || $_POST['age_rating'] === '17+') && empty($_POST['age_rating_description'])) {
-            $errors[] = '年龄分级为12+或以上时，年龄分级说明不能为空';
-        }
+    }
 
-    
-        // 处理应用图标上传
-    
+    // 年龄分级说明验证
+    if (($_POST['age_rating'] === '12+' || $_POST['age_rating'] === '17+') && empty($_POST['age_rating_description'])) {
+        $errors[] = '年龄分级为12+或以上时，年龄分级说明不能为空';
+    }
+
+
+    // 处理应用图标上传
+
     // 处理平台数据
     $platforms = json_encode($_POST['platforms']);
     // 插入应用数据
@@ -45,58 +45,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
     if ($stmt) {
         $stmt->bind_param("sssss", $name, $description, $ageRating, $_POST['age_rating_description'], $platforms);
         if ($stmt->execute() === TRUE) {
-        $appId = $stmt->insert_id;
+            $appId = $stmt->insert_id;
 
-        // 保存标签关联
-        if (!empty($_POST['tags'])) {
-            $stmt = $conn->prepare("INSERT INTO app_tags (app_id, tag_id) VALUES (?, ?)");
-            foreach ($_POST['tags'] as $tagId) {
-                $stmt->bind_param("ii", $appId, $tagId);
-                $stmt->execute();
+            // 保存标签关联
+            if (!empty($_POST['tags'])) {
+                $stmt = $conn->prepare("INSERT INTO app_tags (app_id, tag_id) VALUES (?, ?)");
+                foreach ($_POST['tags'] as $tagId) {
+                    $stmt->bind_param("ii", $appId, $tagId);
+                    $stmt->execute();
+                }
+                $stmt->close();
             }
-            $stmt->close();
-        }
 
-        // 处理上传的预览图片
-        if (!empty($_FILES['images']['name'][0])) {
-            $uploadDir = '../images/';
-            foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
-                $fileName = basename($_FILES['images']['name'][$key]);
-                $targetPath = $uploadDir . $fileName;
-                if (move_uploaded_file($tmpName, $targetPath)) {
-                    $insertImageSql = "INSERT INTO app_images (app_id, image_path) VALUES (?, ?)";
-                    $imgStmt = $conn->prepare($insertImageSql);
-                    $imgStmt->bind_param("is", $appId, $targetPath);
-                    $imgStmt->execute();
+            // 处理上传的预览图片
+            if (!empty($_FILES['images']['name'][0])) {
+                $uploadDir = '../images/';
+                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+                    $fileName = basename($_FILES['images']['name'][$key]);
+                    $targetPath = $uploadDir . $fileName;
+                    if (move_uploaded_file($tmpName, $targetPath)) {
+                        $insertImageSql = "INSERT INTO app_images (app_id, image_path) VALUES (?, ?)";
+                        $imgStmt = $conn->prepare($insertImageSql);
+                        $imgStmt->bind_param("is", $appId, $targetPath);
+                        $imgStmt->execute();
+                    }
                 }
             }
-        }
 
-        // 处理上传的App文件
-        if (!empty($_FILES['app_file']['name'])) {
-            $uploadDir = '../files/';
-            $fileName = basename($_FILES['app_file']['name']);
-            $targetPath = $uploadDir . $fileName;
-            if (move_uploaded_file($_FILES['app_file']['tmp_name'], $targetPath)) {
-                $version = $_POST['version'];
-                $changelog = $_POST['changelog'];
-                $insertVersionSql = "INSERT INTO app_versions (app_id, version, changelog, file_path) VALUES (?, ?, ?, ?)";
-                $verStmt = $conn->prepare($insertVersionSql);
-                $verStmt->bind_param("isss", $appId, $version, $changelog, $targetPath);
-                $verStmt->execute();
+            // 处理上传的App文件
+            if (!empty($_FILES['app_file']['name'])) {
+                $uploadDir = '../files/';
+                $fileName = basename($_FILES['app_file']['name']);
+                $targetPath = $uploadDir . $fileName;
+                if (move_uploaded_file($_FILES['app_file']['tmp_name'], $targetPath)) {
+                    $version = $_POST['version'];
+                    $changelog = $_POST['changelog'];
+                    $insertVersionSql = "INSERT INTO app_versions (app_id, version, changelog, file_path) VALUES (?, ?, ?, ?)";
+                    $verStmt = $conn->prepare($insertVersionSql);
+                    $verStmt->bind_param("isss", $appId, $version, $changelog, $targetPath);
+                    $verStmt->execute();
+                }
             }
-        }
 
-        header('Location: index.php?success=App 添加成功');
-        exit;
-    } else {
-        $error = 'App 添加失败: '. $conn->error;
+            header('Location: index.php?success=App 添加成功');
+            exit;
+        } else {
+            $error = 'App 添加失败: ' . $conn->error;
+        }
     }
-}
 }
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,12 +116,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
         }
     </style>
 </head>
+
 <body>
-<?php if (isset($error)): ?>
-    <div style='color: red; padding: 10px; background-color: #ffeeee; border-radius: 5px; margin-bottom: 20px;'>
-        <?php echo htmlspecialchars($error); ?>
-    </div>
-<?php endif; ?>
+    <?php if (isset($error)): ?>
+        <div style='color: red; padding: 10px; background-color: #ffeeee; border-radius: 5px; margin-bottom: 20px;'>
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+    <?php endif; ?>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
@@ -165,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
                     $tagResult = $conn->query("SELECT id, name FROM tags");
                     while ($tag = $tagResult->fetch_assoc()):
                     ?>
-                    <option value="<?php echo $tag['id']; ?>"><?php echo htmlspecialchars($tag['name']); ?></option>
+                        <option value="<?php echo $tag['id']; ?>"><?php echo htmlspecialchars($tag['name']); ?></option>
                     <?php endwhile; ?>
                 </select>
                 <small class="form-text text-muted">按住Ctrl键可选择多个标签</small>
@@ -182,12 +184,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
                     <option value="12+">12+</option>
                     <option value="17+">17+</option>
                 </select>
-          </div>
-          <div class="form-floating mb-3" id="ageRatingDescriptionGroup" style="display: none;">
-              <textarea class="form-control" id="age_rating_description" name="age_rating_description" rows="3" placeholder="请说明为何需要此年龄分级"></textarea>
-              <label for="age_rating_description">年龄分级说明</label>
-              <div class="form-text">当年龄分级为12+或以上时，此项为必填</div>
-          </div>
+            </div>
+            <div class="form-floating mb-3" id="ageRatingDescriptionGroup" style="display: none;">
+                <textarea class="form-control" id="age_rating_description" name="age_rating_description" rows="3" placeholder="请说明为何需要此年龄分级"></textarea>
+                <label for="age_rating_description">年龄分级说明</label>
+                <div class="form-text">当年龄分级为12+或以上时，此项为必填</div>
+            </div>
 
             <div class="mb-3">
                 <label class="form-label">适用平台</label>
@@ -260,27 +262,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-          // 年龄分级说明显示控制
-          const ageRatingSelect = document.getElementById('age_rating');
-          const descriptionGroup = document.getElementById('ageRatingDescriptionGroup');
-          const descriptionInput = document.getElementById('age_rating_description');
-          
-          function toggleAgeDescription() {
-              const selectedRating = ageRatingSelect.value;
-              if (selectedRating === '12+' || selectedRating === '17+') {
-                  descriptionGroup.style.display = 'block';
-                  descriptionInput.required = true;
-              } else {
-                  descriptionGroup.style.display = 'none';
-                  descriptionInput.required = false;
-              }
-          }
-          
-          ageRatingSelect.addEventListener('change', toggleAgeDescription);
-          // 初始加载时检查
-          toggleAgeDescription();
+        // 年龄分级说明显示控制
+        const ageRatingSelect = document.getElementById('age_rating');
+        const descriptionGroup = document.getElementById('ageRatingDescriptionGroup');
+        const descriptionInput = document.getElementById('age_rating_description');
 
-    
+        function toggleAgeDescription() {
+            const selectedRating = ageRatingSelect.value;
+            if (selectedRating === '12+' || selectedRating === '17+') {
+                descriptionGroup.style.display = 'block';
+                descriptionInput.required = true;
+            } else {
+                descriptionGroup.style.display = 'none';
+                descriptionInput.required = false;
+            }
+        }
+
+        ageRatingSelect.addEventListener('change', toggleAgeDescription);
+        // 初始加载时检查
+        toggleAgeDescription();
+
+
         // 导航栏滚动效果
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
@@ -314,11 +316,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
             if (document.getElementById('windows').checked && !document.querySelector('input[name="windows_version"]:checked')) {
                 e.preventDefault();
                 Swal.fire({
-                title: '提示',
-                text: '请选择Windows版本（XP以前或Win7以后）',
-                icon: 'warning',
-                confirmButtonText: '确定'
-            });
+                    title: '提示',
+                    text: '请选择Windows版本（XP以前或Win7以后）',
+                    icon: 'warning',
+                    confirmButtonText: '确定'
+                });
                 return;
             }
 
@@ -326,11 +328,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
             if (document.getElementById('linux').checked && !document.querySelector('input[name="linux_distribution"]:checked')) {
                 e.preventDefault();
                 Swal.fire({
-                title: '提示',
-                text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
-                icon: 'warning',
-                confirmButtonText: '确定'
-            });
+                    title: '提示',
+                    text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
+                    icon: 'warning',
+                    confirmButtonText: '确定'
+                });
                 return;
             }
 
@@ -344,4 +346,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
         });
     </script>
 </body>
+
 </html>

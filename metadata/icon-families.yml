@@ -1,4 +1,4 @@
-'0':
+"0":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -11,7 +11,7 @@
     pro:
       - family: classic
         style: solid
-  label: '0'
+  label: "0"
   search:
     terms:
       - Digit Zero
@@ -19,9 +19,9 @@
       - none
       - zero
       - zilch
-  unicode: '30'
+  unicode: "30"
   voted: false
-'1':
+"1":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -34,14 +34,14 @@
     pro:
       - family: classic
         style: solid
-  label: '1'
+  label: "1"
   search:
     terms:
       - Digit One
       - one
-  unicode: '31'
+  unicode: "31"
   voted: false
-'2':
+"2":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -54,14 +54,14 @@
     pro:
       - family: classic
         style: solid
-  label: '2'
+  label: "2"
   search:
     terms:
       - Digit Two
       - two
-  unicode: '32'
+  unicode: "32"
   voted: false
-'3':
+"3":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -74,14 +74,14 @@
     pro:
       - family: classic
         style: solid
-  label: '3'
+  label: "3"
   search:
     terms:
       - Digit Three
       - three
-  unicode: '33'
+  unicode: "33"
   voted: false
-'4':
+"4":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -94,14 +94,14 @@
     pro:
       - family: classic
         style: solid
-  label: '4'
+  label: "4"
   search:
     terms:
       - Digit Four
       - four
-  unicode: '34'
+  unicode: "34"
   voted: false
-'5':
+"5":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -114,14 +114,14 @@
     pro:
       - family: classic
         style: solid
-  label: '5'
+  label: "5"
   search:
     terms:
       - Digit Five
       - five
-  unicode: '35'
+  unicode: "35"
   voted: false
-'6':
+"6":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -134,14 +134,14 @@
     pro:
       - family: classic
         style: solid
-  label: '6'
+  label: "6"
   search:
     terms:
       - Digit Six
       - six
-  unicode: '36'
+  unicode: "36"
   voted: false
-'7':
+"7":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -154,14 +154,14 @@
     pro:
       - family: classic
         style: solid
-  label: '7'
+  label: "7"
   search:
     terms:
       - Digit Seven
       - seven
-  unicode: '37'
+  unicode: "37"
   voted: false
-'8':
+"8":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -174,14 +174,14 @@
     pro:
       - family: classic
         style: solid
-  label: '8'
+  label: "8"
   search:
     terms:
       - Digit Eight
       - eight
-  unicode: '38'
+  unicode: "38"
   voted: false
-'9':
+"9":
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -194,12 +194,12 @@
     pro:
       - family: classic
         style: solid
-  label: '9'
+  label: "9"
   search:
     terms:
       - Digit Nine
       - nine
-  unicode: '39'
+  unicode: "39"
   voted: false
 42-group:
   aliases:
@@ -240,7 +240,7 @@ a:
   aliases:
     unicodes:
       composite:
-        - '61'
+        - "61"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -259,7 +259,7 @@ a:
       - Latin Capital Letter A
       - Latin Small Letter A
       - letter
-  unicode: '41'
+  unicode: "41"
   voted: false
 accessible-icon:
   aliases:
@@ -639,7 +639,7 @@ anchor:
   aliases:
     unicodes:
       composite:
-        - '2693'
+        - "2693"
       secondary:
         - 10f13d
   changes:
@@ -802,7 +802,7 @@ angle-down:
   aliases:
     unicodes:
       composite:
-        - '2304'
+        - "2304"
       secondary:
         - 10f107
   changes:
@@ -833,7 +833,7 @@ angle-left:
   aliases:
     unicodes:
       composite:
-        - '2039'
+        - "2039"
       secondary:
         - 10f104
   changes:
@@ -899,7 +899,7 @@ angle-up:
   aliases:
     unicodes:
       composite:
-        - '2303'
+        - "2303"
       secondary:
         - 10f106
   changes:
@@ -1092,7 +1092,7 @@ ankh:
   aliases:
     unicodes:
       composite:
-        - '2625'
+        - "2625"
       secondary:
         - 10f644
   changes:
@@ -1278,7 +1278,7 @@ arrow-down:
   aliases:
     unicodes:
       composite:
-        - '2193'
+        - "2193"
       secondary:
         - 10f063
   changes:
@@ -1571,7 +1571,7 @@ arrow-left:
   aliases:
     unicodes:
       composite:
-        - '2190'
+        - "2190"
       secondary:
         - 10f060
   changes:
@@ -1661,7 +1661,7 @@ arrow-right:
   aliases:
     unicodes:
       composite:
-        - '2192'
+        - "2192"
       secondary:
         - 10f061
   changes:
@@ -2022,7 +2022,7 @@ arrow-up:
   aliases:
     unicodes:
       composite:
-        - '2191'
+        - "2191"
       secondary:
         - 10f062
   changes:
@@ -2765,7 +2765,7 @@ asterisk:
   aliases:
     unicodes:
       composite:
-        - '2731'
+        - "2731"
         - f069
       primary:
         - f069
@@ -2807,7 +2807,7 @@ asymmetrik:
     pro:
       - family: classic
         style: brands
-  label: 'Asymmetrik, Ltd.'
+  label: "Asymmetrik, Ltd."
   search:
     terms: []
   unicode: f372
@@ -2845,7 +2845,7 @@ at:
       - email
       - fluctuate
       - handle
-  unicode: '40'
+  unicode: "40"
   voted: false
 atlassian:
   changes:
@@ -3061,7 +3061,7 @@ b:
   aliases:
     unicodes:
       composite:
-        - '62'
+        - "62"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -3080,7 +3080,7 @@ b:
       - Latin Capital Letter B
       - Latin Small Letter B
       - letter
-  unicode: '42'
+  unicode: "42"
   voted: false
 baby:
   aliases:
@@ -3284,7 +3284,7 @@ bacteria:
   aliases:
     unicodes:
       secondary:
-        - '10e059'
+        - "10e059"
   changes:
     - 5.13.0
     - 5.13.1
@@ -3458,7 +3458,7 @@ ban:
       - entry
       - forbidden
       - hide
-      - 'no'
+      - "no"
       - not
       - prohibit
       - prohibited
@@ -3495,7 +3495,7 @@ ban-smoking:
       - ban
       - cancel
       - forbidden
-      - 'no'
+      - "no"
       - no smoking
       - non-smoking
       - not
@@ -4298,7 +4298,7 @@ bell-slash:
       - forbidden
       - mute
       - notification
-      - 'off'
+      - "off"
       - quiet
       - reminder
       - silent
@@ -4431,7 +4431,7 @@ biohazard:
   aliases:
     unicodes:
       composite:
-        - '2623'
+        - "2623"
       secondary:
         - 10f780
   changes:
@@ -6503,7 +6503,7 @@ building-flag:
   label: Building Flag
   search:
     terms:
-      - ' city'
+      - " city"
       - building
       - diplomat
       - embassy
@@ -6553,7 +6553,7 @@ building-ngo:
   label: Building Ngo
   search:
     terms:
-      - ' city'
+      - " city"
       - building
       - non governmental organization
       - office
@@ -6925,7 +6925,7 @@ c:
   aliases:
     unicodes:
       composite:
-        - '63'
+        - "63"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -6944,7 +6944,7 @@ c:
       - Latin Capital Letter C
       - Latin Small Letter C
       - letter
-  unicode: '43'
+  unicode: "43"
   voted: false
 cable-car:
   aliases:
@@ -8920,8 +8920,8 @@ check:
   aliases:
     unicodes:
       composite:
-        - '2713'
-        - '2714'
+        - "2713"
+        - "2714"
       secondary:
         - 10f00c
   changes:
@@ -8960,7 +8960,7 @@ check:
       - success
       - tick
       - todo
-      - 'yes'
+      - "yes"
       - ✓
   unicode: f00c
   voted: false
@@ -9032,7 +9032,7 @@ check-to-slot:
       - politics
       - positive
       - voting
-      - 'yes'
+      - "yes"
   unicode: f772
   voted: false
 cheese:
@@ -9373,7 +9373,7 @@ chevron-left:
   aliases:
     unicodes:
       composite:
-        - '2329'
+        - "2329"
       secondary:
         - 10f053
   changes:
@@ -9880,7 +9880,7 @@ circle-check:
       - success
       - tick
       - todo
-      - 'yes'
+      - "yes"
   unicode: f058
   voted: false
 circle-chevron-down:
@@ -10516,7 +10516,7 @@ circle-radiation:
       - radiation-alt
     unicodes:
       composite:
-        - '2622'
+        - "2622"
       secondary:
         - 10f7ba
   changes:
@@ -10857,7 +10857,7 @@ clipboard-check:
       - success
       - tick
       - todo
-      - 'yes'
+      - "yes"
   unicode: f46c
   voted: false
 clipboard-list:
@@ -10979,9 +10979,9 @@ clock:
   label: Clock
   search:
     terms:
-      - '00'
-      - '4'
-      - '4:00'
+      - "00"
+      - "4"
+      - "4:00"
       - clock
       - date
       - four
@@ -11107,7 +11107,7 @@ cloud:
   aliases:
     unicodes:
       composite:
-        - '2601'
+        - "2601"
       secondary:
         - 10f0c2
   changes:
@@ -11569,7 +11569,7 @@ clover:
   label: Clover
   search:
     terms:
-      - '4'
+      - "4"
       - charm
       - clover
       - four
@@ -13350,7 +13350,7 @@ d:
   aliases:
     unicodes:
       composite:
-        - '64'
+        - "64"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -13369,7 +13369,7 @@ d:
       - Latin Capital Letter D
       - Latin Small Letter D
       - letter
-  unicode: '44'
+  unicode: "44"
   voted: false
 d-and-d:
   changes:
@@ -13677,7 +13677,7 @@ dharmachakra:
   aliases:
     unicodes:
       composite:
-        - '2638'
+        - "2638"
       secondary:
         - 10f655
   changes:
@@ -13836,7 +13836,7 @@ diamond:
   aliases:
     unicodes:
       composite:
-        - '2666'
+        - "2666"
       secondary:
         - 10f219
   changes:
@@ -14013,7 +14013,7 @@ dice-five:
   aliases:
     unicodes:
       composite:
-        - '2684'
+        - "2684"
       secondary:
         - 10f523
   changes:
@@ -14043,7 +14043,7 @@ dice-four:
   aliases:
     unicodes:
       composite:
-        - '2683'
+        - "2683"
       secondary:
         - 10f524
   changes:
@@ -14073,7 +14073,7 @@ dice-one:
   aliases:
     unicodes:
       composite:
-        - '2680'
+        - "2680"
       secondary:
         - 10f525
   changes:
@@ -14103,7 +14103,7 @@ dice-six:
   aliases:
     unicodes:
       composite:
-        - '2685'
+        - "2685"
       secondary:
         - 10f526
   changes:
@@ -14133,7 +14133,7 @@ dice-three:
   aliases:
     unicodes:
       composite:
-        - '2682'
+        - "2682"
       secondary:
         - 10f527
   changes:
@@ -14163,7 +14163,7 @@ dice-two:
   aliases:
     unicodes:
       composite:
-        - '2681'
+        - "2681"
       secondary:
         - 10f528
   changes:
@@ -14314,7 +14314,7 @@ divide:
   aliases:
     unicodes:
       composite:
-        - '2797'
+        - "2797"
         - f7
       secondary:
         - 10f529
@@ -14459,7 +14459,7 @@ dollar-sign:
       primary:
         - f155
       secondary:
-        - '1024'
+        - "1024"
         - 10f155
   changes:
     - 3.2.0
@@ -14487,7 +14487,7 @@ dollar-sign:
       - dollar
       - heavy dollar sign
       - money
-  unicode: '24'
+  unicode: "24"
   voted: false
 dolly:
   aliases:
@@ -15151,7 +15151,7 @@ e:
   aliases:
     unicodes:
       composite:
-        - '65'
+        - "65"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -15170,7 +15170,7 @@ e:
       - Latin Capital Letter E
       - Latin Small Letter E
       - letter
-  unicode: '45'
+  unicode: "45"
   voted: false
 ear-deaf:
   aliases:
@@ -15768,7 +15768,7 @@ envelope:
     unicodes:
       composite:
         - 1f582
-        - '2709'
+        - "2709"
         - f003
       secondary:
         - 10f0e0
@@ -16152,13 +16152,13 @@ exclamation:
   aliases:
     unicodes:
       composite:
-        - '2755'
-        - '2757'
+        - "2755"
+        - "2757"
         - f12a
       primary:
         - f12a
       secondary:
-        - '1021'
+        - "1021"
         - 10f12a
   changes:
     - 3.1.0
@@ -16179,7 +16179,7 @@ exclamation:
   label: Exclamation
   search:
     terms:
-      - '!'
+      - "!"
       - Exclamation Mark
       - alert
       - danger
@@ -16196,7 +16196,7 @@ exclamation:
       - red exclamation mark
       - warning
       - white exclamation mark
-  unicode: '21'
+  unicode: "21"
   voted: false
 expand:
   aliases:
@@ -16418,7 +16418,7 @@ f:
   aliases:
     unicodes:
       composite:
-        - '66'
+        - "66"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -16437,7 +16437,7 @@ f:
       - Latin Capital Letter F
       - Latin Small Letter F
       - letter
-  unicode: '46'
+  unicode: "46"
   voted: false
 face-angry:
   aliases:
@@ -16563,7 +16563,7 @@ face-frown:
       - frown
     unicodes:
       composite:
-        - '2639'
+        - "2639"
       secondary:
         - 10f119
   changes:
@@ -18025,7 +18025,7 @@ faucet:
   aliases:
     unicodes:
       secondary:
-        - '10e005'
+        - "10e005"
   changes:
     - 5.12.0
     - 5.14.0
@@ -18062,7 +18062,7 @@ faucet-drip:
       composite:
         - 1f6b0
       secondary:
-        - '10e006'
+        - "10e006"
   changes:
     - 5.12.0
     - 5.14.0
@@ -19854,7 +19854,7 @@ flag-usa:
       - betsy ross
       - country
       - fla
-      - 'flag: United States'
+      - "flag: United States"
       - old glory
       - stars
       - stripes
@@ -19910,14 +19910,14 @@ flask-vial:
   label: Flask Vial
   search:
     terms:
-      - ' beaker'
-      - ' chemicals'
-      - ' experiment'
-      - ' experimental'
-      - ' labs'
-      - ' liquid'
-      - ' science'
-      - ' vial'
+      - " beaker"
+      - " chemicals"
+      - " experiment"
+      - " experimental"
+      - " labs"
+      - " liquid"
+      - " science"
+      - " vial"
       - ampule
       - chemistry
       - lab
@@ -20438,7 +20438,7 @@ forward:
   aliases:
     unicodes:
       composite:
-        - '23e9'
+        - "23e9"
       secondary:
         - 10f04e
   changes:
@@ -20696,7 +20696,7 @@ g:
   aliases:
     unicodes:
       composite:
-        - '67'
+        - "67"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -20715,7 +20715,7 @@ g:
       - Latin Capital Letter G
       - Latin Small Letter G
       - letter
-  unicode: '47'
+  unicode: "47"
   voted: false
 galactic-republic:
   changes:
@@ -20998,7 +20998,7 @@ gear:
       - cog
     unicodes:
       composite:
-        - '2699'
+        - "2699"
       secondary:
         - 10f013
   changes:
@@ -22063,7 +22063,7 @@ gripfire:
     pro:
       - family: classic
         style: brands
-  label: 'Gripfire, Inc.'
+  label: "Gripfire, Inc."
   search:
     terms: []
   unicode: f3ac
@@ -22212,7 +22212,7 @@ h:
   aliases:
     unicodes:
       composite:
-        - '68'
+        - "68"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -22231,7 +22231,7 @@ h:
       - Latin Capital Letter H
       - Latin Small Letter H
       - letter
-  unicode: '48'
+  unicode: "48"
   voted: false
 hacker-news:
   changes:
@@ -23415,7 +23415,7 @@ handshake-slash:
   aliases:
     unicodes:
       secondary:
-        - '10e060'
+        - "10e060"
   changes:
     - 5.13.0
     - 5.14.0
@@ -23535,7 +23535,7 @@ hashtag:
       primary:
         - f292
       secondary:
-        - '1023'
+        - "1023"
         - 10f292
   changes:
     - 4.5.0
@@ -23560,7 +23560,7 @@ hashtag:
       - pound
       - social media
       - tag
-  unicode: '23'
+  unicode: "23"
   voted: false
 hat-cowboy:
   aliases:
@@ -23672,7 +23672,7 @@ head-side-cough:
   aliases:
     unicodes:
       secondary:
-        - '10e061'
+        - "10e061"
   changes:
     - 5.13.0
     - 5.14.0
@@ -23702,7 +23702,7 @@ head-side-cough-slash:
   aliases:
     unicodes:
       secondary:
-        - '10e062'
+        - "10e062"
   changes:
     - 5.13.0
     - 5.14.0
@@ -23732,7 +23732,7 @@ head-side-mask:
   aliases:
     unicodes:
       secondary:
-        - '10e063'
+        - "10e063"
   changes:
     - 5.13.0
     - 5.14.0
@@ -23765,7 +23765,7 @@ head-side-virus:
   aliases:
     unicodes:
       secondary:
-        - '10e064'
+        - "10e064"
   changes:
     - 5.13.0
     - 5.14.0
@@ -23933,8 +23933,8 @@ heart:
         - 1f90d
         - 1f90e
         - 1f9e1
-        - '2665'
-        - '2764'
+        - "2665"
+        - "2764"
         - f08a
       secondary:
         - 10f004
@@ -25109,7 +25109,7 @@ house-chimney-user:
   aliases:
     unicodes:
       secondary:
-        - '10e065'
+        - "10e065"
   changes:
     - 5.13.0
     - 5.14.0
@@ -25350,7 +25350,7 @@ house-laptop:
       - laptop-house
     unicodes:
       secondary:
-        - '10e066'
+        - "10e066"
   changes:
     - 5.13.0
     - 5.14.0
@@ -25521,7 +25521,7 @@ house-signal:
   aliases:
     unicodes:
       secondary:
-        - '10e012'
+        - "10e012"
   changes:
     - 5.12.0
     - 5.14.0
@@ -25711,7 +25711,7 @@ i:
   aliases:
     unicodes:
       composite:
-        - '69'
+        - "69"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -25730,7 +25730,7 @@ i:
       - Latin Capital Letter I
       - Latin Small Letter I
       - letter
-  unicode: '49'
+  unicode: "49"
   voted: false
 i-cursor:
   aliases:
@@ -26973,7 +26973,7 @@ keyboard:
   aliases:
     unicodes:
       composite:
-        - '2328'
+        - "2328"
       secondary:
         - 10f11c
   changes:
@@ -27654,7 +27654,7 @@ left-right:
       - arrows-alt-h
     unicodes:
       composite:
-        - '2194'
+        - "2194"
       secondary:
         - 10f337
   changes:
@@ -27855,14 +27855,14 @@ lightbulb:
   label: Lightbulb
   search:
     terms:
-      - '  comic'
-      - '  electric'
-      - '  idea'
-      - '  innovation'
-      - '  inspiration'
-      - '  light'
-      - '  light bulb'
-      - ' bulb'
+      - "  comic"
+      - "  electric"
+      - "  idea"
+      - "  innovation"
+      - "  inspiration"
+      - "  light"
+      - "  light bulb"
+      - " bulb"
       - bulb
       - comic
       - electric
@@ -28550,7 +28550,7 @@ lungs-virus:
   aliases:
     unicodes:
       secondary:
-        - '10e067'
+        - "10e067"
   changes:
     - 5.13.0
     - 5.14.0
@@ -28745,9 +28745,9 @@ magnifying-glass-chart:
   label: Magnifying Glass Chart
   search:
     terms:
-      - ' data'
-      - ' graph'
-      - ' intelligence'
+      - " data"
+      - " graph"
+      - " intelligence"
       - analysis
       - chart
       - market
@@ -29160,7 +29160,7 @@ mars:
   aliases:
     unicodes:
       composite:
-        - '2642'
+        - "2642"
       secondary:
         - 10f222
   changes:
@@ -29964,7 +29964,7 @@ meteor:
   aliases:
     unicodes:
       composite:
-        - '2604'
+        - "2604"
       secondary:
         - 10f753
   changes:
@@ -30282,9 +30282,9 @@ minus:
       - subtract
     unicodes:
       composite:
-        - '2013'
-        - '2212'
-        - '2796'
+        - "2013"
+        - "2212"
+        - "2796"
       secondary:
         - 10f068
   changes:
@@ -31218,7 +31218,7 @@ mug-hot:
   aliases:
     unicodes:
       composite:
-        - '2615'
+        - "2615"
       secondary:
         - 10f7b6
   changes:
@@ -31323,7 +31323,7 @@ music:
       - sound
   unicode: f001
   voted: false
-'n':
+"n":
   aliases:
     unicodes:
       composite:
@@ -31341,14 +31341,14 @@ music:
     pro:
       - family: classic
         style: solid
-  label: 'N'
+  label: "N"
   search:
     terms:
       - Latin Capital Letter N
       - Latin Small Letter N
       - letter
       - nay
-      - 'no'
+      - "no"
   unicode: 4e
   voted: false
 naira-sign:
@@ -32168,7 +32168,7 @@ p:
   aliases:
     unicodes:
       composite:
-        - '70'
+        - "70"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -32187,7 +32187,7 @@ p:
       - Latin Capital Letter P
       - Latin Small Letter P
       - letter
-  unicode: '50'
+  unicode: "50"
   voted: false
 padlet:
   changes:
@@ -32841,7 +32841,7 @@ pen-fancy:
     unicodes:
       composite:
         - 1f58b
-        - '2712'
+        - "2712"
       secondary:
         - 10f5ac
   changes:
@@ -32876,7 +32876,7 @@ pen-nib:
   aliases:
     unicodes:
       composite:
-        - '2711'
+        - "2711"
       secondary:
         - 10f5ad
   changes:
@@ -33017,7 +33017,7 @@ people-arrows:
       - people-arrows-left-right
     unicodes:
       secondary:
-        - '10e068'
+        - "10e068"
   changes:
     - 5.13.0
     - 5.14.0
@@ -33242,7 +33242,7 @@ percent:
         - f295
         - f541
       secondary:
-        - '1025'
+        - "1025"
         - 10f295
         - 10f541
   changes:
@@ -33268,7 +33268,7 @@ percent:
       - proportion
       - rate
       - ratio
-  unicode: '25'
+  unicode: "25"
   voted: true
 periscope:
   changes:
@@ -35190,7 +35190,7 @@ plane-slash:
   aliases:
     unicodes:
       secondary:
-        - '10e069'
+        - "10e069"
   changes:
     - 5.13.0
     - 5.14.0
@@ -35526,7 +35526,7 @@ plus:
       - add
     unicodes:
       composite:
-        - '2795'
+        - "2795"
         - f067
       primary:
         - f067
@@ -35739,7 +35739,7 @@ power-off:
       - Power Symbol
       - cancel
       - computer
-      - 'on'
+      - "on"
       - reboot
       - restart
   unicode: f011
@@ -35838,7 +35838,7 @@ print:
       composite:
         - 1f5a8
         - 1f5b6
-        - '2399'
+        - "2399"
       secondary:
         - 10f02f
   changes:
@@ -36020,7 +36020,7 @@ q:
   aliases:
     unicodes:
       composite:
-        - '71'
+        - "71"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -36039,7 +36039,7 @@ q:
       - Latin Capital Letter Q
       - Latin Small Letter Q
       - letter
-  unicode: '51'
+  unicode: "51"
   voted: false
 qq:
   changes:
@@ -36091,8 +36091,8 @@ question:
   aliases:
     unicodes:
       composite:
-        - '2753'
-        - '2754'
+        - "2753"
+        - "2754"
         - f128
       primary:
         - f128
@@ -36116,7 +36116,7 @@ question:
   label: Question
   search:
     terms:
-      - '?'
+      - "?"
       - Question Mark
       - help
       - information
@@ -36237,7 +36237,7 @@ r:
   aliases:
     unicodes:
       composite:
-        - '72'
+        - "72"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -36256,7 +36256,7 @@ r:
       - Latin Capital Letter R
       - Latin Small Letter R
       - letter
-  unicode: '52'
+  unicode: "52"
   voted: false
 r-project:
   changes:
@@ -36672,7 +36672,7 @@ recycle:
   aliases:
     unicodes:
       composite:
-        - '2672'
+        - "2672"
         - 267a
         - 267b
       secondary:
@@ -37965,7 +37965,7 @@ s:
   aliases:
     unicodes:
       composite:
-        - '73'
+        - "73"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -37984,7 +37984,7 @@ s:
       - Latin Capital Letter S
       - Latin Small Letter S
       - letter
-  unicode: '53'
+  unicode: "53"
   voted: false
 sack-dollar:
   aliases:
@@ -38195,7 +38195,7 @@ scale-balanced:
       - balance-scale
     unicodes:
       composite:
-        - '2696'
+        - "2696"
       secondary:
         - 10f24e
   changes:
@@ -38460,9 +38460,9 @@ scissors:
       - cut
     unicodes:
       composite:
-        - '2700'
-        - '2702'
-        - '2704'
+        - "2700"
+        - "2702"
+        - "2704"
       secondary:
         - 10f0c4
   changes:
@@ -39401,7 +39401,7 @@ shop-slash:
       - store-alt-slash
     unicodes:
       secondary:
-        - '10e070'
+        - "10e070"
   changes:
     - 5.13.0
     - 5.14.0
@@ -39939,7 +39939,7 @@ skull-crossbones:
     unicodes:
       composite:
         - 1f571
-        - '2620'
+        - "2620"
       secondary:
         - 10f714
   changes:
@@ -40071,7 +40071,7 @@ slash:
       - cancel
       - close
       - mute
-      - 'off'
+      - "off"
       - stop
       - x
   unicode: f715
@@ -40244,8 +40244,8 @@ snowflake:
   aliases:
     unicodes:
       composite:
-        - '2744'
-        - '2746'
+        - "2744"
+        - "2746"
       secondary:
         - 10f2dc
   changes:
@@ -40284,7 +40284,7 @@ snowman:
   aliases:
     unicodes:
       composite:
-        - '2603'
+        - "2603"
         - 26c4
       secondary:
         - 10f7d0
@@ -41154,8 +41154,8 @@ square-check:
       - check-square
     unicodes:
       composite:
-        - '2611'
-        - '2705'
+        - "2611"
+        - "2705"
         - f046
       secondary:
         - 10f14a
@@ -41198,7 +41198,7 @@ square-check:
       - success
       - tick
       - todo
-      - 'yes'
+      - "yes"
       - ✓
   unicode: f14a
   voted: false
@@ -42144,7 +42144,7 @@ square-up-right:
       - external-link-square-alt
     unicodes:
       composite:
-        - '2197'
+        - "2197"
       secondary:
         - 10f360
   changes:
@@ -42661,7 +42661,7 @@ star-of-david:
   aliases:
     unicodes:
       composite:
-        - '2721'
+        - "2721"
       secondary:
         - 10f69a
   changes:
@@ -42988,7 +42988,7 @@ store-slash:
   aliases:
     unicodes:
       secondary:
-        - '10e071'
+        - "10e071"
   changes:
     - 5.13.0
     - 5.14.0
@@ -43350,7 +43350,7 @@ sun:
   aliases:
     unicodes:
       composite:
-        - '2600'
+        - "2600"
       secondary:
         - 10f185
   changes:
@@ -43628,7 +43628,7 @@ t:
   aliases:
     unicodes:
       composite:
-        - '74'
+        - "74"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -43647,7 +43647,7 @@ t:
       - Latin Capital Letter T
       - Latin Small Letter T
       - letter
-  unicode: '54'
+  unicode: "54"
   voted: false
 table:
   aliases:
@@ -44304,7 +44304,7 @@ temperature-arrow-up:
       - temperature-up
     unicodes:
       secondary:
-        - '10e040'
+        - "10e040"
   changes:
     - 5.12.0
     - 5.14.0
@@ -44974,7 +44974,7 @@ thumbs-down:
   label: Thumbs Down
   search:
     terms:
-      - '-1'
+      - "-1"
       - disagree
       - disapprove
       - dislike
@@ -45016,7 +45016,7 @@ thumbs-up:
   label: Thumbs Up
   search:
     terms:
-      - '+1'
+      - "+1"
       - agree
       - approve
       - favorite
@@ -45030,7 +45030,7 @@ thumbs-up:
       - thumbs up
       - thumbs-o-up
       - up
-      - 'yes'
+      - "yes"
       - you got it dude
   unicode: f164
   voted: false
@@ -45202,8 +45202,8 @@ toggle-off:
   search:
     terms:
       - button
-      - 'off'
-      - 'on'
+      - "off"
+      - "on"
       - switch
   unicode: f204
   voted: false
@@ -45232,8 +45232,8 @@ toggle-on:
   search:
     terms:
       - button
-      - 'off'
-      - 'on'
+      - "off"
+      - "on"
       - switch
   unicode: f205
   voted: false
@@ -45322,7 +45322,7 @@ toilet-paper-slash:
   aliases:
     unicodes:
       secondary:
-        - '10e072'
+        - "10e072"
   changes:
     - 5.13.0
     - 5.14.0
@@ -45467,7 +45467,7 @@ torii-gate:
   aliases:
     unicodes:
       composite:
-        - '26e9'
+        - "26e9"
       secondary:
         - 10f6a1
   changes:
@@ -45660,7 +45660,7 @@ trademark:
   aliases:
     unicodes:
       composite:
-        - '2122'
+        - "2122"
       secondary:
         - 10f25c
   changes:
@@ -45726,7 +45726,7 @@ trailer:
   aliases:
     unicodes:
       secondary:
-        - '10e041'
+        - "10e041"
   changes:
     - 5.12.0
     - 5.14.0
@@ -46666,7 +46666,7 @@ turn-down:
       - level-down-alt
     unicodes:
       composite:
-        - '2935'
+        - "2935"
       secondary:
         - 10f3be
   changes:
@@ -46697,7 +46697,7 @@ turn-up:
       - level-up-alt
     unicodes:
       composite:
-        - '2934'
+        - "2934"
       secondary:
         - 10f3bf
   changes:
@@ -46813,7 +46813,7 @@ u:
   aliases:
     unicodes:
       composite:
-        - '75'
+        - "75"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -46832,7 +46832,7 @@ u:
       - Latin Capital Letter U
       - Latin Small Letter U
       - letter
-  unicode: '55'
+  unicode: "55"
   voted: false
 uber:
   changes:
@@ -47166,7 +47166,7 @@ up-down:
       - arrows-alt-v
     unicodes:
       composite:
-        - '2195'
+        - "2195"
         - 2b0d
       secondary:
         - 10f338
@@ -48194,7 +48194,7 @@ users-slash:
   aliases:
     unicodes:
       secondary:
-        - '10e073'
+        - "10e073"
   changes:
     - 5.13.0
     - 5.14.0
@@ -48315,7 +48315,7 @@ v:
   aliases:
     unicodes:
       composite:
-        - '76'
+        - "76"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -48334,7 +48334,7 @@ v:
       - Latin Capital Letter V
       - Latin Small Letter V
       - letter
-  unicode: '56'
+  unicode: "56"
   voted: false
 vaadin:
   changes:
@@ -48445,7 +48445,7 @@ venus:
   aliases:
     unicodes:
       composite:
-        - '2640'
+        - "2640"
       secondary:
         - 10f221
   changes:
@@ -48538,7 +48538,7 @@ vest:
   aliases:
     unicodes:
       secondary:
-        - '10e085'
+        - "10e085"
   changes:
     - 5.15.0
     - 5.15.1
@@ -48565,7 +48565,7 @@ vest-patches:
   aliases:
     unicodes:
       secondary:
-        - '10e086'
+        - "10e086"
   changes:
     - 5.15.0
     - 5.15.1
@@ -48899,7 +48899,7 @@ virus:
   aliases:
     unicodes:
       secondary:
-        - '10e074'
+        - "10e074"
   changes:
     - 5.13.0
     - 5.14.0
@@ -48990,7 +48990,7 @@ virus-slash:
   aliases:
     unicodes:
       secondary:
-        - '10e075'
+        - "10e075"
   changes:
     - 5.13.0
     - 5.14.0
@@ -49027,7 +49027,7 @@ viruses:
   aliases:
     unicodes:
       secondary:
-        - '10e076'
+        - "10e076"
   changes:
     - 5.13.0
     - 5.14.0
@@ -49371,7 +49371,7 @@ w:
   aliases:
     unicodes:
       composite:
-        - '77'
+        - "77"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -49390,7 +49390,7 @@ w:
       - Latin Capital Letter W
       - Latin Small Letter W
       - letter
-  unicode: '57'
+  unicode: "57"
   voted: false
 walkie-talkie:
   aliases:
@@ -50562,7 +50562,7 @@ x:
   aliases:
     unicodes:
       composite:
-        - '78'
+        - "78"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -50581,7 +50581,7 @@ x:
       - Latin Capital Letter X
       - Latin Small Letter X
       - letter
-  unicode: '58'
+  unicode: "58"
   voted: false
 x-ray:
   aliases:
@@ -50653,8 +50653,8 @@ xmark:
     unicodes:
       composite:
         - 1f5d9
-        - '2715'
-        - '2716'
+        - "2715"
+        - "2716"
         - 274c
         - d7
       secondary:
@@ -50725,11 +50725,11 @@ xmarks-lines:
       - roadblock
   unicode: e59a
   voted: false
-'y':
+"y":
   aliases:
     unicodes:
       composite:
-        - '79'
+        - "79"
   changes:
     - 6.0.0-beta1
     - 6.2.0
@@ -50742,15 +50742,15 @@ xmarks-lines:
     pro:
       - family: classic
         style: solid
-  label: 'Y'
+  label: "Y"
   search:
     terms:
       - Latin Capital Letter Y
       - Latin Small Letter Y
       - letter
       - yay
-      - 'yes'
-  unicode: '59'
+      - "yes"
+  unicode: "59"
   voted: false
 y-combinator:
   changes:

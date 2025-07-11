@@ -34,5 +34,3 @@ $conn->set_charset('utf8mb4');
 date_default_timezone_set('Asia/Shanghai');
 
 // 错误日志记录函数
-
-?>

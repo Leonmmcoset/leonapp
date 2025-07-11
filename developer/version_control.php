@@ -51,11 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_version'])) {
         }
         $fileName = basename($_FILES['app_file']['name']);
         $targetPath = $uploadDir . $fileName;
-        
+
         if (move_uploaded_file($_FILES['app_file']['tmp_name'], $targetPath)) {
             $version = $_POST['version'];
             $changelog = $_POST['changelog'] ?? '';
-            
+
             // 插入新版本记录
             $insertVersionSql = "INSERT INTO app_versions (app_id, version, changelog, file_path) VALUES (?, ?, ?, ?)";
             $verStmt = $conn->prepare($insertVersionSql);
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_version'])) {
                 unlink($targetPath); // 清理已上传文件
             } else {
                 $verStmt->bind_param("isss", $appId, $version, $changelog, $targetPath);
-                
+
                 if ($verStmt->execute()) {
                     // 更新应用表中的最新版本
                     // 更新应用表中的最新版本
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_version'])) {
                         $success = '版本上传成功';
                     }
                 } else {
-                    $error = '版本保存失败: '. $conn->error;
+                    $error = '版本保存失败: ' . $conn->error;
                     unlink($targetPath); // 数据库更新失败，删除文件
                 }
             }
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['version_id'])) {
     $versionId = $_POST['version_id'];
     $version = $_POST['version'];
     $changelog = $_POST['changelog'] ?? '';
-    
+
     // 检查是否有新文件上传
     if (!empty($_FILES['new_app_file']['name'])) {
         $uploadDir = '../files/';
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['version_id'])) {
         }
         $fileName = basename($_FILES['new_app_file']['name']);
         $newFilePath = $uploadDir . $fileName;
-        
+
         if (move_uploaded_file($_FILES['new_app_file']['tmp_name'], $newFilePath)) {
             // 获取旧文件路径并删除
             $getOldPathSql = "SELECT file_path FROM app_versions WHERE id = ?";
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['version_id'])) {
                         unlink($oldFilePath);
                     }
                 }
-                
+
                 // 更新版本信息
                 $updateVersionSql = "UPDATE app_versions SET version = ?, changelog = ?, file_path = ? WHERE id = ?";
                 $updateVersionStmt = $conn->prepare($updateVersionSql);
@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['version_id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_version'])) {
     $versionId = $_POST['version_id'];
     $filePath = $_POST['file_path'];
-    
+
     // 删除文件
     if (file_exists($filePath)) {
         if (!unlink($filePath)) {
@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_version'])) {
             $error = '版本删除失败，请稍后再试';
         }
     }
-    
+
     // 从数据库删除版本记录
     $deleteVersionSql = "DELETE FROM app_versions WHERE id = ?";
     $deleteVersionStmt = $conn->prepare($deleteVersionSql);
@@ -218,6 +218,7 @@ if (!$verStmt) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -233,6 +234,7 @@ if (!$verStmt) {
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
@@ -317,19 +319,19 @@ if (!$verStmt) {
                             </thead>
                             <tbody>
                                 <?php foreach ($versions as $ver): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($ver['version']); ?></td>
-                                    <td><?php echo htmlspecialchars($ver['upload_time']); ?></td>
-                                    <td><?php echo nl2br(htmlspecialchars($ver['changelog'] ?: '无')); ?></td>
-                                    <td>
-                                        <a href="../download.php?id=<?php echo $ver['id']; ?>&type=version" class="btn btn-sm btn-outline-primary">下载</a>
-                                        <a href="#" class="btn btn-sm btn-outline-warning ms-2" onclick="openEditModal(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['version']); ?>', '<?php echo htmlspecialchars($ver['changelog']); ?>')">修改</a>
-                                        <a href="#" class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDelete(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['file_path']); ?>')">删除</a>
-                                        <?php if ($ver['is_current'] == 1): ?>
-                                            <span class="badge bg-success">当前版本</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($ver['version']); ?></td>
+                                        <td><?php echo htmlspecialchars($ver['upload_time']); ?></td>
+                                        <td><?php echo nl2br(htmlspecialchars($ver['changelog'] ?: '无')); ?></td>
+                                        <td>
+                                            <a href="../download.php?id=<?php echo $ver['id']; ?>&type=version" class="btn btn-sm btn-outline-primary">下载</a>
+                                            <a href="#" class="btn btn-sm btn-outline-warning ms-2" onclick="openEditModal(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['version']); ?>', '<?php echo htmlspecialchars($ver['changelog']); ?>')">修改</a>
+                                            <a href="#" class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDelete(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['file_path']); ?>')">删除</a>
+                                            <?php if ($ver['is_current'] == 1): ?>
+                                                <span class="badge bg-success">当前版本</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -374,7 +376,7 @@ if (!$verStmt) {
                         </div>
                     </div>
                 </div>`;
-            
+
             document.body.insertAdjacentHTML('beforeend', modal);
             const editModal = new bootstrap.Modal(document.getElementById('editVersionModal'));
             editModal.show();
@@ -382,20 +384,20 @@ if (!$verStmt) {
             document.getElementById('editVersionForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
-                
+
                 fetch('version_control.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(data => {
-                    editModal.hide();
-                    window.location.reload();
-                })
-                .catch(error => {
-                    editModal.hide();
-                    window.location.reload();
-                });
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        editModal.hide();
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        editModal.hide();
+                        window.location.reload();
+                    });
             });
         }
 
@@ -404,16 +406,20 @@ if (!$verStmt) {
             formData.append('delete_version', 'true');
             formData.append('version_id', versionId);
             formData.append('file_path', filePath);
-            
-            fetch('version_control.php', { method: 'POST', body: formData })
-            .then(response => response.text())
-            .then(data => {
-                window.location.reload();
-            })
-            .catch(error => {
-                window.location.reload();
-            });
+
+            fetch('version_control.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    window.location.reload();
+                });
         }
     </script>
 </body>
+
 </html>

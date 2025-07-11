@@ -46,6 +46,7 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,11 +54,25 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/animations.css">
     <style>
-        body { background-color: #f4f4f4; padding: 70px 0; }
-        .container { max-width: 500px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .alert { margin-bottom: 20px; }
+        body {
+            background-color: #f4f4f4;
+            padding: 70px 0;
+        }
+
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -88,4 +103,5 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
 
     <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

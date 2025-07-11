@@ -13,7 +13,7 @@ echo '<style>
 // 导航栏
 echo '<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="../index.php">'. APP_STORE_NAME . '</a>
+        <a class="navbar-brand" href="../index.php">' . APP_STORE_NAME . '</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -48,39 +48,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = '邮箱/用户名和密码不能为空';
     } else {
         // 检查数据库连接是否为 MySQLi 对象
-if (!($conn instanceof mysqli)) {
-    log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
-    $error = '数据库连接错误，请检查配置';
-} else {
-    $stmt = $conn->prepare('SELECT id, username, password FROM developers WHERE email = ? OR username = ?');
-    if (!$stmt) {
-        log_error('登录查询准备失败: ' . $conn->error, __FILE__, __LINE__);
-        $error = '登录时发生错误，请稍后再试';
-    } else {
-        $stmt->bind_param('ss', $loginId, $loginId);
-        if (!$stmt->execute()) {
-            log_error('登录查询执行失败: ' . $stmt->error, __FILE__, __LINE__);
-            $error = '登录时发生错误，请稍后再试';
+        if (!($conn instanceof mysqli)) {
+            log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
+            $error = '数据库连接错误，请检查配置';
         } else {
-            $result = $stmt->get_result();
-            $developer = $result->fetch_assoc();
-            if ($developer && password_verify($password, $developer['password'])) {
-                $_SESSION['developer_id'] = $developer['id'];
-                $_SESSION['developer_username'] = $developer['username'];
-                header('Location: dashboard.php');
-                exit;
+            $stmt = $conn->prepare('SELECT id, username, password FROM developers WHERE email = ? OR username = ?');
+            if (!$stmt) {
+                log_error('登录查询准备失败: ' . $conn->error, __FILE__, __LINE__);
+                $error = '登录时发生错误，请稍后再试';
             } else {
-                $error = '邮箱/用户名或密码错误';
+                $stmt->bind_param('ss', $loginId, $loginId);
+                if (!$stmt->execute()) {
+                    log_error('登录查询执行失败: ' . $stmt->error, __FILE__, __LINE__);
+                    $error = '登录时发生错误，请稍后再试';
+                } else {
+                    $result = $stmt->get_result();
+                    $developer = $result->fetch_assoc();
+                    if ($developer && password_verify($password, $developer['password'])) {
+                        $_SESSION['developer_id'] = $developer['id'];
+                        $_SESSION['developer_username'] = $developer['username'];
+                        header('Location: dashboard.php');
+                        exit;
+                    } else {
+                        $error = '邮箱/用户名或密码错误';
+                    }
+                }
             }
         }
-    }
-}
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -94,6 +95,7 @@ if (!($conn instanceof mysqli)) {
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-5 col-md-4">
         <h2>开发者登录</h2>
@@ -120,4 +122,5 @@ if (!($conn instanceof mysqli)) {
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

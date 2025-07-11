@@ -162,11 +162,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $newImages = $_FILES['images'];
         for ($i = 0; $i < count($newImages['name']); $i++) {
             if ($newImages['error'][$i] !== UPLOAD_ERR_OK) continue;
-            
+
             $fileName = $newImages['name'][$i];
             $fileTmp = $newImages['tmp_name'][$i];
             $fileSize = $newImages['size'][$i];
-            
+
             $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             if (!in_array($fileExt, $allowedImageTypes)) {
                 $error = "图片 {$fileName} 格式不支持，仅允许jpg、png";
@@ -180,10 +180,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = "最多只能上传5张图片";
                 break;
             }
-            
+
             $newFileName = uniqid() . '.' . $fileExt;
             $targetPath = $imageUploadDir . $newFileName;
-            
+
             if (move_uploaded_file($fileTmp, $targetPath)) {
                 // 插入数据库
                 $stmt = $conn->prepare("INSERT INTO app_images (app_id, image_path) VALUES (?, ?)");
@@ -207,36 +207,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = '应用名称和描述不能为空';
     } else {
         // 检查数据库连接是否为 MySQLi 对象
-if (!($conn instanceof mysqli)) {
-    log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
-    $error = '数据库连接错误，请检查配置';
-} else {
-    $platforms = $_POST['platforms'] ?? [];
-    $platforms_json = json_encode($platforms);
-    $stmt = $conn->prepare('UPDATE apps SET name = ?, description = ?, version = ?, changelog = ?, age_rating = ?, age_rating_description = ?, platforms = ?, file_path = ?, status = \'pending\' WHERE id = ? AND developer_id = ?');
-    if (!$stmt) {
-        log_error('更新应用信息查询准备失败: ' . $conn->error, __FILE__, __LINE__);
-        $error = '更新应用信息时发生错误，请稍后再试';
-    } else {
-        $stmt->bind_param('ssssssssii', $appName, $appDescription, $version, $changelog, $ageRating, $ageRatingDescription, $platforms_json, $appFilePath, $appId, $developerId);
-        if (!$stmt->execute()) {
-            log_error('更新应用信息查询执行失败: ' . $stmt->error, __FILE__, __LINE__);
-            $error = '更新应用信息时发生错误，请稍后再试';
+        if (!($conn instanceof mysqli)) {
+            log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
+            $error = '数据库连接错误，请检查配置';
         } else {
-            $success = '应用信息更新成功，请等待管理员重新审核';
-            header('Location: dashboard.php?success=' . urlencode($success));
-            exit;
-            $app['name'] = $appName;
-            $app['description'] = $appDescription;
+            $platforms = $_POST['platforms'] ?? [];
+            $platforms_json = json_encode($platforms);
+            $stmt = $conn->prepare('UPDATE apps SET name = ?, description = ?, version = ?, changelog = ?, age_rating = ?, age_rating_description = ?, platforms = ?, file_path = ?, status = \'pending\' WHERE id = ? AND developer_id = ?');
+            if (!$stmt) {
+                log_error('更新应用信息查询准备失败: ' . $conn->error, __FILE__, __LINE__);
+                $error = '更新应用信息时发生错误，请稍后再试';
+            } else {
+                $stmt->bind_param('ssssssssii', $appName, $appDescription, $version, $changelog, $ageRating, $ageRatingDescription, $platforms_json, $appFilePath, $appId, $developerId);
+                if (!$stmt->execute()) {
+                    log_error('更新应用信息查询执行失败: ' . $stmt->error, __FILE__, __LINE__);
+                    $error = '更新应用信息时发生错误，请稍后再试';
+                } else {
+                    $success = '应用信息更新成功，请等待管理员重新审核';
+                    header('Location: dashboard.php?success=' . urlencode($success));
+                    exit;
+                    $app['name'] = $appName;
+                    $app['description'] = $appDescription;
+                }
+            }
         }
-    }
-}
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -245,6 +246,7 @@ if (!($conn instanceof mysqli)) {
     <link rel="stylesheet" href="../css/animations.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-4">
         <h2 class="text-center mb-4">编辑应用</h2>
@@ -290,14 +292,14 @@ if (!($conn instanceof mysqli)) {
                 // 解析平台值，提取主平台和子选项
                 $mainPlatforms = [];
                 $subOptions = [];
-                foreach($platforms as $platform){
-                    if(strpos($platform, 'windows_') === 0){
+                foreach ($platforms as $platform) {
+                    if (strpos($platform, 'windows_') === 0) {
                         $mainPlatforms[] = 'windows';
                         $subOptions['windows'] = $platform;
-                    } elseif(strpos($platform, 'linux_') === 0){
+                    } elseif (strpos($platform, 'linux_') === 0) {
                         $mainPlatforms[] = 'linux';
                         $subOptions['linux'] = $platform;
-                    } else{
+                    } else {
                         $mainPlatforms[] = $platform;
                     }
                 }
@@ -352,9 +354,9 @@ if (!($conn instanceof mysqli)) {
                 <label for="tags" class="form-label">应用标签 (至少选择1个)</label>
                 <select id="tags" name="tags[]" multiple class="form-control">
                     <?php foreach ($tags as $tag): ?>
-                    <option value="<?php echo $tag['id']; ?>" <?php echo in_array($tag['id'], $appTags) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($tag['name']); ?>
-                    </option>
+                        <option value="<?php echo $tag['id']; ?>" <?php echo in_array($tag['id'], $appTags) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($tag['name']); ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
                 <small class="form-text text-muted">按住Ctrl键可选择多个标签</small>
@@ -380,17 +382,17 @@ if (!($conn instanceof mysqli)) {
                 ?>
                 <!-- 现有图片 -->
                 <?php if (!empty($existingImages)): ?>
-                <div class="mb-3">
-                    <label>现有图片:</label>
-                    <div class="d-flex flex-wrap gap-2">
-                        <?php foreach ($existingImages as $img): ?>
-                        <div class="position-relative">
-                            <img src="<?php echo htmlspecialchars($img['image_path']); ?>" alt="应用图片" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">
-                            <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" onclick="removeImage(<?php echo $img['id']; ?>)">×</button>
+                    <div class="mb-3">
+                        <label>现有图片:</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <?php foreach ($existingImages as $img): ?>
+                                <div class="position-relative">
+                                    <img src="<?php echo htmlspecialchars($img['image_path']); ?>" alt="应用图片" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">
+                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" onclick="removeImage(<?php echo $img['id']; ?>)">×</button>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-                        <?php endforeach; ?>
                     </div>
-                </div>
                 <?php endif; ?>
                 <!-- 新图片上传 -->
                 <input type="file" name="images[]" multiple accept="image/*" class="form-control">
@@ -403,17 +405,17 @@ if (!($conn instanceof mysqli)) {
             <a href="dashboard.php" class="btn btn-secondary">返回仪表盘</a>
         </div>
     </div>
-<script>
-function removeImage(imageId) {
-    const removedInput = document.getElementById('removed_images');
-    const currentValues = removedInput.value ? removedInput.value.split(',') : [];
-    if (!currentValues.includes(imageId.toString())) {
-        currentValues.push(imageId);
-        removedInput.value = currentValues.join(',');
-    }
-    // 从DOM中移除图片元素
-    event.target.closest('.position-relative').remove();
-}
+    <script>
+        function removeImage(imageId) {
+            const removedInput = document.getElementById('removed_images');
+            const currentValues = removedInput.value ? removedInput.value.split(',') : [];
+            if (!currentValues.includes(imageId.toString())) {
+                currentValues.push(imageId);
+                removedInput.value = currentValues.join(',');
+            }
+            // 从DOM中移除图片元素
+            event.target.closest('.position-relative').remove();
+        }
 
         // 平台子选项显示控制
         document.getElementById('windows').addEventListener('change', function() {
@@ -438,11 +440,11 @@ function removeImage(imageId) {
             if (document.getElementById('windows').checked && !document.querySelector('input[name="windows_version"]:checked')) {
                 e.preventDefault();
                 Swal.fire({
-                title: '提示',
-                text: '请选择Windows版本（XP以前或Win7以后）',
-                icon: 'warning',
-                confirmButtonText: '确定'
-            });
+                    title: '提示',
+                    text: '请选择Windows版本（XP以前或Win7以后）',
+                    icon: 'warning',
+                    confirmButtonText: '确定'
+                });
                 return;
             }
 
@@ -450,11 +452,11 @@ function removeImage(imageId) {
             if (document.getElementById('linux').checked && !document.querySelector('input[name="linux_distribution"]:checked')) {
                 e.preventDefault();
                 Swal.fire({
-                title: '提示',
-                text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
-                icon: 'warning',
-                confirmButtonText: '确定'
-            });
+                    title: '提示',
+                    text: '请选择Linux发行版（Ubuntu、Arch Linux或CentOS）',
+                    icon: 'warning',
+                    confirmButtonText: '确定'
+                });
                 return;
             }
 
@@ -473,6 +475,7 @@ function removeImage(imageId) {
             // 设置隐藏字段值
             document.getElementById('platforms_hidden').value = JSON.stringify(platforms);
         });
-</script>
+    </script>
 </body>
+
 </html>

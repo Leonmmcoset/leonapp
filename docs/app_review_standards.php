@@ -1,4 +1,5 @@
 <?php
+
 /**
  * APP 审核标准文档 - 完整版
  */
@@ -6,6 +7,7 @@
 <?php require_once '../config.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +17,10 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/css/all.min.css">
     <style>
-        body { padding-top: 56px; }
+        body {
+            padding-top: 56px;
+        }
+
         .blur-bg {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
@@ -28,14 +33,17 @@
             border-radius: 0.5rem;
             background-color: #f8f9fa;
         }
+
         .audit-subsection {
             margin-bottom: 1.5rem;
             padding-left: 1rem;
             border-left: 3px solid #0d6efd;
         }
+
         .audit-point {
             margin-bottom: 0.75rem;
         }
+
         .audit-note {
             color: #6c757d;
             font-size: 0.9rem;
@@ -44,6 +52,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg fixed-top">
@@ -75,7 +84,7 @@
 
         <div class="audit-section">
             <h2 class="fw-bold mb-4">一、内容审核标准</h2>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">1.1 法律法规合规性</h3>
                 <ul class="list-unstyled">
@@ -93,7 +102,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">1.2 知识产权保护</h3>
                 <ul class="list-unstyled">
@@ -107,7 +116,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">1.3 广告与推广内容</h3>
                 <ul class="list-unstyled">
@@ -125,7 +134,7 @@
 
         <div class="audit-section">
             <h2 class="fw-bold mb-4">二、功能审核标准</h2>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">2.1 功能完整性</h3>
                 <ul class="list-unstyled">
@@ -139,7 +148,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">2.2 用户界面与交互</h3>
                 <ul class="list-unstyled">
@@ -157,7 +166,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">2.3 数据安全与隐私</h3>
                 <ul class="list-unstyled">
@@ -179,7 +188,7 @@
 
         <div class="audit-section">
             <h2 class="fw-bold mb-4">三、性能审核标准</h2>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">3.1 响应速度与稳定性</h3>
                 <ul class="list-unstyled">
@@ -197,7 +206,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">3.2 资源占用</h3>
                 <ul class="list-unstyled">
@@ -211,7 +220,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">3.3 兼容性</h3>
                 <ul class="list-unstyled">
@@ -229,17 +238,17 @@
 
         <div class="audit-section">
             <h2 class="fw-bold mb-4">四、审核流程与结果</h2>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">4.1 审核周期</h3>
                 <p>标准审核周期为5个工作日，紧急审核可在24小时内完成（需额外支付加急费用支付到<a href="https://afdian.com/a/leonmmcoset">站长爱发电</a>（使用自定义金额并备注）5元）</p>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">4.2 审核结果通知</h3>
                 <p>审核结果将通过邮件和平台内消息通知开发者，包含审核通过或拒绝上线两种结果</p>
             </div>
-            
+
             <div class="audit-subsection">
                 <h3 class="fw-semibold">4.3 申诉机制</h3>
                 <p>如对审核结果有异议，开发者可在收到通知后7个工作日内向<a href="mailto:leonmmcoset@outlook.com">站长邮件</a>提交申诉，我们将在3个工作日内进行复核</p>
@@ -253,4 +262,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

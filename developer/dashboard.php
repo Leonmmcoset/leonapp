@@ -39,6 +39,7 @@ if (!($conn instanceof mysqli)) {
 
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,15 +54,18 @@ if (!($conn instanceof mysqli)) {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
         }
+
         .app-card {
             margin-bottom: 1rem;
         }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
         }
+
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -70,30 +74,38 @@ if (!($conn instanceof mysqli)) {
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             text-align: center;
         }
+
         .app-list {
             margin-top: 20px;
         }
+
         .app-item {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 10px;
         }
+
         .status-pending {
             color: orange;
         }
+
         .status-approved {
             color: green;
         }
+
         .status-rejected {
             color: red;
         }
+
         .action-buttons {
             margin-top: 10px;
         }
+
         .action-buttons a {
             display: inline-block;
             padding: 5px 10px;
@@ -103,12 +115,15 @@ if (!($conn instanceof mysqli)) {
             border-radius: 3px;
             margin-right: 10px;
         }
+
         .action-buttons a:hover {
             background-color: #0056b3;
         }
+
         .add-app {
             margin-bottom: 20px;
         }
+
         .add-app a {
             display: inline-block;
             padding: 10px 20px;
@@ -117,21 +132,26 @@ if (!($conn instanceof mysqli)) {
             text-decoration: none;
             border-radius: 3px;
         }
+
         .add-app a:hover {
             background-color: #218838;
         }
+
         .logout {
             text-align: right;
         }
+
         .logout a {
             color: #dc3545;
             text-decoration: none;
         }
+
         .logout a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
@@ -146,25 +166,25 @@ if (!($conn instanceof mysqli)) {
                         <a class="nav-link active" aria-current="page" href="dashboard.php">应用仪表盘</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="upload_app.php">上传应用</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="profile.php">更改信息</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php">退出登录</a>
-                </li>
+                        <a class="nav-link" href="upload_app.php">上传应用</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.php">更改信息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">退出登录</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="dashboard-container mt-4">
-        <?php 
-        $rejectedApps = array_filter($apps, function($app) {
+        <?php
+        $rejectedApps = array_filter($apps, function ($app) {
             return $app['status'] === 'rejected';
         });
-        if (!empty($rejectedApps)): 
+        if (!empty($rejectedApps)):
         ?>
             <div class="alert alert-danger">
                 <strong>提醒:</strong> 您有 <?php echo count($rejectedApps); ?> 个应用未通过审核，请查看详情。
@@ -188,24 +208,24 @@ if (!($conn instanceof mysqli)) {
                         <div class="card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($app['name']); ?></h5>
                             <p class="card-text">
-                                状态: 
+                                状态:
                                 <?php if ($app['status'] === 'approved'): ?>
                                     <span class="badge bg-success">已通过</span>
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="../js/bootstrap.bundle.min.js"></script>
+                                    <!-- Bootstrap JS Bundle with Popper -->
+                                    <script src="../js/bootstrap.bundle.min.js"></script>
                                 <?php elseif ($app['status'] === 'rejected'): ?>
                                     <span class="badge bg-danger">未通过</span>
-                                    <div class="alert alert-warning mt-2">
-                                        拒绝原因: <?php echo htmlspecialchars($app['rejection_reason']); ?>
-                                    </div>
-                                <?php else: ?>
-                                    <span class="badge bg-warning">待审核</span>
-                                <?php endif; ?>
-                            </p>
-                            <div class="action-buttons">
-                                <a href="edit_app.php?id=<?php echo $app['id']; ?>", class="btn btn-primary">编辑</a>
-                                <a href="version_control.php?id=<?php echo $app['id']; ?>", class="btn btn-secondary">版本控制</a>
+                            <div class="alert alert-warning mt-2">
+                                拒绝原因: <?php echo htmlspecialchars($app['rejection_reason']); ?>
                             </div>
+                        <?php else: ?>
+                            <span class="badge bg-warning">待审核</span>
+                        <?php endif; ?>
+                        </p>
+                        <div class="action-buttons">
+                            <a href="edit_app.php?id=<?php echo $app['id']; ?>" , class="btn btn-primary">编辑</a>
+                            <a href="version_control.php?id=<?php echo $app['id']; ?>" , class="btn btn-secondary">版本控制</a>
+                        </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -215,4 +235,5 @@ if (!($conn instanceof mysqli)) {
     <!-- Bootstrap JS and Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

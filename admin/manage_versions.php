@@ -46,7 +46,7 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_version'])) {
     $version = $_POST['version'];
     $changelog = $_POST['changelog'];
-    
+
     if (empty($version)) {
         $error = '版本号不能为空';
     } elseif (empty($_FILES['app_file']['name'])) {
@@ -55,12 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_version'])) {
         $uploadDir = '../files/';
         $fileName = basename($_FILES['app_file']['name']);
         $targetPath = $uploadDir . $fileName;
-        
+
         if (move_uploaded_file($_FILES['app_file']['tmp_name'], $targetPath)) {
             $insertVersionSql = "INSERT INTO app_versions (app_id, version, changelog, file_path, created_at) VALUES (?, ?, ?, ?, NOW())";
             $stmt = $conn->prepare($insertVersionSql);
             $stmt->bind_param("isss", $appId, $version, $changelog, $targetPath);
-            
+
             if ($stmt->execute() === TRUE) {
                 header('Location: manage_versions.php?app_id=' . $appId . '&success=版本添加成功');
                 exit;
@@ -77,27 +77,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_version'])) {
 // 处理删除版本
 if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
     $versionId = $_GET['delete_id'];
-    
+
     // 获取版本信息
     $getVersionSql = "SELECT file_path FROM app_versions WHERE id = ? AND app_id = ?";
     $stmt = $conn->prepare($getVersionSql);
     $stmt->bind_param("ii", $versionId, $appId);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows === 1) {
         $version = $result->fetch_assoc();
-        
+
         // 删除文件
         if (file_exists($version['file_path'])) {
             unlink($version['file_path']);
         }
-        
+
         // 删除数据库记录
         $deleteVersionSql = "DELETE FROM app_versions WHERE id = ? AND app_id = ?";
         $stmt = $conn->prepare($deleteVersionSql);
         $stmt->bind_param("ii", $versionId, $appId);
-        
+
         if ($stmt->execute() === TRUE) {
             header('Location: manage_versions.php?app_id=' . $appId . '&success=版本删除成功');
             exit;
@@ -114,19 +114,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_version'])) {
     $versionId = $_POST['version_id'];
     $version = $_POST['version'];
     $changelog = $_POST['changelog'];
-    
+
     if (empty($version)) {
         $error = '版本号不能为空';
     } else {
         // 检查是否上传了新文件
         $fileUpdate = '';
         $params = ['ss', $version, $changelog, $versionId, $appId];
-        
+
         if (!empty($_FILES['new_app_file']['name'])) {
             $uploadDir = '../files/';
             $fileName = basename($_FILES['new_app_file']['name']);
             $targetPath = $uploadDir . $fileName;
-            
+
             if (move_uploaded_file($_FILES['new_app_file']['tmp_name'], $targetPath)) {
                 // 获取旧文件路径
                 $getOldFileSql = "SELECT file_path FROM app_versions WHERE id = ? AND app_id = ?";
@@ -135,12 +135,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_version'])) {
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $oldVersion = $result->fetch_assoc();
-                
+
                 // 删除旧文件
                 if (file_exists($oldVersion['file_path'])) {
                     unlink($oldVersion['file_path']);
                 }
-                
+
                 $fileUpdate = ", file_path = ?";
                 $params[0] = 'sss';
                 $params[] = $targetPath;
@@ -148,14 +148,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_version'])) {
                 $error = '文件上传失败';
             }
         }
-        
+
         if (empty($error)) {
             $updateVersionSql = "UPDATE app_versions SET version = ?, changelog = ?" . $fileUpdate . " WHERE id = ? AND app_id = ?";
             $stmt = $conn->prepare($updateVersionSql);
-            
+
             // 动态绑定参数
             $stmt->bind_param(...$params);
-            
+
             if ($stmt->execute() === TRUE) {
                 header('Location: manage_versions.php?app_id=' . $appId . '&success=版本更新成功');
                 exit;
@@ -175,6 +175,7 @@ if (isset($_GET['success'])) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -188,18 +189,22 @@ if (isset($_GET['success'])) {
         .version-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .version-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
+
         .action-btn {
             margin: 0 2px;
         }
+
         .modal-backdrop {
             backdrop-filter: blur(5px);
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -262,17 +267,18 @@ if (isset($_GET['success'])) {
                                 <p class="card-text"><?php echo nl2br(htmlspecialchars($version['changelog'])); ?></p>
                             </div>
                             <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
-                                <small class="text-muted">文件大小: <?php 
-                                    $filePath = $version['file_path'];
-                                    if (file_exists($filePath)) {
-                                        echo filesize($filePath) > 0 ? number_format(filesize($filePath) / 1024 / 1024, 2) . ' MB' : '未知';
-                                    } else {
-                                        echo '文件不存在';
-                                    }
-                                ?></small>
-                                <div>                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editVersionModal_<?php echo $version['id']; ?>">编辑</button>
+                                <small class="text-muted">文件大小: <?php
+                                                                $filePath = $version['file_path'];
+                                                                if (file_exists($filePath)) {
+                                                                    echo filesize($filePath) > 0 ? number_format(filesize($filePath) / 1024 / 1024, 2) . ' MB' : '未知';
+                                                                } else {
+                                                                    echo '文件不存在';
+                                                                }
+                                                                ?></small>
+                                <div> <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editVersionModal_<?php echo $version['id']; ?>">编辑</button>
                                     <a href="../<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-sm btn-primary" download>下载</a>
-                                    <a href="?app_id=<?php echo $appId; ?>&delete_id=<?php echo $version['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除此版本吗?');">删除</a>                                </div>
+                                    <a href="?app_id=<?php echo $appId; ?>&delete_id=<?php echo $version['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除此版本吗?');">删除</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -289,13 +295,13 @@ if (isset($_GET['success'])) {
                                     <div class="modal-body">
                                         <input type="hidden" name="version_id" value="<?php echo $version['id']; ?>">
                                         <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="version_<?php echo $version['id']; ?>" name="version" value="<?php echo htmlspecialchars($version['version']); ?>" required>
-                <label for="version_<?php echo $version['id']; ?>">版本号</label>
-            </div>
+                                            <input type="text" class="form-control" id="version_<?php echo $version['id']; ?>" name="version" value="<?php echo htmlspecialchars($version['version']); ?>" required>
+                                            <label for="version_<?php echo $version['id']; ?>">版本号</label>
+                                        </div>
                                         <div class="form-floating mb-3">
-                <textarea class="form-control" id="changelog_<?php echo $version['id']; ?>" name="changelog" rows="3" required><?php echo htmlspecialchars($version['changelog']); ?></textarea>
-                <label for="changelog_<?php echo $version['id']; ?>">更新日志</label>
-            </div>
+                                            <textarea class="form-control" id="changelog_<?php echo $version['id']; ?>" name="changelog" rows="3" required><?php echo htmlspecialchars($version['changelog']); ?></textarea>
+                                            <label for="changelog_<?php echo $version['id']; ?>">更新日志</label>
+                                        </div>
                                         <div class="mb-3">
                                             <label for="new_app_file_<?php echo $version['id']; ?>" class="form-label">更新App文件 (可选)</label>
                                             <input class="form-control" type="file" id="new_app_file_<?php echo $version['id']; ?>" name="new_app_file">
@@ -326,13 +332,13 @@ if (isset($_GET['success'])) {
                 <form method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="version" name="version" placeholder="如: 1.0.0" required>
-                <label for="version">版本号</label>
-            </div>
+                            <input type="text" class="form-control" id="version" name="version" placeholder="如: 1.0.0" required>
+                            <label for="version">版本号</label>
+                        </div>
                         <div class="form-floating mb-3">
-                <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="描述本次更新内容" required></textarea>
-                <label for="changelog">更新日志</label>
-            </div>
+                            <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="描述本次更新内容" required></textarea>
+                            <label for="changelog">更新日志</label>
+                        </div>
                         <div class="mb-3">
                             <label for="app_file" class="form-label">App文件</label>
                             <input class="form-control" type="file" id="app_file" name="app_file" required>
@@ -362,4 +368,5 @@ if (isset($_GET['success'])) {
         });
     </script>
 </body>
+
 </html>

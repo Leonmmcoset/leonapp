@@ -15,7 +15,7 @@ echo '<style>
 // 导航栏
 echo '<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="../index.php">'. APP_STORE_NAME . '</a>
+        <a class="navbar-brand" href="../index.php">' . APP_STORE_NAME . '</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -57,7 +57,7 @@ if (!isset($_SESSION['admin'])) {
     echo '<head>';
     echo '    <meta charset="UTF-8">';
     echo '    <meta name="viewport" content="width=device-width, initial-scale=1.0">';
-    echo '    <title>管理员登录 - '. APP_STORE_NAME . '</title>';
+    echo '    <title>管理员登录 - ' . APP_STORE_NAME . '</title>';
     echo '    <!-- Bootstrap CSS -->';
     echo '    <link rel="stylesheet" href="../css/animations.css">';
     echo '    <link href="../css/bootstrap.min.css" rel="stylesheet">';
@@ -84,7 +84,7 @@ if (!isset($_SESSION['admin'])) {
             Swal.fire({
                 icon: "error",
                 title: "错误",
-                text: "'. addslashes($error) . '",
+                text: "' . addslashes($error) . '",
             });
         </script>';
     }
