@@ -14,7 +14,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/css/all.min.css">
     <style>
-        body { padding-top: 56px; }
+        body {
+            padding-top: 56px;
+        }
         .blur-bg {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);

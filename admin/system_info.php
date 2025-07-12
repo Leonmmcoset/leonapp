@@ -1,24 +1,70 @@
 <?php
-session_start();
-require_once '../config.php';
+    session_start();
+    require_once '../config.php';
 
-// 删除文件
-function delete_file($file_path) {
-    if (file_exists($file_path)) {
-        return unlink($file_path);
+    // 删除文件
+    function delete_file($file_path) {
+        if (file_exists($file_path)) {
+            return unlink($file_path);
+        }
+        return false;
     }
-    return false;
-}
 
-// 处理删除请求
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $upload_dirs = [
-        '../uploads/apps',
-        '../uploads/images'
-    ];
-    
-    // 全量删除
-    if (isset($_POST['delete_all'])) {
+    // 处理删除请求
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $upload_dirs = [
+            '../uploads/apps',
+            '../uploads/images'
+        ];
+
+        // 全量删除
+        if (isset($_POST['delete_all'])) {
+            foreach ($upload_dirs as $dir) {
+                if (is_dir($dir)) {
+                    $files = scandir($dir);
+                    foreach ($files as $file) {
+                        if ($file !== '.' && $file !== '..') {
+                            $file_path = $dir . '/' . $file;
+                            if (is_file($file_path)) {
+                                delete_file($file_path);
+                            }
+                        }
+                    }
+                }
+            }
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
+        }
+
+        // 单个删除
+        if (isset($_POST['delete_files'])) {
+            foreach ($_POST['delete_files'] as $file_info) {
+                list($type, $filename) = explode('|', $file_info);
+                $dir = $type === '图片' ? '../uploads/images' : '../uploads/apps';
+                $file_path = $dir . '/' . $filename;
+                delete_file($file_path);
+            }
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
+        }
+    }
+
+    // 验证管理员权限
+    if (!isset($_SESSION['admin'])) {
+        header('Location: login.php');
+        exit;
+    }
+
+    // 获取上传文件和图片信息
+    function get_uploaded_files_info() {
+        $uploaded_files = [];
+
+        // 上传目录配置
+        $upload_dirs = [
+            '../uploads/apps',
+            '../uploads/images'
+        ];
+
         foreach ($upload_dirs as $dir) {
             if (is_dir($dir)) {
                 $files = scandir($dir);
@@ -26,68 +72,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($file !== '.' && $file !== '..') {
                         $file_path = $dir . '/' . $file;
                         if (is_file($file_path)) {
-                            delete_file($file_path);
+                            $file_size = filesize($file_path);
+                            $uploaded_files[] = [
+                                'name' => $file,
+                                'size' => $file_size,
+                                'type' => strpos($dir, 'images') !== false ? '图片' : '文件'
+                            ];
                         }
                     }
                 }
             }
         }
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit;
-    }
-    
-    // 单个删除
-    if (isset($_POST['delete_files'])) {
-        foreach ($_POST['delete_files'] as $file_info) {
-            list($type, $filename) = explode('|', $file_info);
-            $dir = $type === '图片' ? '../uploads/images' : '../uploads/apps';
-            $file_path = $dir . '/' . $filename;
-            delete_file($file_path);
-        }
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit;
-    }
-}
 
-// 验证管理员权限
-if (!isset($_SESSION['admin'])) {
-    header('Location: login.php');
-    exit;
-}
-
-// 获取上传文件和图片信息
-function get_uploaded_files_info() {
-    $uploaded_files = [];
-    
-    // 上传目录配置
-    $upload_dirs = [
-        '../uploads/apps',
-        '../uploads/images'
-    ];
-    
-    foreach ($upload_dirs as $dir) {
-        if (is_dir($dir)) {
-            $files = scandir($dir);
-            foreach ($files as $file) {
-                if ($file !== '.' && $file !== '..') {
-                    $file_path = $dir . '/' . $file;
-                    if (is_file($file_path)) {
-                        $file_size = filesize($file_path);
-                        $uploaded_files[] = [
-                            'name' => $file,
-                            'size' => $file_size,
-                            'type' => strpos($dir, 'images') !== false ? '图片' : '文件'
-                        ];
-                    }
-                }
-            }
-        }
+        return $uploaded_files;
     }
-    
-    return $uploaded_files;
-}
 
-$uploaded_files = get_uploaded_files_info();
+    $uploaded_files = get_uploaded_files_info();
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -105,7 +105,7 @@ $uploaded_files = get_uploaded_files_info();
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="index.php">管理员面板</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">

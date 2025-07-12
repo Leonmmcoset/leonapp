@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare('INSERT INTO announcements (title, content, admin_id) VALUES (?, ?, ?)');
         $stmt->bind_param('ssi', $title, $content, $admin_id);
         if ($stmt->execute()) {
-            header('Location: announcements.php?success=公告发布成功');
+            echo '<script>Swal.fire("成功", "公告发布成功", "success").then(() => { window.location.reload(); });</script>';
             exit;
         } else {
-            $error = '公告发布失败: ' . $conn->error;
+            echo '<script>Swal.fire("错误", "公告发布失败: ' . $conn->error . '", "error");</script>';
         }
         $stmt->close();
     } else {
-        $error = '标题和内容不能为空';
+        echo '<script>Swal.fire("错误", "标题和内容不能为空", "error");</script>';
     }
 }
 

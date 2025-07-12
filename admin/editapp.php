@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin'])) {
 
 // 验证App ID
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    header('Location: index.php?error=无效的App ID');
+    echo '<script>Swal.fire("错误", "无效的App ID", "error").then(() => { window.location.href = "index.php"; });</script>';
     exit;
 }
 $appId = $_GET['id'];
@@ -23,7 +23,7 @@ $stmt->bind_param("i", $appId);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows === 0) {
-    header('Location: index.php?error=App不存在');
+    echo '<script>Swal.fire("错误", "App不存在", "error").then(() => { window.location.href = "index.php"; });</script>';
     exit;
 }
 $app = $result->fetch_assoc();
@@ -99,11 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
                 $stmt->close();
             }
 
-            header('Location: index.php?success=App 更新成功');
-            exit;
-        } else {
-            $error = 'App 更新失败: '. $conn->error;
-        }
+            $updateAppSql = "UPDATE apps SET name = ?, description = ?, age_rating = ?, platforms = ? WHERE id = ?";
+            $updateStmt = $conn->prepare($updateAppSql);
+            $updateStmt->bind_param("ssssi", $name, $description, $ageRating, $newPlatforms, $appId);
+            if ($updateStmt->execute() === TRUE) {
+                echo '<script>Swal.fire("成功", "App 更新成功", "success").then(() => { window.location.href = "index.php"; });</script>';
+                exit;
+            } else {
+                echo '<script>Swal.fire("错误", "App 更新失败: '. $conn->error .'", "error");</script>';
+            }
+            $updateStmt->close();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -391,5 +397,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
 $stmt = $conn->prepare("UPDATE apps SET name=?, description=?, age_rating=?, age_rating_description=?, platforms=?, updated_at=NOW() WHERE id=?");
 $stmt->bind_param("sssssi", $name, $description, $age_rating, $_POST['age_rating_description'], $platformsJson, $appId);
 
-// ... existing code ...
 ?>

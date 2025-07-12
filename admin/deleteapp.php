@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin'])) {
 
 // 验证App ID
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    header('Location: index.php?error=无效的App ID');
+    echo '<script>Swal.fire("错误", "无效的App ID", "error").then(() => { window.location.href = "index.php"; });</script>';
     exit;
 }
 $appId = $_GET['id'];
@@ -33,9 +33,9 @@ if ($stmt->execute() === TRUE) {
     $verStmt->bind_param("i", $appId);
     $verStmt->execute();
 
-    header('Location: index.php?success=App 删除成功');
+    echo '<script>Swal.fire("成功", "App 删除成功", "success").then(() => { window.location.href = "index.php"; });</script>';
 } else {
-    header('Location: index.php?error=App 删除失败: '. $conn->error);
+    echo '<script>Swal.fire("错误", "App 删除失败: '. $conn->error .'", "error").then(() => { window.location.href = "index.php"; });</script>';
 }
 exit;
 ?>

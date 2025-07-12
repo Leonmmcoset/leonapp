@@ -30,7 +30,7 @@ $resultApps = $conn->query($sqlApps);
 
 if (!$resultApps) {
     error_log("Database query failed: " . $conn->error);
-    echo '<div class="alert alert-danger">获取App列表失败，请联系管理员。</div>';
+    echo '<script>Swal.fire("错误", "获取App列表失败，请联系管理员。", "error");</script>';
 } else {
 ?>
 <!DOCTYPE html>
@@ -59,6 +59,7 @@ if (!$resultApps) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {
@@ -104,13 +105,22 @@ if (!$resultApps) {
     </nav>
 
     <div class="container mt-4">
+        <script>
         <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success"><?php echo $_GET['success']; ?></div>
+            Swal.fire({
+                icon: "success",
+                title: "成功",
+                text: "<?php echo addslashes($_GET['success']); ?>",
+            });
         <?php endif; ?>
         <?php if (isset($_GET['error'])): ?>
-            <div class="alert alert-danger"><?php echo $_GET['error']; ?></div>
+            Swal.fire({
+                icon: "error",
+                title: "错误",
+                text: "<?php echo addslashes($_GET['error']); ?>",
+            });
         <?php endif; ?>
-    
+        </script>
         <h2>App列表</h2>
         <div class="mb-3">
             <a href="manage_tags.php" class="btn btn-info">标签管理</a>
@@ -135,7 +145,19 @@ if (!$resultApps) {
                         <td>
                             <a href="editapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-primary">编辑</a>
                             <a href="manage_versions.php?app_id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-secondary">版本管理</a>
-                            <a href="deleteapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除吗?');">删除</a>
+                            <a href="deleteapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="event.preventDefault(); Swal.fire({
+                                title: '确定要删除吗?',
+                                text: '删除后将无法恢复!',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: '确定删除'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = this.href;
+                                }
+                            });">删除</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

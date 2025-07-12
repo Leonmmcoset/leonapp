@@ -87,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
             }
         }
 
-        header('Location: index.php?success=App 添加成功');
+        echo '<script>Swal.fire("成功", "App 添加成功", "success").then(() => { window.location.href = "index.php"; });</script>';
         exit;
     } else {
-        $error = 'App 添加失败: '. $conn->error;
+        echo '<script>Swal.fire("错误", "App 添加失败: '. $conn->error .'", "error");</script>';
     }
 }
 }
