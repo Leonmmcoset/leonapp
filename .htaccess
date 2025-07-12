@@ -4,3 +4,9 @@ LimitRequestBody 524288000
 # 错误处理
 ErrorDocument 500 /error_pages/500.html
 ErrorDocument 404 /error_pages/404.html
+
+# API 伪静态规则
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api(/.*)?$ api.php?action=$1 [QSA,L]

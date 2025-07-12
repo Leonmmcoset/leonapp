@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 // API根路径处理 - 返回可用端点信息
-if (!isset($_GET['action'])) {
+if (!isset($_GET['action']) || $_GET['action'] === '') {
     http_response_code(200);
     echo json_encode([
         'status' => 'success',
