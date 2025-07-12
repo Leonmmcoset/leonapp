@@ -181,7 +181,6 @@ if (isset($_GET['success'])) {
     <title>管理版本 - <?php echo htmlspecialchars($app['name']); ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <style>

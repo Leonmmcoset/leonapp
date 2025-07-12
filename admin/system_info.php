@@ -97,7 +97,6 @@
     <title>系统信息 - 上传文件列表</title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
 </head>

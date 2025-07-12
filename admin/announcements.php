@@ -56,7 +56,6 @@ $result = $conn->query($sql);
     <title>公告管理 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- Fluent Design 模糊效果 -->
@@ -71,7 +70,7 @@ $result = $conn->query($sql);
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
-            <a class="navbar-brand" href="../index.php"><img src="/favicon.ico" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"><?php echo APP_STORE_NAME; ?></a>
+            <a class="navbar-brand" href="../index.php"><?php echo APP_STORE_NAME; ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

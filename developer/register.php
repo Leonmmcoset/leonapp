@@ -42,7 +42,7 @@ echo '<style>
 echo '<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
         <a href="../index.php"><img src="/favicon.jpeg" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"></a>
-        <a class="navbar-brand" href="../index.php"><img src="/favicon.ico" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);">'. APP_STORE_NAME . '</a>
+        <a class="navbar-brand" href="../index.php">'. APP_STORE_NAME . '</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -186,7 +186,6 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发者注册</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico">
     <style>
         body {
             background-color: #f4f4f4;
