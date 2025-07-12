@@ -96,7 +96,44 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
         </div>
     <?php endif; ?>
 
-    <div class="container mt-4">
+    <style>
+        .storage-progress {
+            margin: 20px 0;
+        }
+        .storage-progress .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+    </style>
+    
+    <div class="container mt-4 storage-progress">
+        <?php
+        // 获取磁盘总容量和网站占用存储
+        $totalSpace = disk_total_space(__DIR__);
+        $freeSpace = disk_free_space(__DIR__);
+        $usedSpace = $totalSpace - $freeSpace;
+        $usagePercent = round(($usedSpace / $totalSpace) * 100, 2);
+        
+        function formatBytes($bytes) {
+            if ($bytes >= 1073741824) {
+                return round($bytes / 1073741824, 2) . ' GB';
+            } elseif ($bytes >= 1048576) {
+                return round($bytes / 1048576, 2) . ' MB';
+            } elseif ($bytes >= 1024) {
+                return round($bytes / 1024, 2) . ' KB';
+            } else {
+                return $bytes . ' B';
+            }
+        }
+        ?>
+        <div class="progress-label">
+            <span>磁盘使用情况</span>
+            <span><?php echo formatBytes($usedSpace); ?> / <?php echo formatBytes($totalSpace); ?></span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: <?php echo $usagePercent; ?>%" aria-valuenow="<?php echo $usagePercent; ?>" aria-valuemin="0" aria-valuemax="100"><?php echo $usagePercent; ?>%</div>
+        </div><br>
         <form method="get" action="index.php" class="mb-4" onsubmit="return validateSearch();">
     <script>
     function validateSearch() {
