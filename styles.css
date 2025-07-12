@@ -118,6 +118,10 @@ body {
     border-radius: var(--border-radius);
 }
 
+* {
+    border-radius: var(--border-radius);
+}
+
 /* 年龄分级 SVG 样式 */
 .age-rating {
     display: inline-flex;
