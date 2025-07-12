@@ -1,6 +1,6 @@
 # App Store 项目
 
-这是一个基于 PHP 7.4 的 App Store 项目，使用 Bootstrap 实现 Fluent Design 风格界面，数据存储采用 MySQL 数据库。
+这是一个基于 PHP 7.4 的 App Store 项目，使用 Bootstrap 实现 Fluent Design 风格界面，数据存储采用 MySQL 数据库。项目各页面顶栏已添加 logo 图片，路径为 `/favicon.jpeg`，点击可跳转至首页，图片设置了高度 30px、右边距 10px 以及圆角样式 `var(--border-radius)`。
 
 ## 项目结构
 ```
@@ -49,7 +49,7 @@ app2/
 对于有经验的开发者，可按照以下步骤快速部署：
 ```cmd
 # 1. 克隆项目并进入目录
-git clone <repository-url> app2
+.git clone <repository-url> app2
 cd app2
 
 # 2. 创建并配置环境文件
@@ -118,7 +118,7 @@ cd app2
 2. 创建数据库（将`your_db_name`替换为您喜欢的数据库名称）：
    ```sql
    CREATE DATABASE your_db_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   exit
+exit
    ```
 
 #### 导入数据库结构
@@ -199,145 +199,60 @@ icacls images /grant Users:(OI)(CI)W
 ```cmd
 php -S localhost:8000
 ```
-然后在浏览器中访问：http://localhost:8000
 
-#### 选项B：配置Apache服务器
-1. 确保`mod_rewrite`模块已启用
-2. 创建虚拟主机配置：
-```apache
-<VirtualHost *:80>
-    ServerName appstore.local
-    DocumentRoot "d:/app2"
-    <Directory "d:/app2">
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
-3. 修改`hosts`文件添加：`127.0.0.1 appstore.local`
-4. 重启Apache，访问 http://appstore.local
-
-#### 选项C：配置Nginx服务器
-```nginx
-server {
-    listen 80;
-    server_name appstore.local;
-    root d:/app2;
-    index index.php;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass 127.0.0.1:9000;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
-}
-```
-
-### 8. 首次使用与安全设置
-
-#### 管理员账号初始化
-1. 访问管理员登录页面：http://localhost:8000/admin/login.php
-2. 使用默认账号登录：
-   - 用户名：`admin@example.com`（来自config.php中的ADMIN_EMAIL）
-   - 密码：`admin123`（来自config.php中的ADMIN_PASSWORD）
-3. **重要**：登录后立即点击右上角头像，选择**修改密码**，设置强密码
-
-#### 安全建议
-- 生产环境中设置`define('DEBUG_MODE', false);`
-- 定期备份数据库
-- 不要将`config.php`提交到版本控制系统
-- 保持PHP和所有依赖包为最新安全版本
-
-## 使用教程
-
-### 开发者功能
-
-#### 注册开发者账号
-1. 访问开发者注册页面：http://localhost:8000/developer/register.php
-2. 填写注册信息，提交后系统会发送验证邮件
-3. 点击邮件中的验证链接激活账号
-
-#### 上传新应用
-1. 登录开发者后台：http://localhost:8000/developer/login.php
-2. 点击**上传新应用**按钮
-3. 填写应用信息：
-   - 应用名称、描述、版本号
-   - 选择应用类别和年龄分级
-   - 上传应用图标（推荐尺寸：512x512px）
-   - 上传应用截图（最多5张）
-   - 上传应用安装包（支持.zip格式）
-4. 点击**提交审核**，等待管理员审核
-
-#### 管理应用版本
-1. 在开发者后台点击应用名称进入管理页面
-2. 点击**发布新版本**添加应用更新
-3. 填写版本变更说明和更新内容
-4. 上传新版本安装包
-
-### 管理员功能
-
-#### 应用审核
-1. 登录管理员后台：http://localhost:8000/admin/login.php
-2. 点击**应用审核**菜单
-3. 查看待审核应用列表，点击**查看详情**
-4. 审核应用信息和安装包，点击**通过**或**拒绝**并填写反馈
-
-#### 管理应用分类
-1. 在管理员后台点击**分类管理**
-2. 可以添加、编辑或删除应用分类
-3. 设置分类排序和显示状态
-
-#### 系统信息查看
-1. 在管理员后台点击**系统信息**
-2. 查看服务器环境、PHP配置和数据库状态
-3. 监控应用总数、开发者数量和文件存储使用情况
-
-### API使用指南
-
-#### 获取应用列表
-```http
-GET /api.php?action=list&page=1&limit=10
-```
-返回JSON格式的应用列表数据
-
-#### 获取应用详情
-```http
-GET /api.php?action=app&id=1
-```
-返回指定ID的应用详细信息
-
-#### API响应格式
+## API 文档
+### 根路径 `/api`
+- **方法**：GET
+- **功能**：返回可用端点信息
+- **响应示例**：
 ```json
 {
-  "success": true,
-  "data": {},
-  "message": "操作成功"
+    "status": "success",
+    "message": "App Store API",
+    "version": "1.0",
+    "endpoints": {
+        "/api?action=list": "获取应用列表，支持search、platform、age_rating、tag、page、limit参数。search：搜索关键词；platform：平台；age_rating：年龄分级；tag：标签；page：页码；limit：每页数量",
+        "/api?action=app&id=1": "获取指定ID的应用详情，需传入app_id参数。包含应用基础信息、版本、图片、评价和标签信息",
+        "/api?action=favorite": "收藏应用（POST方法，需app_id和user_id参数）"
+    },
+    "example": "GET /api?action=list&search=游戏&limit=10"
 }
 ```
 
-## 功能说明
-- **首页**：展示最新 App 列表，包含基本信息和评分。
-- **App 信息页**：显示 App 详细信息、版本历史、预览图片和用户评价，支持用户评分。
-- **管理页**：管理员可以添加、删除 App，审核应用，管理标签和查看系统信息。
-- **开发者后台**：开发者可以注册账号、管理应用、上传新版本和查看应用统计。
-- **API 接口**：提供 `/api` 获取 App 列表，`/api/app/<编号>` 获取单个 App 详细信息。
+### 应用列表 `/api?action=list`
+- **方法**：GET
+- **功能**：获取应用列表，支持多条件筛选和分页查询
+- **参数**：
+  - `search`：搜索关键词，可选
+  - `platform`：平台，可选
+  - `age_rating`：年龄分级，可选
+  - `tag`：标签，可选
+  - `page`：页码，可选，默认1
+  - `limit`：每页数量，可选，默认10
+- **响应示例**：
+```json
+{
+    "data": [
+        {
+            "id": "1",
+            "name": "示例应用",
+            "description": "这是一个示例应用",
+            "age_rating": "3+",
+            "avg_rating": "4.5"
+        }
+    ],
+    "pagination": {
+        "total": 100,
+        "page": 1,
+        "limit": 10,
+        "totalPages": 10
+    }
+}
+```
 
-## 管理员登录
-默认管理员账号信息在 `config.php` 中配置，登录后可访问管理页面。
-
-## 故障排除
-- **数据库导入错误**：确保数据库名称为'awa'且已创建，检查SQL文件路径是否正确
-- **权限问题**：确认 `files` 和 `images` 目录权限设置为755
-- **邮件发送失败**：检查 `config.php` 中的SMTP配置，确保端口（通常465或587）和加密方式正确
-- **类找不到错误**：运行 `composer install` 确保所有依赖已正确安装
-
-## 注意事项
-- 请确保 `files`、`images` 目录以及其子目录有足够的写入权限（推荐设置权限为755）。
-- 生产环境中必须修改默认管理员密码和数据库连接信息，确保系统安全。
-- 邮件服务配置：请在 `config.php` 中正确设置 SMTP 服务器地址、端口、用户名和密码，以确保开发者邮箱验证功能正常工作。
+### 应用详情 `/api?action=app&id={id}`
+- **方法**：GET
+- **功能**：获取指定ID应用的详细信息，包含基础信息、版本、图片、评价和标签信息
+- **参数**：
+  - `id`：应用ID，必需，数字类型
+- **响应示例**：响应包含应用基础信息、版本、图片、评价和标签信息。

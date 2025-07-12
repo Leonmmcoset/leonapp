@@ -13,21 +13,30 @@ if (!isset($_GET['action'])) {
         'message' => 'App Store API',
         'version' => '1.0',
         'endpoints' => [
-            '/api?action=list' => '获取应用列表，支持search、platform、age_rating、tag、page、limit参数',
-            '/api?action=app&id=1' => '获取指定ID的应用详情',
+            '/api?action=list' => '获取应用列表，支持search、platform、age_rating、tag、page、limit参数。search：搜索关键词；platform：平台；age_rating：年龄分级；tag：标签；page：页码；limit：每页数量',
+            '/api?action=app&id=1' => '获取指定ID的应用详情，需传入app_id参数。包含应用基础信息、版本、图片、评价和标签信息',
             '/api?action=favorite' => '收藏应用（POST方法，需app_id和user_id参数）'
         ],
-        'example' => 'GET /api?action=list&platform=windows&limit=20'
+        'example' => 'GET /api?action=list&search=游戏&limit=10'
     ]);
     exit;
 }
 
 
 // 支持查询参数路由模式（不依赖URL重写）
+// 以下为各API端点详细处理逻辑
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
     
-    // 处理应用列表请求
+    // 处理应用列表请求，支持多条件筛选和分页查询
+    // 参数:
+    //   search - 搜索关键词，可选
+    //   platform - 平台，可选
+    //   age_rating - 年龄分级，可选
+    //   tag - 标签，可选
+    //   page - 页码，可选，默认1
+    //   limit - 每页数量，可选，默认10
+    // 方法: GET
     if ($action === 'list' && $requestMethod === 'GET') {
         $sql = "SELECT apps.id, apps.name, apps.description, apps.age_rating, AVG(reviews.rating) as avg_rating 
                 FROM apps 
@@ -133,7 +142,9 @@ if (isset($_GET['action'])) {
         exit;
     }
     
-    // 处理应用详情请求
+    // 处理应用详情请求，获取指定ID应用的详细信息，包含基础信息、版本、图片、评价和标签信息
+    // 参数: id - 应用ID，必需，数字类型
+    // 方法: GET
     elseif ($action === 'app' && isset($_GET['id']) && is_numeric($_GET['id']) && $requestMethod === 'GET') {
         $appId = $_GET['id'];
         error_log("Requesting app details for ID: $appId");
