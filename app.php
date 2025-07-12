@@ -180,18 +180,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                 <h1><?php echo $app['name']; ?></h1>
                 <p class="lead"><?php echo $app['description']; ?></p>
                 <p>年龄分级: <?php echo $app['age_rating']; ?></p>
-    <?php if (!empty($app['age_rating_description'])): ?>
-    <div class="age-rating-description">
-        <h4>年龄分级说明</h4>
-        <p><?php echo nl2br(htmlspecialchars($app['age_rating_description'])); ?></p>
-    </div>
-    <?php endif; ?>
+                <?php if (!empty($app['age_rating_description'])): ?>
+                <div class="age-rating-description">
+                    <h4>年龄分级说明</h4>
+                    <p><?php echo nl2br(htmlspecialchars($app['age_rating_description'])); ?></p>
+                </div>
+                <?php endif; ?>
                 <p>适用平台: <?php
                     $platforms = json_decode($app['platforms'], true) ?? [];
                     $platformIcons = [
                         'windows' => '<i class="fab fa-windows"></i>',
+                        'windows_win7' => '<i class="fab fa-windows"></i>',
+                        'windows_xp' => '<i class="fab fa-windows"></i>',
                         'macos' => '<i class="fab fa-apple"></i>',
                         'linux' => '<i class="fab fa-linux"></i>',
+                        'linux_arch' => '<i class="fab fa-linux"></i>',
+                        'linux_ubuntu' => '<i class="fab fa-linux"></i>',
                         'android' => '<i class="fab fa-android"></i>',
                         'ios' => '<i class="fab fa-app-store-ios"></i>'
                     ];

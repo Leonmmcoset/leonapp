@@ -73,6 +73,9 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                         <a class="nav-link" href="developer/login.php">开发者登录</a>
                     </li>
                     <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="thanks.php">鸣谢</a>
+                    </li>
                 </ul>
             </div>
         </div>

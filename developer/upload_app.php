@@ -215,6 +215,7 @@ if (!($conn instanceof mysqli)) {
                 $mail->addAddress(ADMIN_EMAIL);
                 
                 $mail->isHTML(false);
+                $mail->CharSet = 'utf-8';
                 $mail->Subject = $subject;
                 $mail->Body    = $body;
                 
