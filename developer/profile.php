@@ -104,6 +104,19 @@ if (!($conn instanceof mysqli)) {
             margin: 0;
             padding: 20px;
         }
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .profile-container {
             max-width: 800px;
             margin: 0 auto;
@@ -126,7 +139,7 @@ if (!($conn instanceof mysqli)) {
         }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
@@ -182,6 +195,11 @@ if (!($conn instanceof mysqli)) {
             </div>
             <button type="submit" class="btn btn-primary">保存更改</button>
         </form>
-    </div>
+</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('page-transition');
+        });
+    </script>
 </body>
 </html>

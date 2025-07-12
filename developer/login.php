@@ -92,9 +92,22 @@ if (!($conn instanceof mysqli)) {
             background-color: #f4f4f4;
             padding: 20px 0;
         }
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <div class="container mt-5 col-md-4">
         <h2>开发者登录</h2>
         <?php if (isset($success)): ?>
@@ -119,5 +132,10 @@ if (!($conn instanceof mysqli)) {
         </div>
     </div>
     <script src="/js/bootstrap.bundle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('page-transition');
+        });
+    </script>
 </body>
 </html>

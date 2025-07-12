@@ -149,10 +149,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
         }
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <!-- 导航栏 -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('page-transition');
+    });
+    </script>
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
             <a href="index.php"><img src="/favicon.jpeg" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"></a>

@@ -112,10 +112,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
         }
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="page-transition">
 <?php if (isset($error)): ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('page-transition');
+    });
+    </script>
     <div style='color: red; padding: 10px; background-color: #ffeeee; border-radius: 5px; margin-bottom: 20px;'>
         <?php echo htmlspecialchars($error); ?>
     </div>

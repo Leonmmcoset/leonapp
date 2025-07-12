@@ -30,6 +30,27 @@
 
     // 为内容添加顶部内边距
     echo '<div style="padding-top: 70px;">';
+    echo '<style>
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>';
+    echo '<body class="page-transition">';
+    echo '<script>
+        document.addEventListener(\'DOMContentLoaded\', function() {
+            document.body.classList.add(\'page-transition\');
+        });
+    </script>';
     if (preg_match('/^\/api/', $_SERVER['REQUEST_URI'])) {
         include 'api.php';
         exit;
