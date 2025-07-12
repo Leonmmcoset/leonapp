@@ -160,7 +160,7 @@ $resultApps = $conn->query($sqlApps);
                                 // 获取应用适用平台
                                 $platforms = json_decode($app['platforms'], true);
                                 
-                               <?php echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
+                                echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
                                 echo '<p class="card-text">平台: ';
                                 foreach ($platforms as $platform) {
                                     $icon = '';
