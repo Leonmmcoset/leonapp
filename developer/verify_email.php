@@ -51,6 +51,7 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>邮箱验证 - <?= APP_STORE_NAME ?></title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico">
     <style>
         body { background-color: #f4f4f4; padding: 70px 0; }
         .container { max-width: 500px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
@@ -61,7 +62,7 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
-            <a href="../index.php"><img src="/favicon.jpeg" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"></a>
+            <a href="../index.php"><img src="/favicon.ico" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"></a>
             <a class="navbar-brand" href="../index.php"><?= APP_STORE_NAME ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>

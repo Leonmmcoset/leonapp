@@ -243,6 +243,7 @@ if (!($conn instanceof mysqli)) {
     <title>编辑应用</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico">
 </head>
 <body>
     <div class="container mt-4">

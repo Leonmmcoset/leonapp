@@ -287,6 +287,7 @@ if (!($conn instanceof mysqli)) {
     <title>上传应用 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

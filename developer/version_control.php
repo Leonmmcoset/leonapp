@@ -223,6 +223,7 @@ if (!$verStmt) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>版本控制 - <?php echo htmlspecialchars($app['name']); ?></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico">
     <link rel="stylesheet" href="../styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -236,7 +237,7 @@ if (!$verStmt) {
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
             <a href="../index.php"><img src="/favicon.jpeg" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"></a>
-            <a class="navbar-brand" href="../index.php"><?php echo APP_STORE_NAME; ?></a>
+            <a class="navbar-brand" href="../index.php"><img src="/favicon.ico" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"><?php echo APP_STORE_NAME; ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

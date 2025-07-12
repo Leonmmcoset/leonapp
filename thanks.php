@@ -28,6 +28,7 @@ require_once 'config.php';
     <title>鸣谢页面</title>
     <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="css/all.min.css">
@@ -111,7 +112,7 @@ require_once 'config.php';
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light blur-bg">
         <div class="container">
-            <a href="index.php"><img src="/favicon.jpeg" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"></a>
+            <a href="index.php"><img src="/favicon.ico" alt="Logo" style="height: 30px; margin-right: 10px; border-radius: var(--border-radius);"></a>
             <a class="navbar-brand" href="#"><?php echo APP_STORE_NAME; ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

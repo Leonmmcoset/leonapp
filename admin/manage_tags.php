@@ -60,6 +60,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>标签管理 - 应用商店后台</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico">
 </head>
 <body>
     <div class="container mt-5">
