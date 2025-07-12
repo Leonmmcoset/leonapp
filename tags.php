@@ -76,6 +76,8 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {
@@ -160,7 +162,23 @@ $tagResult = $conn->query("SELECT id, name FROM tags ORDER BY name");
                                 $platforms = json_decode($row['platforms'], true);
                                 echo ' 标签: '. implode(', ', $tags) . '<br>';
                                 $platforms = $platforms ?? [];
-                                echo ' 平台: '. implode(', ', $platforms) . '<br>';
+                                echo ' 平台: ';
+                                foreach ($platforms as $platform) {
+                                    $icon = '';
+                                    if ($platform === 'Windows') {
+                                        $icon = '<i class="fab fa-windows"></i>';
+                                    } elseif ($platform === 'macOS') {
+                                        $icon = '<i class="fab fa-apple"></i>';
+                                    } elseif ($platform === 'Linux') {
+                                        $icon = '<i class="fab fa-linux"></i>';
+                                    } elseif ($platform === 'iOS') {
+                                        $icon = '<i class="fab fa-app-store-ios"></i>';
+                                    } elseif ($platform === 'Android') {
+                                        $icon = '<i class="fab fa-android"></i>';
+                                    }
+                                    echo " <span class='d-inline-flex align-items-center'>$icon $platform</span>";
+                                }
+                                echo '<br>';
                                 echo ' 评分: '. round($row['avg_rating'], 1) . '/5<br>';
                                 echo '';
                                 ?>

@@ -31,6 +31,8 @@ if (!isset($conn) || !$conn instanceof mysqli) {
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Fluent Design 模糊效果 -->
     <style>
@@ -160,6 +162,8 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
         </div>
         <!-- <p>网站占用量: <?php echo formatBytes($websiteSpace); ?></p> -->
         <br>
+        <!-- 这里可添加平台信息展示，参考 app.php 样式 -->
+        
         <form method="get" action="index.php" class="mb-4" onsubmit="return validateSearch();">
     <script>
     function validateSearch() {

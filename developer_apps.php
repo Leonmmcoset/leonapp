@@ -160,8 +160,24 @@ $resultApps = $conn->query($sqlApps);
                                 // 获取应用适用平台
                                 $platforms = json_decode($app['platforms'], true);
                                 
-                                echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
-                                echo '<p class="card-text">平台: '. implode(', ', $platforms) . '</p>';
+                               <?php echo '<p class="card-text">标签: '. implode(', ', $tags) . '</p>';
+                                echo '<p class="card-text">平台: ';
+                                foreach ($platforms as $platform) {
+                                    $icon = '';
+                                    if ($platform === 'Windows') {
+                                        $icon = '<i class="fab fa-windows"></i>';
+                                    } elseif ($platform === 'macOS') {
+                                        $icon = '<i class="fab fa-apple"></i>';
+                                    } elseif ($platform === 'Linux') {
+                                        $icon = '<i class="fab fa-linux"></i>';
+                                    } elseif ($platform === 'iOS') {
+                                        $icon = '<i class="fab fa-app-store-ios"></i>';
+                                    } elseif ($platform === 'Android') {
+                                        $icon = '<i class="fab fa-android"></i>';
+                                    }
+                                    echo " <span class='d-inline-flex align-items-center'>$icon $platform</span>";
+                                }
+                                echo '</p>';
                                 ?>
                                 <p class="card-text">
                                     <small class="text-muted">
