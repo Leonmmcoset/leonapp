@@ -103,13 +103,13 @@ if (!($conn instanceof mysqli)) {
             <div class="alert alert-danger" role="alert"><?php echo $error; ?></div>
         <?php endif; ?>
         <form method="post">
-            <div class="mb-3">
-                <label for="login_id" class="form-label">邮箱/用户名</label>
+            <div class="form-floating mb-3">
                 <input type="text" id="login_id" name="login_id" class="form-control" placeholder="请输入邮箱或用户名" required>
+                <label for="login_id">邮箱/用户名</label>
             </div>
-            <div class="form-group">
-                <label for="password" class="form-label">密码</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+            <div class="form-floating mb-3">
+                <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码" required>
+                <label for="password">密码</label>
             </div>
             <button type="submit" class="btn btn-primary w-100">登录</button>
         </form>

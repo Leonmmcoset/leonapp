@@ -114,7 +114,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
         $freeSpace = disk_free_space(__DIR__);
         $usedSpace = $totalSpace - $freeSpace;
         $usagePercent = round(($usedSpace / $totalSpace) * 100, 2);
-        
+
         function formatBytes($bytes) {
             if ($bytes >= 1073741824) {
                 return round($bytes / 1073741824, 2) . ' GB';
@@ -126,14 +126,39 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
                 return $bytes . ' B';
             }
         }
-        ?>
+
+        // 计算网站占用量
+        function getDirectorySize($dir) {
+            $size = 0;
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
+            foreach ($iterator as $file) {
+                if ($file->isFile()) {
+                    $size += $file->getSize();
+                }
+            }
+            return $size;
+        }
+        $websiteSpace = getDirectorySize(__DIR__);
+        $websiteUsagePercent = round(($websiteSpace / $totalSpace) * 100, 2);
+        ?> 
         <div class="progress-label">
             <span>磁盘使用情况</span>
             <span><?php echo formatBytes($usedSpace); ?> / <?php echo formatBytes($totalSpace); ?></span>
         </div>
         <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: <?php echo $usagePercent; ?>%" aria-valuenow="<?php echo $usagePercent; ?>" aria-valuemin="0" aria-valuemax="100"><?php echo $usagePercent; ?>%</div>
-        </div><br>
+        </div>
+        <!-- <p>网站占用量: <?php echo formatBytes($websiteSpace); ?></p> -->
+        <br>
+        <div class="progress-label">
+            <span>网站使用情况</span>
+            <span><?php echo formatBytes($websiteSpace); ?> / <?php echo formatBytes($totalSpace); ?></span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: <?php echo $websiteUsagePercent; ?>%" aria-valuenow="<?php echo $websiteUsagePercent; ?>" aria-valuemin="0" aria-valuemax="100"><?php echo $websiteUsagePercent; ?>%</div>
+        </div>
+        <!-- <p>网站占用量: <?php echo formatBytes($websiteSpace); ?></p> -->
+        <br>
         <form method="get" action="index.php" class="mb-4" onsubmit="return validateSearch();">
     <script>
     function validateSearch() {

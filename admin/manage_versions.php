@@ -286,11 +286,11 @@ if (isset($_GET['success'])) {
                                     <div class="modal-body">
                                         <input type="hidden" name="version_id" value="<?php echo $version['id']; ?>">
                                         <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="version_<?php echo $version['id']; ?>" name="version" value="<?php echo htmlspecialchars($version['version']); ?>" required>
+                <input type="text" class="form-control" id="version_<?php echo $version['id']; ?>" name="version" value="<?php echo htmlspecialchars($version['version']); ?>" placeholder="如: 1.0.0" required>
                 <label for="version_<?php echo $version['id']; ?>">版本号</label>
             </div>
                                         <div class="form-floating mb-3">
-                <textarea class="form-control" id="changelog_<?php echo $version['id']; ?>" name="changelog" rows="3" required><?php echo htmlspecialchars($version['changelog']); ?></textarea>
+                <textarea class="form-control" id="changelog_<?php echo $version['id']; ?>" name="changelog" rows="3" placeholder="描述本次更新内容" required><?php echo htmlspecialchars($version['changelog']); ?></textarea>
                 <label for="changelog_<?php echo $version['id']; ?>">更新日志</label>
             </div>
                                         <div class="mb-3">

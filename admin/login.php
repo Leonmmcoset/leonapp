@@ -84,13 +84,13 @@ if (!isset($_SESSION['admin'])) {
                                 </script>
                             <?php endif; ?>
                             <form method="post">
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">用户名</label>
+                                <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="username" name="username" required>
+                                    <label for="username">用户名</label>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">密码</label>
+                                <div class="form-floating mb-3">
                                     <input type="password" class="form-control" id="password" name="password" required>
+                                    <label for="password">密码</label>
                                 </div>
                                 <button type="submit" class="btn btn-primary">登录</button>
                             </form>
