@@ -107,8 +107,8 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
             margin-bottom: 5px;
         }
     </style>
-    
-    <div class="container mt-4 storage-progress">
+    <div style="align-content: center; text-align: center;">
+    <div class="container-fluid mt-4 storage-progress">
         <?php
         // 获取磁盘总容量和网站占用存储
         $totalSpace = disk_total_space(__DIR__);
@@ -443,7 +443,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
             ?>
 
         </div>
-    </div>
+    </div></div>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="/js/bootstrap.bundle.js"></script>
