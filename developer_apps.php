@@ -2,6 +2,10 @@
 session_start();
 require_once 'config.php';
 
+if (!defined('APP_STORE_NAME')) {
+    define('APP_STORE_NAME', '');
+}
+
 // 验证开发者ID参数
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header('Location: index.php');
