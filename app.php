@@ -198,12 +198,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                 <p class="lead"><i class="fas fa-info-circle"></i> <?php echo $app['description']; ?></p>
                 <p>年龄分级: 
                     <?php
+                    $svgHeader = '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="0" dy="2" result="offsetblur"/><feFlood flood-color="rgba(0,0,0,0.2)"/><feComposite in2="offsetblur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
                     $esrbIcons = [
-                        '3+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#34A853"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">3+</text></svg>',
-                        '7+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#FBBC05"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">7+</text></svg>',
-                        '12+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#EA4335"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">12+</text></svg>',
-                        '16+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#34A853"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">16+</text></svg>',
-                        '18+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#34A853"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">18+</text></svg>'
+                        '3+' => "{$svgHeader}<circle cx='20' cy='20' r='18' fill='#34A853' filter='url(#shadow)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='14' font-weight='bold'>3+</text></svg>",
+                        '7+' => "{$svgHeader}<circle cx='20' cy='20' r='18' fill='#FBBC05' filter='url(#shadow)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='14' font-weight='bold'>7+</text></svg>",
+                        '12+' => "{$svgHeader}<circle cx='20' cy='20' r='18' fill='#EA4335' filter='url(#shadow)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='14' font-weight='bold'>12+</text></svg>",
+                        '16+' => "{$svgHeader}<circle cx='20' cy='20' r='18' fill='#FBBC05' filter='url(#shadow)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='14' font-weight='bold'>16+</text></svg>",
+                        '18+' => "{$svgHeader}<circle cx='20' cy='20' r='18' fill='#EA4335' filter='url(#shadow)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='14' font-weight='bold'>18+</text></svg>"
                     ];
                     echo isset($esrbIcons[$app['age_rating']]) ? $esrbIcons[$app['age_rating']] : '<i class="fas fa-user-check"></i>';
                     ?> <?php echo $app['age_rating']; ?></p>
@@ -234,6 +235,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                         'macos' => 'MacOS',
                         'linux_arch' => 'Linux（适用于Arch Linux）',
                         'linux_ubuntu' => 'Linux（适用于Ubuntu）',
+                        'windows' => 'Windows',
+                        'linux' => 'Linux',
                     ];
                     
                     $platformTexts = [];
