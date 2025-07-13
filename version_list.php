@@ -124,7 +124,8 @@ while ($row = $result->fetch_assoc()) {
                                 <p class="card-text"><?php echo nl2br(htmlspecialchars($version['changelog'])); ?></p>
                                 <button class="btn btn-outline-secondary mt-2" onclick="toggleFavorite(<?php echo $appId; ?>, '<?php echo addslashes(htmlspecialchars($app['name'])); ?>')">收藏</button>
                             </div>
-                            <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">                                <a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-primary" download>下载</a>                                <small class="text-muted">文件大小: <?php echo $fileSize; ?></small>                            </div>
+                            <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                            <a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-primary" download>下载（大小：<?php echo $fileSize; ?>)</a>
                         </div>
                     </div>
                 <?php endforeach; ?>
