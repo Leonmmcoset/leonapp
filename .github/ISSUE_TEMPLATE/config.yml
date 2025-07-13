@@ -1,8 +1,8 @@
 blank_issues_enabled: false
-contact_links:
-  - name: 支持问题
-    url: https://example.com/support
-    about: 对于使用问题，请联系我们的支持团队
-  - name: 项目讨论
-    url: https://github.com/yourusername/yourapp/discussions
-    about: 在讨论区提出想法或进行交流
+templates:
+  - name: Bug报告
+    about: 创建一个Bug报告以帮助我们改进
+    file: bug_report.yml
+  - name: 功能请求
+    about: 为这个项目提出一个想法
+    file: feature_request.yml
