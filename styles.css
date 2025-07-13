@@ -53,7 +53,7 @@ body {
     border: none;
     border-radius: 16px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: var(--card-shadow);
     animation: fadeInUp 0.6s ease-out forwards;
     opacity: 0;
@@ -77,7 +77,7 @@ body {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     border-radius: 20px;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: translateZ(0);
 }
 
@@ -93,7 +93,7 @@ body {
 
 .navbar {
     padding: 0.75rem 1rem;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: fixed;
     top: 0;
     width: 100%;
