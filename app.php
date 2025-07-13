@@ -196,7 +196,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
             <div class="col-md-6">
                 <h1><i class="fas fa-box-open"></i> <?php echo $app['name']; ?></h1>
                 <p class="lead"><i class="fas fa-info-circle"></i> <?php echo $app['description']; ?></p>
-                <p>年龄分级: <i class="fas fa-user-check"></i> <?php echo $app['age_rating']; ?></p>
+                <p>年龄分级: 
+                    <?php
+                    $esrbIcons = [
+                        '3+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#34A853"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">3+</text></svg>',
+                        '7+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#FBBC05"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">7+</text></svg>',
+                        '12+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#EA4335"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">12+</text></svg>',
+                        '16+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#34A853"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">16+</text></svg>',
+                        '18+' => '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#34A853"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="14">18+</text></svg>'
+                    ];
+                    echo isset($esrbIcons[$app['age_rating']]) ? $esrbIcons[$app['age_rating']] : '<i class="fas fa-user-check"></i>';
+                    ?> <?php echo $app['age_rating']; ?></p>
                 <?php if (!empty($app['age_rating_description'])): ?>
                 <div class="age-rating-description">
                     <h4>年龄分级说明</h4>
