@@ -1,4 +1,4 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 templates:
   - name: Bug报告
     about: 创建一个Bug报告以帮助我们改进
