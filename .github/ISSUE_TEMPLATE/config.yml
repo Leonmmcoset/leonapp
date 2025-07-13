@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 支持问题
+    url: https://example.com/support
+    about: 对于使用问题，请联系我们的支持团队
+  - name: 项目讨论
+    url: https://github.com/yourusername/yourapp/discussions
+    about: 在讨论区提出想法或进行交流
