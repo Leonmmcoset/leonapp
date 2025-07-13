@@ -77,6 +77,12 @@ if (!isset($conn) || !$conn instanceof mysqli) {
                     </li>
                     <?php endif; ?>
                     <li class="nav-item">
+                        <a class="nav-link" href="http://leonmmcoset.jjmm.ink:3232/app.php?id=36">下载LeonAPP手机版</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://leonmmcoset.jjmm.ink:3232/app.php?id=41">下载LeonAPP电脑版</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="thanks.php">鸣谢</a>
                     </li>
                 </ul>

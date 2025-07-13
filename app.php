@@ -194,9 +194,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-6">
-                <h1><?php echo $app['name']; ?></h1>
-                <p class="lead"><?php echo $app['description']; ?></p>
-                <p>年龄分级: <?php echo $app['age_rating']; ?></p>
+                <h1><i class="fas fa-box-open"></i> <?php echo $app['name']; ?></h1>
+                <p class="lead"><i class="fas fa-info-circle"></i> <?php echo $app['description']; ?></p>
+                <p>年龄分级: <i class="fas fa-user-check"></i> <?php echo $app['age_rating']; ?></p>
                 <?php if (!empty($app['age_rating_description'])): ?>
                 <div class="age-rating-description">
                     <h4>年龄分级说明</h4>
