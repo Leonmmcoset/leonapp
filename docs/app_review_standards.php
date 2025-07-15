@@ -13,6 +13,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
     <style>
         body {
             padding-top: 56px;
@@ -57,7 +58,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">首页</a>
+                        <a class="nav-link" href="/index.php">首页</a>
                     </li>
                     <?php if (isset($_SESSION['admin'])): ?>
                         <li class="nav-item">

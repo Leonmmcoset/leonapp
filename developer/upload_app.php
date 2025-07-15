@@ -564,6 +564,14 @@ if (!($conn instanceof mysqli)) {
                 <input type="file" id="images" name="images[]" multiple accept="image/*" class="form-control">
                 <small>可选择多张图片</small>
             </div>
+            <div class="form-group mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="age_doc_confirm" name="age_doc_confirm" required>
+                    <label class="form-check-label" for="age_doc_confirm">
+                        我已阅读并理解<a href="../docs/age_rating.php" target="_blank">年龄说明文档</a>
+                    </label>
+                </div>
+            </div>
             <input type="submit" value="上传" class="btn btn-primary w-100 py-2">
         </form>
         <div class="back-link mt-4">
