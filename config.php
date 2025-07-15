@@ -20,9 +20,11 @@ define('SMTP_PASSWORD', '');
 define('SMTP_FROM_EMAIL', 'leonmm2@163.com');
 define('SMTP_FROM_NAME', 'leonmm2@163.com');
 
-// 管理员账号
-define('ADMIN_USERNAME', 'Admin');
-define('ADMIN_PASSWORD', '');
+// 管理员账号 - 支持多个账号
+$admin_accounts = [
+    ['id' => 1, 'username' => 'Admin', 'password' => ''],
+    // 可添加更多管理员账号，格式: ['id' => 数字, 'username' => '用户名', 'password' => '']
+];
 
 // 数据库连接
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);

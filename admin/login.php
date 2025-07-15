@@ -10,11 +10,14 @@ if (!isset($_SESSION['admin'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        if ($username === ADMIN_USERNAME && $password === ADMIN_PASSWORD) {
+        $adminFound = false;
+        foreach ($admin_accounts as $account) {
+            if ($username === $account['username'] && $password === $account['password']) {
                 $_SESSION['admin'] = [
-                    'id' => 1, // 配置文件中未定义管理员ID，使用默认值1
-                    'username' => $username
+                    'id' => $account['id'],
+                    'username' => $account['username']
                 ];
+                $adminFound = true;
                 
                 // 处理自动登录
                 if (isset($_POST['remember_me']) && $_POST['remember_me'] === 'on') {
@@ -34,9 +37,12 @@ if (!isset($_SESSION['admin'])) {
                 
                 header('Location: index.php');
                 exit();
-            } else {
-                $error = '用户名或密码错误';
             }
+        }
+        
+        if (!$adminFound) {
+            $error = '用户名或密码错误';
+        }
     }
 ?>
 <!DOCTYPE html>
