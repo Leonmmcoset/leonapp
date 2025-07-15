@@ -160,16 +160,7 @@ CREATE TABLE IF NOT EXISTS download_history (
     FOREIGN KEY (version_id) REFERENCES app_versions(id) ON DELETE CASCADE
 );
 
--- 创建用户收藏表
-CREATE TABLE IF NOT EXISTS user_favorites (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    app_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY unique_favorite (user_id, app_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (app_id) REFERENCES apps(id) ON DELETE CASCADE
-);
+
 
 -- 创建公告表
 CREATE TABLE IF NOT EXISTS announcements (

@@ -15,7 +15,7 @@ if (!isset($_GET['action']) || $_GET['action'] === '') {
         'endpoints' => [
             '/api?action=list' => '获取应用列表，支持search、platform、age_rating、tag、page、limit参数。search：搜索关键词；platform：平台；age_rating：年龄分级；tag：标签；page：页码；limit：每页数量',
             '/api?action=app&id=1' => '获取指定ID的应用详情，需传入app_id参数。包含应用基础信息、版本、图片、评价和标签信息',
-            '/api?action=favorite' => '收藏应用（POST方法，需app_id和user_id参数）'
+
         ],
         'example' => 'GET /api?action=list&search=游戏&limit=10'
     ]);
@@ -218,42 +218,6 @@ if (isset($_GET['action'])) {
         exit;
     }
     
-    // 处理用户收藏应用
-    elseif ($action === 'favorite' && isset($_GET['app_id']) && is_numeric($_GET['app_id']) && isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $requestMethod === 'POST') {
-        $appId = $_GET['app_id'];
-        $userId = $_GET['user_id'];
-        
-        $stmt = $conn->prepare("INSERT IGNORE INTO user_favorites (user_id, app_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $userId, $appId);
-        
-        if ($stmt->execute()) {
-            echo json_encode(['status' => 'success', 'message' => 'App added to favorites']);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add to favorites']);
-        }
-        $stmt->close();
-        exit;
-    }
-    
-    // 获取用户收藏列表
-    elseif ($action === 'favorites' && isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $requestMethod === 'GET') {
-        $userId = $_GET['user_id'];
-        
-        $sql = "SELECT apps.* FROM user_favorites JOIN apps ON user_favorites.app_id = apps.id WHERE user_favorites.user_id = $userId";
-        $result = $conn->query($sql);
-        
-        $favorites = [];
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $favorites[] = $row;
-            }
-        }
-        
-        echo json_encode($favorites);
-        exit;
-    }
-
     // 获取所有标签
     elseif ($action === 'tags' && $requestMethod === 'GET') {
         $sql = "SELECT id, name FROM tags ORDER BY name";

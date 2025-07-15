@@ -309,7 +309,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
                     echo '<p class="card-text">平台: '. implode(', ', $platforms) . '</p>';
                     echo '<p class="card-text">评分: '. round($row['avg_rating'] ?? 0, 1) . '/5</p>';
                     echo '<a href="app.php?id='. $row['id'] . '" class="btn btn-primary">查看详情</a>';
-                    echo '<button class="btn btn-outline-secondary mt-2" onclick="toggleFavorite('. $row['id'] . ', \''. htmlspecialchars($row['name']) . '\')">收藏</button>';
+                   
                     echo '</div></div></div>';
                 }
             } else {

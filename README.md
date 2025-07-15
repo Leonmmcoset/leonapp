@@ -213,7 +213,7 @@ php -S localhost:8000
     "endpoints": {
         "/api?action=list": "获取应用列表，支持search、platform、age_rating、tag、page、limit参数。search：搜索关键词；platform：平台；age_rating：年龄分级；tag：标签；page：页码；limit：每页数量",
         "/api?action=app&id=1": "获取指定ID的应用详情，需传入app_id参数。包含应用基础信息、版本、图片、评价和标签信息",
-        "/api?action=favorite": "收藏应用（POST方法，需app_id和user_id参数）"
+
     },
     "example": "GET /api?action=list&search=游戏&limit=10"
 }
