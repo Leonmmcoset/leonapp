@@ -44,7 +44,7 @@ $resultApps = $conn->query($sqlApps);
     <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="styles.css">
     <!-- Fluent Design 模糊效果 -->
