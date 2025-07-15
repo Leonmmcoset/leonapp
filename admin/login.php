@@ -11,15 +11,32 @@ if (!isset($_SESSION['admin'])) {
         $password = $_POST['password'];
 
         if ($username === ADMIN_USERNAME && $password === ADMIN_PASSWORD) {
-            $_SESSION['admin'] = [
-                'id' => 1, // 配置文件中未定义管理员ID，使用默认值1
-                'username' => $username
-            ];
-            header('Location: index.php');
-            exit();
-        } else {
-            $error = '用户名或密码错误';
-        }
+                $_SESSION['admin'] = [
+                    'id' => 1, // 配置文件中未定义管理员ID，使用默认值1
+                    'username' => $username
+                ];
+                
+                // 处理自动登录
+                if (isset($_POST['remember_me']) && $_POST['remember_me'] === 'on') {
+                    $cookie_lifetime = 30 * 24 * 60 * 60; // 30天
+                    $cookie_params = session_get_cookie_params();
+                    setcookie(
+                        session_name(),
+                        session_id(),
+                        time() + $cookie_lifetime,
+                        $cookie_params['path'],
+                        $cookie_params['domain'],
+                        $cookie_params['secure'],
+                        $cookie_params['httponly']
+                    );
+                    ini_set('session.gc_maxlifetime', $cookie_lifetime);
+                }
+                
+                header('Location: index.php');
+                exit();
+            } else {
+                $error = '用户名或密码错误';
+            }
     }
 ?>
 <!DOCTYPE html>
@@ -106,10 +123,16 @@ if (!isset($_SESSION['admin'])) {
                                     <label for="username">用户名</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control" id="password" name="password" required>
-                                    <label for="password">密码</label>
-                                </div>
-                                <button type="submit" class="btn btn-primary">登录</button>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <label for="password">密码</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me">
+                            <label class="form-check-label" for="remember_me">
+                                自动登录
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">登录</button>
                             </form>
                         </div>
                     </div>

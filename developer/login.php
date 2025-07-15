@@ -68,6 +68,23 @@ if (!($conn instanceof mysqli)) {
             if ($developer && password_verify($password, $developer['password'])) {
                 $_SESSION['developer_id'] = $developer['id'];
                 $_SESSION['developer_username'] = $developer['username'];
+                
+                // 处理自动登录
+                if (isset($_POST['remember_me']) && $_POST['remember_me'] === 'on') {
+                    $cookie_lifetime = 30 * 24 * 60 * 60; // 30天
+                    $cookie_params = session_get_cookie_params();
+                    setcookie(
+                        session_name(),
+                        session_id(),
+                        time() + $cookie_lifetime,
+                        $cookie_params['path'],
+                        $cookie_params['domain'],
+                        $cookie_params['secure'],
+                        $cookie_params['httponly']
+                    );
+                    ini_set('session.gc_maxlifetime', $cookie_lifetime);
+                }
+                
                 header('Location: dashboard.php');
                 exit;
             } else {
@@ -124,6 +141,12 @@ if (!($conn instanceof mysqli)) {
             <div class="form-floating mb-3">
                 <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码" required>
                 <label for="password">密码</label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me">
+                <label class="form-check-label" for="remember_me">
+                    自动登录
+                </label>
             </div>
             <button type="submit" class="btn btn-primary w-100">登录</button>
         </form>
