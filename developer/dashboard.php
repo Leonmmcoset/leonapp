@@ -47,6 +47,8 @@ if (!($conn instanceof mysqli)) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .blur-bg {
             backdrop-filter: blur(10px);
@@ -213,9 +215,10 @@ if (!($conn instanceof mysqli)) {
                                 <?php endif; ?>
                             </p>
                             <div class="action-buttons">
-                                <a href="edit_app.php?id=<?php echo $app['id']; ?>", class="btn btn-primary">编辑</a>
-                                <a href="version_control.php?id=<?php echo $app['id']; ?>", class="btn btn-secondary">版本控制</a>
-                            </div>
+                <a href="edit_app.php?id=<?php echo $app['id']; ?>", class="btn btn-primary">编辑</a>
+                <a href="version_control.php?id=<?php echo $app['id']; ?>", class="btn btn-secondary">版本控制</a>
+                <a href="#" class="delete-btn btn btn-danger" data-app-id="<?php echo $app['id']; ?>">删除</a>
+            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -223,10 +226,54 @@ if (!($conn instanceof mysqli)) {
         </div>
     </div>
     <!-- Bootstrap JS and Popper -->
-    <script src="/js/bootstrap.bundle.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('page-transition');
+
+            // 删除按钮事件处理
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const appId = this.getAttribute('data-app-id');
+                    const appName = this.closest('.card').querySelector('.card-title').textContent;
+
+                    Swal.fire({
+                        title: '确认删除',
+                        text: `您确定要删除应用"${appName}"吗？此操作不可撤销。`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: '删除',
+                        cancelButtonText: '取消'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch('delete_app.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: `app_id=${encodeURIComponent(appId)}`
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('删除成功', data.message, 'success').then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire('删除失败', data.message, 'error');
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire('错误', '删除过程中发生错误', 'error');
+                            });
+                        }
+                    });
+                });
+            });
         });
     </script>
 </body>
