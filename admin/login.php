@@ -122,7 +122,7 @@ if (!isset($_SESSION['admin'])) {
                     <div class="card blur-bg">
                         <div class="card-header">管理员登录</div>
                         <div class="card-body">
-                            <?php if (isset($error)): ?>
+                            <!-- <?php if (isset($error)): ?>
                                 <script>
                                     Swal.fire({
                                         icon: "error",
@@ -130,7 +130,7 @@ if (!isset($_SESSION['admin'])) {
                                         text: "<?php echo addslashes($error); ?>",
                                     });
                                 </script>
-                            <?php endif; ?>
+                            <?php endif; ?> -->
                             <form method="post">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="username" name="username" required>

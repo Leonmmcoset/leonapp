@@ -23,7 +23,8 @@ define('SMTP_FROM_NAME', 'leonmm2@163.com');
 // 管理员账号 - 支持多个账号
 $admin_accounts = [
     ['id' => 1, 'username' => 'Admin', 'password' => ''],
-    ['id' => 2, 'username' => 'Admin2', 'password' => ''],
+    ['id' => 2, 'username' => 'jgzyes', 'password' => ''],
+    ['id' => 3, 'username' => 'zmm', 'password' => ''],
     // 可添加更多管理员账号，格式: ['id' => 数字, 'username' => '用户名', 'password' => '']
 ];
 

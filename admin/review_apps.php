@@ -186,6 +186,9 @@ if (!($conn instanceof mysqli)) {
     </nav>
 
     <div class="container mt-4">
+        <div class="alert alert-info">
+            请遵循应用商店的<a href="/docs/app_review_standards.php" target="_blank">审核规则</a>，确保应用符合平台要求。
+        </div>
         <?php if (!empty($success)): ?>
             <div class="alert alert-success"><?php echo $success; ?></div>
         <?php endif; ?>
@@ -321,7 +324,7 @@ function showRejectReason(appId, appName) {
     <!-- Bootstrap JS with Popper -->
     <script src="/js/bootstrap.bundle.js"></script>
     <!-- SweetAlert2 JS -->
-    <script src="/js/sweetalert.js/dist/sweetalert2.all.min.js"></script>
+    <script src="/js/sweetalert.js"></script>
     <script>
     function confirmLogout() {
         Swal.fire({
