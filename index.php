@@ -92,7 +92,7 @@ if (!isset($conn) || !$conn instanceof mysqli) {
 
     <?php
 // 获取最新公告
-$announcementQuery = "SELECT title, content FROM announcements ORDER BY created_at DESC LIMIT 1";
+$announcementQuery = "SELECT title, content, created_at FROM announcements ORDER BY created_at DESC LIMIT 1";
 $announcementResult = $conn->query($announcementQuery);
 $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $announcementResult->fetch_assoc() : null;
 ?>
@@ -100,6 +100,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
         <div class="container mt-3">
             <div class="alert alert-info blur-bg">
                 <h4 class="alert-heading"><?php echo htmlspecialchars($announcement['title']); ?></h4>
+                <p class="text-muted small">发布时间: <?php echo date('Y-m-d H:i', strtotime($announcement['created_at'])); ?></p>
                 <p><?php echo nl2br(htmlspecialchars($announcement['content'])); ?></p>
                 <p class="mt-2"><a href="history_announcements.php" class="alert-link">查看所有历史公告</a></p>
             </div>

@@ -63,6 +63,8 @@ $result = $conn->query($sql);
     <title>公告管理 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- Fluent Design 模糊效果 -->
@@ -99,7 +101,7 @@ $result = $conn->query($sql);
                         <a class="nav-link" href="system_info.php">系统信息</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="announcements.php">公告管理</a>
+                        <a class="nav-link active" aria-current="page" href="announcements.php">公告管理</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick="confirmLogout()">退出登录</a>
@@ -110,7 +112,6 @@ $result = $conn->query($sql);
     </nav>
 
     <div class="container mt-4">
-        <script src="/js/sweetalert.js"></script>
         <script>
         function confirmLogout() {
             Swal.fire({
@@ -125,22 +126,38 @@ $result = $conn->query($sql);
                 }
             });
         }
+        function confirmDelete(id) {
+            Swal.fire({
+                title: '确定要删除这条公告吗?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'delete_announcement.php?id=' + id;
+                }
+            });
+        }
         </script>
         <?php if (isset($_GET['success'])): ?>
+            <script>
             Swal.fire({
                 icon: "success",
                 title: "成功",
                 text: "<?php echo addslashes($_GET['success']); ?>",
             });
+            </script>
         <?php endif; ?>
         <?php if (isset($error)): ?>
+            <script>
             Swal.fire({
                 icon: "error",
                 title: "错误",
                 text: "<?php echo addslashes($error); ?>",
             });
+            </script>
         <?php endif; ?>
-        </script>
 
         <h2>发布公告</h2>
         <form method="post">
@@ -163,6 +180,7 @@ $result = $conn->query($sql);
                     <th>标题</th>
                     <th>发布者</th>
                     <th>发布时间</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -172,6 +190,9 @@ $result = $conn->query($sql);
                         <td><?php echo htmlspecialchars($row['title']); ?></td>
                         <td><?php echo htmlspecialchars($row['username']); ?></td>
                         <td><?php echo $row['created_at']; ?></td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">删除</button>
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -180,6 +201,8 @@ $result = $conn->query($sql);
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="/js/bootstrap.bundle.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         // 导航栏滚动效果
         window.addEventListener('scroll', function() {
