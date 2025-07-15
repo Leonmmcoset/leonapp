@@ -159,7 +159,7 @@ require_once 'config.php';
             &copy; <?php echo date('Y'); ?> <?php echo APP_STORE_NAME; ?>. 保留所有权利。
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/sweetalert.js"></script>
     <script src="/js/bootstrap.bundle.js"></script>
 </body>
 </html>

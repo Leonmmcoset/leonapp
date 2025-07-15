@@ -4,10 +4,17 @@ require_once '../config.php';
 // 设置会话cookie路径为根目录以确保跨目录访问
 session_set_cookie_params(0, '/');
 session_start();
-// 检查管理员登录状态
+// 检查是否已登录
 if (!isset($_SESSION['admin'])) {
     header('Location: login.php');
-    exit;
+    exit();
+}
+
+// 检查权限
+if ($_SESSION['admin']['permission'] != 'all') {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
 }
 
 // 处理退出登录
@@ -41,7 +48,7 @@ if (isset($_GET['logout'])) {
                     <a class="nav-link active" aria-current="page" href="manage_developers.php">管理开发者</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="?logout=true">退出登录</a>
+                    <a class="nav-link" href="#" onclick="confirmLogout()">退出登录</a>
                 </li>
             </ul>
         </div>
@@ -206,6 +213,22 @@ if (!$stmt) {
         }
 
     </style>
+    <script src="/js/sweetalert.js"></script>
+    <script>
+    function confirmLogout() {
+        Swal.fire({
+            title: '确定要登出吗?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            }
+        });
+    }
+    </script>
 </head>
 <body>
 <!-- Bootstrap JS Bundle with Popper -->

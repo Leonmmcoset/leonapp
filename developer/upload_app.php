@@ -289,7 +289,7 @@ if (!($conn instanceof mysqli)) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/sweetalert.js"></script>
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {

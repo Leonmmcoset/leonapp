@@ -2,10 +2,17 @@
 require_once '../config.php';
 
 session_start();
-// 检查管理员登录状态
+// 检查是否已登录
 if (!isset($_SESSION['admin'])) {
     header('Location: login.php');
-    exit;
+    exit();
+}
+
+// 检查权限
+if ($_SESSION['admin']['permission'] != 'all') {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
 }
 
 // 验证App ID

@@ -11,10 +11,17 @@ if (!isset($conn) || !$conn instanceof mysqli) {
 $sql = 'SELECT title, content FROM announcements ORDER BY created_at DESC LIMIT 1';
 $result = $conn->query($sql);
 $announcement = $result ? $result->fetch_assoc() : null;
-// 检查管理员登录状态
+// 检查是否已登录
 if (!isset($_SESSION['admin'])) {
     header('Location: login.php');
-    exit;
+    exit();
+}
+
+// 非全部权限管理员重定向到对应权限页面
+if ($_SESSION['admin']['permission'] != 'all') {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
 }
 
 // 处理退出登录
@@ -59,7 +66,22 @@ if (!$resultApps) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/sweetalert.js"></script>
+    <script>
+    function confirmLogout() {
+        Swal.fire({
+            title: '确定要登出吗?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            }
+        });
+    }
+    </script>
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {
@@ -98,7 +120,7 @@ if (!$resultApps) {
                         <a class="nav-link" href="announcements.php">公告管理</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="?logout=true">退出登录</a>
+                        <a class="nav-link" href="#" onclick="confirmLogout()">退出登录</a>
                     </li>
                 </ul>
             </div>

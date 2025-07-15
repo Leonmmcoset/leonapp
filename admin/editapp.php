@@ -2,10 +2,17 @@
 require_once '../config.php';
 
 session_start();
-// 检查管理员登录状态
+// 检查是否已登录
 if (!isset($_SESSION['admin'])) {
     header('Location: login.php');
-    exit;
+    exit();
+}
+
+// 检查权限
+if ($_SESSION['admin']['permission'] != 'all') {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
 }
 
 // 验证App ID
@@ -122,7 +129,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/sweetalert.js"></script>
+    <script>
+    function confirmLogout() {
+        Swal.fire({
+            title: '确定要登出吗?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            }
+        });
+    }
+    </script>
     <!-- Fluent Design 模糊效果 -->
     <style>
         .blur-bg {
@@ -151,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
                         <a class="nav-link active" aria-current="page" href="editapp.php?id=<?php echo $appId; ?>">编辑App</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="?logout=true">退出登录</a>
+                        <a class="nav-link" href="#" onclick="confirmLogout()">退出登录</a>
                     </li>
                 </ul>
             </div>

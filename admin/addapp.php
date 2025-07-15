@@ -2,10 +2,17 @@
 require_once '../config.php';
 
 session_start();
-// 检查管理员登录状态
+// 检查是否已登录
 if (!isset($_SESSION['admin'])) {
     header('Location: login.php');
-    exit;
+    exit();
+}
+
+// 检查权限
+if ($_SESSION['admin']['permission'] != 'all') {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
 }
 
 $success = '';
@@ -96,19 +103,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>添加App - <?php echo APP_STORE_NAME; ?></title>
-    <!-- Bootstrap CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <!-- 自定义CSS -->
+    <title>添加应用</title>
     <link rel="stylesheet" href="../styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Fluent Design 模糊效果 -->
-    <style>
-        .blur-bg {
+    <script src="/js/sweetalert.js"></script>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>应用管理系统</h1>
+        <div class="admin-actions">
+            <span>欢迎, <?php echo htmlspecialchars($_SESSION['admin']['username']); ?></span>
+            <a href="#" onclick="confirmLogout()" class="logout-btn">登出</a>
+        </div>
+    </div>
+    <script>
+    function confirmLogout() {
+        Swal.fire({
+            title: '确定要登出吗?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            }
+        });
+    }
+    </script>
+<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>添加App - <?php echo APP_STORE_NAME; ?></title>\n    <!-- Bootstrap CSS -->\n    <link href="../css/bootstrap.min.css" rel="stylesheet">\n    <!-- 自定义CSS -->\n    <link rel="stylesheet" href="../styles.css">\n    <script src="/js/sweetalert.js"></script>\n    <script>\n    function confirmLogout() {\n        Swal.fire({\n            title: '确定要登出吗?',\n            icon: 'question',\n            showCancelButton: true,\n            confirmButtonText: '确定',\n            cancelButtonText: '取消'\n        }).then((result) => {\n            if (result.isConfirmed) {\n                window.location.href = 'logout.php';\n            }\n        });\n    }\n    </script>\n    <!-- Fluent Design 模糊效果 -->\n    <style>\n        .blur-bg {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.5);
         }
@@ -153,8 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
                         <a class="nav-link active" aria-current="page" href="addapp.php">添加App</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="?logout=true">退出登录</a>
-                    </li>
+                        <a class="nav-link" href="#" onclick="confirmLogout()">退出登录</a>\n                    </li>
                 </ul>
             </div>
         </div>

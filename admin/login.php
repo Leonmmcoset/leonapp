@@ -15,7 +15,8 @@ if (!isset($_SESSION['admin'])) {
             if ($username === $account['username'] && $password === $account['password']) {
                 $_SESSION['admin'] = [
                     'id' => $account['id'],
-                    'username' => $account['username']
+                    'username' => $account['username'],
+                    'permission' => $account['permission']
                 ];
                 $adminFound = true;
                 
@@ -35,7 +36,14 @@ if (!isset($_SESSION['admin'])) {
                     ini_set('session.gc_maxlifetime', $cookie_lifetime);
                 }
                 
-                header('Location: index.php');
+                // 根据权限设置重定向页面
+                $redirectPage = 'index.php';
+                if ($_SESSION['admin']['permission'] == 'say') {
+                    $redirectPage = 'announcements.php';
+                } elseif ($_SESSION['admin']['permission'] == 'review') {
+                    $redirectPage = 'review_apps.php';
+                }
+                header("Location: $redirectPage");
                 exit();
             }
         }
@@ -77,7 +85,7 @@ if (!isset($_SESSION['admin'])) {
             }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/sweetalert.js"></script>
 </head>
 <body class="page-transition">
     <!-- 导航栏 -->

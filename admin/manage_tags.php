@@ -2,6 +2,13 @@
 require_once '../config.php';
 require_once 'login.php'; // 确保管理员已登录
 
+// 检查权限
+if ($_SESSION['admin']['permission'] != 'all') {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
+}
+
 // 处理标签添加
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_tag'])) {
     $name = trim($_POST['tag_name']);
@@ -61,6 +68,22 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
     <title>标签管理 - 应用商店后台</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
+    <script src="/js/sweetalert.js"></script>
+    <script>
+    function confirmLogout() {
+        Swal.fire({
+            title: '确定要登出吗?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            }
+        });
+    }
+    </script>
 </head>
 <body>
     <div class="container mt-5">
@@ -152,5 +175,8 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="confirmLogout()">退出登录</a>
+                    </li>
 </body>
 </html>

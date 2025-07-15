@@ -7,6 +7,13 @@ if (!isset($_SESSION['admin']) || !isset($_SESSION['admin']['id'])) {
     exit;
 }
 
+// 检查权限 - 允许all和say权限
+if (!in_array($_SESSION['admin']['permission'], ['all', 'say'])) {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
+}
+
 // 处理公告发布
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
@@ -95,7 +102,7 @@ $result = $conn->query($sql);
                         <a class="nav-link" href="announcements.php">公告管理</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="?logout=true">退出登录</a>
+                        <a class="nav-link" href="#" onclick="confirmLogout()">退出登录</a>
                     </li>
                 </ul>
             </div>
@@ -103,8 +110,22 @@ $result = $conn->query($sql);
     </nav>
 
     <div class="container mt-4">
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="/js/sweetalert.js"></script>
         <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: '确定要登出吗?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'logout.php';
+                }
+            });
+        }
+        </script>
         <?php if (isset($_GET['success'])): ?>
             Swal.fire({
                 icon: "success",

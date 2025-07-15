@@ -55,6 +55,13 @@
         exit;
     }
 
+    // 检查权限
+    if ($_SESSION['admin']['permission'] != 'all') {
+        $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+        header("Location: $redirect");
+        exit();
+    }
+
     // 获取上传文件和图片信息
     function get_uploaded_files_info() {
         $uploaded_files = [];

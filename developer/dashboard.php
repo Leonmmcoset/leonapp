@@ -48,7 +48,7 @@ if (!($conn instanceof mysqli)) {
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/sweetalert.js"></script>
     <style>
         .blur-bg {
             backdrop-filter: blur(10px);

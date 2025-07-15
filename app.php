@@ -137,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/css/all.min.css">
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="/js/sweetalert.js/dist/sweetalert2.min.css">
+    <script src="/js/sweetalert.js/dist/sweetalert2.all.min.js"></script>
     <!-- 本地 Chart.js -->
     <script src="js/charts.js"></script>
     <!-- 自定义CSS -->

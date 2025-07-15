@@ -6,10 +6,17 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 session_start();
-// 检查管理员登录状态
+// 检查是否已登录
 if (!isset($_SESSION['admin'])) {
     header('Location: login.php');
-    exit;
+    exit();
+}
+
+// 检查权限 - 允许all和review权限
+if (!in_array($_SESSION['admin']['permission'], ['all', 'review'])) {
+    $redirect = $_SESSION['admin']['permission'] == 'say' ? 'announcements.php' : 'review_apps.php';
+    header("Location: $redirect");
+    exit();
 }
 
 $success = '';
@@ -133,7 +140,7 @@ if (!($conn instanceof mysqli)) {
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/js/sweetalert.js/dist/sweetalert2.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- Fluent Design 模糊效果 -->
@@ -171,7 +178,7 @@ if (!($conn instanceof mysqli)) {
                         <a class="nav-link active" aria-current="page" href="review_apps.php">应用审核</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="?logout=true">退出登录</a>
+                        <a class="nav-link" onclick="confirmLogout()">退出登录</a>
                     </li>
                 </ul>
             </div>
@@ -314,6 +321,22 @@ function showRejectReason(appId, appName) {
     <!-- Bootstrap JS with Popper -->
     <script src="/js/bootstrap.bundle.js"></script>
     <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/js/sweetalert.js/dist/sweetalert2.all.min.js"></script>
+    <script>
+    function confirmLogout() {
+        Swal.fire({
+            title: '确认退出登录?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            }
+        });
+    }
+    </script>
 </body>
 </html>
