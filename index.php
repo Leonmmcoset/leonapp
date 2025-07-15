@@ -101,6 +101,7 @@ $announcement = $announcementResult && $announcementResult->num_rows > 0 ? $anno
             <div class="alert alert-info blur-bg">
                 <h4 class="alert-heading"><?php echo htmlspecialchars($announcement['title']); ?></h4>
                 <p><?php echo nl2br(htmlspecialchars($announcement['content'])); ?></p>
+                <p class="mt-2"><a href="history_announcements.php" class="alert-link">查看所有历史公告</a></p>
             </div>
         </div>
     <?php endif; ?>
