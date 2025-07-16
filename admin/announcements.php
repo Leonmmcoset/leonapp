@@ -63,6 +63,8 @@ $result = $conn->query($sql);
     <title>公告管理 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- 自定义CSS -->
@@ -159,28 +161,28 @@ $result = $conn->query($sql);
             </script>
         <?php endif; ?>
 
-        <h2>发布公告</h2>
+        <h2><i class="fas fa-bullhorn me-2"></i>发布公告</h2>
         <form method="post">
             <div class="mb-3">
-                <label for="title" class="form-label">标题</label>
+                <label for="title" class="form-label"><i class="fas fa-heading me-2"></i>标题</label>
                 <input type="text" class="form-control" id="title" name="title" required>
             </div>
             <div class="mb-3">
-                <label for="content" class="form-label">内容</label>
+                <label for="content" class="form-label"><i class="fas fa-paragraph me-2"></i>内容</label>
                 <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">发布</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-2"></i>发布</button>
         </form>
 
-        <h2 class="mt-4">公告列表</h2>
+        <h2 class="mt-4"><i class="fas fa-list-alt me-2"></i>公告列表</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>标题</th>
-                    <th>发布者</th>
-                    <th>发布时间</th>
-                    <th>操作</th>
+                    <th><i class="fas fa-id-card me-2"></i>ID</th>
+                    <th><i class="fas fa-heading me-2"></i>标题</th>
+                    <th><i class="fas fa-user me-2"></i>发布者</th>
+                    <th><i class="fas fa-clock me-2"></i>发布时间</th>
+                    <th><i class="fas fa-cog me-2"></i>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -191,7 +193,7 @@ $result = $conn->query($sql);
                         <td><?php echo htmlspecialchars($row['username']); ?></td>
                         <td><?php echo $row['created_at']; ?></td>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">删除</button>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)"><i class="fas fa-trash-alt me-1"></i>删除</button>
                         </td>
                     </tr>
                 <?php endwhile; ?>

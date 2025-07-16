@@ -61,6 +61,8 @@ if (!isset($_SESSION['admin'])) {
     <title>管理员登录 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- 顶栏样式 -->
@@ -120,7 +122,7 @@ if (!isset($_SESSION['admin'])) {
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card blur-bg">
-                        <div class="card-header">管理员登录</div>
+                        <div class="card-header"><i class="fas fa-sign-in-alt me-2"></i>管理员登录</div>
                         <div class="card-body">
                             <!-- <?php if (isset($error)): ?>
                                 <script>
@@ -134,19 +136,19 @@ if (!isset($_SESSION['admin'])) {
                             <form method="post">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="username" name="username" required>
-                                    <label for="username">用户名</label>
+                                    <label for="username"><i class="fas fa-user me-2"></i>用户名</label>
                                 </div>
                                 <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="password" name="password" required>
-                            <label for="password">密码</label>
+                            <label for="password"><i class="fas fa-lock me-2"></i>密码</label>
                         </div>
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me">
                             <label class="form-check-label" for="remember_me">
-                                自动登录
+                                <i class="fas fa-clock me-2"></i>自动登录
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-primary">登录</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt me-2"></i>登录</button>
                             </form>
                         </div>
                     </div>

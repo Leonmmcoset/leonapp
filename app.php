@@ -196,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
             <div class="col-md-6">
                 <h1><i class="fas fa-box-open"></i> <?php echo $app['name']; ?></h1>
                 <p class="lead"><i class="fas fa-info-circle"></i> <?php echo $app['description']; ?></p>
-                <p>年龄分级: 
+                <p><i class="fas fa-shield-alt"></i> 年龄分级: 
                     <?php
                     $svgHeader = '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="0" dy="2" result="offsetblur"/><feFlood flood-color="rgba(0,0,0,0.2)"/><feComposite in2="offsetblur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
                     $esrbIcons = [
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                     <p><?php echo nl2br(htmlspecialchars($app['age_rating_description'])); ?></p>
                 </div>
                 <?php endif; ?>
-                <p>适用平台: <?php
+                <p><i class="fas fa-laptop"></i> 适用平台: <?php
                     $platforms = json_decode($app['platforms'], true) ?? [];
                     $platformIcons = [
                         'windows' => '<i class="fab fa-windows"></i>',
@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                     }
                     echo implode(', ', $platformTexts);
                 ?></p>
-                <p>评分: <?php echo round($app['avg_rating'], 1); ?>/5</p>
+                <p><i class="fas fa-star"></i> 评分: <?php echo round($app['avg_rating'], 1); ?>/5</p>
                 <p>开发者: <?php if ($developerId == 0 || empty($developerName)): ?>管理员<?php else: ?><a href="developer_apps.php?id=<?php echo $developerId; ?>"><?php echo htmlspecialchars($developerName); ?></a><?php endif; ?></p>
 
                 <?php
@@ -262,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                     $tags[] = $tag['name']; 
                 }
                 if (!empty($tags)): ?>
-                    <p>标签: <?php echo implode(', ', $tags); ?></p>
+                    <p><i class="fas fa-tags"></i> 标签: <?php echo implode(', ', $tags); ?></p>
                 <?php endif; ?>
             </div>
             <div class="col-md-6">
@@ -297,10 +297,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                 <?php while ($version = $resultVersions->fetch_assoc()): ?>
                     <div class="card mb-3 blur-bg">
                         <div class="card-body">
-                            <h5 class="card-title">版本 <?php echo $version['version']; ?></h5>
+                            <h5 class="card-title"><i class="fas fa-code-branch"></i> 版本 <?php echo $version['version']; ?></h5>
                             <p class="card-text"><?php echo $version['changelog']; ?></p>
-<a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-primary btn-lg" download>立即下载</a>
-                            <a href="version_list.php?id=<?php echo $app['id']; ?>" class="btn btn-outline-secondary">查看版本历史</a>
+<a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-primary btn-lg" download><i class="fas fa-download"></i> 立即下载</a>
+                            <a href="version_list.php?id=<?php echo $app['id']; ?>" class="btn btn-outline-secondary"><i class="fas fa-history"></i> 查看版本历史</a>
                         </div>
                     </div>
                 <?php endwhile; ?>
@@ -309,10 +309,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
 
         <div class="row mt-4">
             <div class="col-md-6">
-                    <h2>提交评价</h2>
+                    <h2><i class="fas fa-comments"></i> 评价</h2>
                     <form method="post" action="">
                         <div class="mb-3">
-                            <label for="rating" class="form-label">评分</label>
+                            <label for="rating" class="form-label"><i class="fas fa-star"></i> 评分</label>
                             <select class="form-select" id="rating" name="rating" required>
                                 <option value="1">1星</option>
                                 <option value="2">2星</option>
@@ -321,7 +321,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                                 <option value="5">5星</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">提交评价</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> 提交评价</button>
                     </form>
                     <h2>评价</h2>
                     <div id="reviews-container">
@@ -342,7 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
                                     }
                                     echo '</p>';
                                     ?>
-                                    <p class="card-text"><small class="text-muted">评价时间: <?php echo $review['created_at']; ?></small></p>
+                                    <p class="card-text"><i class="fas fa-clock"></i> <small class="text-muted">评价时间: <?php echo $review['created_at']; ?></small></p>
                                 </div>
                             </div>
                         <?php endwhile; ?>

@@ -10,3 +10,7 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^api(/.*)?$ api.php?action=$1 [QSA,L]
+Header append X-Powered-By "LeonAPP Server"
+Header append X-System-Discription "LeonAPP Server System, a powerful APP store system."
+Header append X-System-Author "LeonMMcoset"
+Header append X-System-Email "leonmmcoset@outlook.com"

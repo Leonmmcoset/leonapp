@@ -188,6 +188,8 @@ if (isset($_GET['success'])) {
     <title>管理版本 - <?php echo htmlspecialchars($app['name']); ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <style>
@@ -236,12 +238,12 @@ if (isset($_GET['success'])) {
     <div class="container mt-4">
         <div class="row mb-4">
             <div class="col">
-                <h1>管理版本: <?php echo htmlspecialchars($app['name']); ?></h1>
+                <h1><i class="fas fa-code-branch me-2"></i>管理版本: <?php echo htmlspecialchars($app['name']); ?></h1>
                 <p class="text-muted">管理该应用的所有版本</p>
             </div>
             <div class="col text-end">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVersionModal">
-                    添加新版本
+                    <i class="fas fa-plus-circle me-2"></i>添加新版本
                 </button>
             </div>
         </div>
@@ -263,7 +265,7 @@ if (isset($_GET['success'])) {
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card version-card h-100">
                             <div class="card-body">
-                                <h5 class="card-title">版本 <?php echo htmlspecialchars($version['version']); ?></h5>
+                                <h5 class="card-title"><i class="fas fa-tag me-2"></i>版本 <?php echo htmlspecialchars($version['version']); ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted">发布日期: <?php echo date('Y-m-d H:i', strtotime($version['created_at'])); ?></h6>
                                 <p class="card-text"><?php echo nl2br(htmlspecialchars($version['changelog'])); ?></p>
                             </div>
@@ -286,7 +288,7 @@ if (isset($_GET['success'])) {
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="editVersionModalLabel">编辑版本 <?php echo htmlspecialchars($version['version']); ?></h5>
+                                    <h5 class="modal-title" id="editVersionModalLabel"><i class="fas fa-edit me-2"></i>编辑版本 <?php echo htmlspecialchars($version['version']); ?></h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form method="post" enctype="multipart/form-data">
@@ -294,14 +296,14 @@ if (isset($_GET['success'])) {
                                         <input type="hidden" name="version_id" value="<?php echo $version['id']; ?>">
                                         <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="version_<?php echo $version['id']; ?>" name="version" value="<?php echo htmlspecialchars($version['version']); ?>" placeholder="如: 1.0.0" required>
-                <label for="version_<?php echo $version['id']; ?>">版本号</label>
+                <label for="version_<?php echo $version['id']; ?>"><i class="fas fa-hashtag me-2"></i>版本号</label>
             </div>
                                         <div class="form-floating mb-3">
                 <textarea class="form-control" id="changelog_<?php echo $version['id']; ?>" name="changelog" rows="3" placeholder="描述本次更新内容" required><?php echo htmlspecialchars($version['changelog']); ?></textarea>
-                <label for="changelog_<?php echo $version['id']; ?>">更新日志</label>
+                <label for="changelog_<?php echo $version['id']; ?>"><i class="fas fa-history me-2"></i>更新日志</label>
             </div>
                                         <div class="mb-3">
-                                            <label for="new_app_file_<?php echo $version['id']; ?>" class="form-label">更新App文件 (可选)</label>
+                                            <label for="new_app_file_<?php echo $version['id']; ?>" class="form-label"><i class="fas fa-upload me-2"></i>更新App文件 (可选)</label>
                                             <input class="form-control" type="file" id="new_app_file_<?php echo $version['id']; ?>" name="new_app_file">
                                             <div class="form-text">当前文件: <?php echo basename($version['file_path']); ?></div>
                                         </div>
@@ -324,21 +326,21 @@ if (isset($_GET['success'])) {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addVersionModalLabel">添加新版本</h5>
+                    <h5 class="modal-title" id="addVersionModalLabel"><i class="fas fa-plus-circle me-2"></i>添加新版本</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="version" name="version" placeholder="如: 1.0.0" required>
-                <label for="version">版本号</label>
+                <label for="version"><i class="fas fa-hashtag me-2"></i>版本号</label>
             </div>
                         <div class="form-floating mb-3">
                 <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="描述本次更新内容" required></textarea>
-                <label for="changelog">更新日志</label>
+                <label for="changelog"><i class="fas fa-history me-2"></i>更新日志</label>
             </div>
                         <div class="mb-3">
-                            <label for="app_file" class="form-label">App文件</label>
+                            <label for="app_file" class="form-label"><i class="fas fa-upload me-2"></i>App文件</label>
                             <input class="form-control" type="file" id="app_file" name="app_file" required>
                             <a href="<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-sm btn-primary" download>下载</a>
                         </div>

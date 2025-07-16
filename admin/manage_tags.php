@@ -67,6 +67,8 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>标签管理 - 应用商店后台</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
     <script>
@@ -88,7 +90,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">标签管理</h1>
-        <a href="index.php" class="btn btn-secondary mb-3">返回应用列表</a>
+        <a href="index.php" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left me-2"></i>返回应用列表</a>
 
         <?php if (isset($_GET['success'])): ?>
             <div class="alert alert-success"><?php echo $_GET['success']; ?></div>
@@ -100,15 +102,15 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
         <!-- 添加标签表单 -->
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0">添加新标签</h5>
+                <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>添加新标签</h5>
             </div>
             <div class="card-body">
                 <form method="post">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="tag_name" name="tag_name" required>
-                        <label for="tag_name">标签名称</label>
+                        <label for="tag_name"><i class="fas fa-tag me-2"></i>标签名称</label>
                     </div>
-                    <button type="submit" name="add_tag" class="btn btn-primary">添加标签</button>
+                    <button type="submit" name="add_tag" class="btn btn-primary"><i class="fas fa-save me-2"></i>添加标签</button>
                 </form>
             </div>
         </div>
@@ -116,7 +118,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
         <!-- 标签列表 -->
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">现有标签</h5>
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>现有标签</h5>
             </div>
             <div class="card-body">
                 <table class="table table-striped">
@@ -137,9 +139,9 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
                             <td>
                                 <!-- 编辑按钮触发模态框 -->
                                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $tag['id']; ?>">
-                                    编辑
+                                    <i class="fas fa-edit me-1"></i>编辑
                                 </button>
-                                <a href="manage_tags.php?delete=<?php echo $tag['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除这个标签吗？关联的应用标签也会被删除。');">删除</a>
+                                <a href="manage_tags.php?delete=<?php echo $tag['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除这个标签吗？关联的应用标签也会被删除。');"><i class="fas fa-trash-alt me-1"></i>删除</a>
                             </td>
                         </tr>
 
@@ -148,7 +150,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">编辑标签</h5>
+                                        <h5 class="modal-title"><i class="fas fa-edit me-2"></i>编辑标签</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -156,11 +158,11 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
                                             <input type="hidden" name="tag_id" value="<?php echo $tag['id']; ?>">
                                             <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="edit_tag_name<?php echo $tag['id']; ?>" name="tag_name" value="<?php echo htmlspecialchars($tag['name']); ?>" required>
-                                                <label for="edit_tag_name<?php echo $tag['id']; ?>">标签名称</label>
+                                                <label for="edit_tag_name<?php echo $tag['id']; ?>"><i class="fas fa-tag me-2"></i>标签名称</label>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                                <button type="submit" name="edit_tag" class="btn btn-primary">保存修改</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times-circle me-2"></i>取消</button>
+                                                <button type="submit" name="edit_tag" class="btn btn-primary"><i class="fas fa-save me-2"></i>保存修改</button>
                                             </div>
                                         </form>
                                     </div>

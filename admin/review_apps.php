@@ -139,6 +139,8 @@ if (!($conn instanceof mysqli)) {
     <title>应用审核 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="/js/sweetalert.js/dist/sweetalert2.min.css">
     <!-- 自定义CSS -->
@@ -187,7 +189,7 @@ if (!($conn instanceof mysqli)) {
 
     <div class="container mt-4">
         <div class="alert alert-info">
-            请遵循应用商店的<a href="/docs/app_review_standards.php" target="_blank">审核规则</a>，确保应用符合平台要求。
+            请遵循应用商店的<a href="/docs/app_review_standards.php" target="_blank"><i class="fas fa-external-link-alt me-1"></i>审核规则</a>，确保应用符合平台要求。
         </div>
         <?php if (!empty($success)): ?>
             <div class="alert alert-success"><?php echo $success; ?></div>
@@ -196,8 +198,8 @@ if (!($conn instanceof mysqli)) {
             <div class="alert alert-danger"><?php echo $error; ?></div>
         <?php endif; ?>
 
-        <h2>应用审核</h2>
-        <p class="text-muted">待审核应用: <?php echo count($pendingApps); ?></p>
+        <h2><i class="fas fa-check-circle me-2"></i>应用审核</h2>
+        <p class="text-muted"><i class="fas fa-clock me-1"></i>待审核应用: <?php echo count($pendingApps); ?></p>
 
         <?php if (empty($pendingApps)): ?>
             <div class="alert alert-info">没有待审核的应用</div>
@@ -277,8 +279,8 @@ if (!($conn instanceof mysqli)) {
                                 <form method="post" class="mt-3">
                                     <input type="hidden" name="app_id" value="<?php echo $app['id']; ?>">
                                     <div class="d-flex gap-2">
-                                        <button type="submit" name="review_action" value="approve" class="btn btn-success flex-grow-1">通过</button>
-                                        <button type="button" class="btn btn-danger flex-grow-1" onclick="showRejectReason(<?php echo $app['id']; ?>, '<?php echo addslashes(htmlspecialchars($app['name'])); ?>')">拒绝</button>
+                                        <button type="submit" name="review_action" value="approve" class="btn btn-success me-2"><i class="fas fa-check me-1"></i>通过</button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal<?php echo $app['id']; ?>"><i class="fas fa-times me-1"></i>拒绝</button>
                                     </div>
                                 </form>
                             </div>

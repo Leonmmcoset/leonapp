@@ -103,9 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>添加应用</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加App - <?php echo APP_STORE_NAME; ?></title>
+    <!-- Bootstrap CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
 </head>
@@ -195,26 +202,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
         <form method="post" enctype="multipart/form-data">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="name" name="name" required>
-                <label for="name">App名称</label>
+                <label for="name"><i class="fas fa-file-signature me-2"></i>App名称</label>
             </div>
             <div class="mb-3">
-                <label for="tags" class="form-label">标签</label>
-                <select id="tags" name="tags[]" multiple class="form-control">
-                    <?php
-                    $tagResult = $conn->query("SELECT id, name FROM tags");
-                    while ($tag = $tagResult->fetch_assoc()):
-                    ?>
-                    <option value="<?php echo $tag['id']; ?>"><?php echo htmlspecialchars($tag['name']); ?></option>
-                    <?php endwhile; ?>
-                </select>
-                <small class="form-text text-muted">按住Ctrl键可选择多个标签</small>
-            </div>
-            <div class="form-floating mb-3">
+                <label for="description" class="form-label"><i class="fas fa-align-left me-2"></i>描述</label>
                 <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                <label for="description">描述</label>
             </div>
             <div class="mb-3">
-                <label for="age_rating" class="form-label">年龄分级</label>
+                <label for="age_rating" class="form-label"><i class="fas fa-shield-alt me-2"></i>年龄分级</label>
                 <select class="form-select" id="age_rating" name="age_rating" required>
                     <option value="3+">3+</option>
                     <option value="7+">7+</option>
@@ -277,21 +272,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
             </div>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="version" name="version" required>
-                <label for="version">版本号</label>
+                <label for="version" class="form-label"><i class="fas fa-code-branch me-2"></i>版本号</label>
             </div>
             <div class="form-floating mb-3">
                 <textarea class="form-control" id="changelog" name="changelog" rows="3" required></textarea>
-                <label for="changelog">更新日志</label>
+                <label for="changelog" class="form-label"><i class="fas fa-history me-2"></i>更新日志</label>
             </div>
             <div class="form-floating mb-3">
                 <input class="form-control" type="file" id="app_file" name="app_file" required>
-                <label for="app_file">App文件</label>
+                <label for="app_file" class="form-label"><i class="fas fa-file-archive me-2"></i>App文件</label>
             </div>
             <div class="form-floating mb-3">
                 <input class="form-control" type="file" id="images" name="images[]" multiple>
-                <label for="images">预览图片 (可多选)</label>
+                <label for="images" class="form-label"><i class="fas fa-upload me-2"></i>预览图片 (可多选)</label>
             </div>
-            <button type="submit" class="btn btn-primary" name="add_app">添加App</button>
+            <button type="submit" name="add_app" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>添加App</button>
             <a href="index.php" class="btn btn-secondary ms-2">取消</a>
         </form>
     </div>

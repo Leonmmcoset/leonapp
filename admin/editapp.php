@@ -127,6 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
     <title>编辑App - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
@@ -192,36 +194,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
         <form method="post" enctype="multipart/form-data">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($app['name']); ?>" required>
-                <label for="name">App名称</label>
-            </div>
-        <div class="mb-3">
-            <label for="tags" class="form-label">标签</label>
-            <select id="tags" name="tags[]" multiple class="form-control">
-                <?php
-                $selectedTags = [];
-                $tagQuery = $conn->prepare("SELECT tag_id FROM app_tags WHERE app_id = ?");
-                $tagQuery->bind_param("i", $appId);
-                $tagQuery->execute();
-                $tagResult = $tagQuery->get_result();
-                while ($tag = $tagResult->fetch_assoc()) {
-                    $selectedTags[] = $tag['tag_id'];
-                }
-                
-                $allTags = $conn->query("SELECT id, name FROM tags");
-                while ($tag = $allTags->fetch_assoc()):
-                $selected = in_array($tag['id'], $selectedTags) ? 'selected' : '';
-                ?>
-                <option value="<?php echo $tag['id']; ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($tag['name']); ?></option>
-                <?php endwhile; ?>
-            </select>
-            <div class="form-text">按住Ctrl键可选择多个标签</div>
-        </div>
-        <div class="form-floating mb-3">
-                <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($app['description']); ?></textarea>
-                <label for="description">描述</label>
+                <label for="name"><i class="fas fa-file-signature me-2"></i>App名称</label>
             </div>
             <div class="mb-3">
-                <label for="age_rating" class="form-label">年龄分级</label>
+                <label for="description" class="form-label"><i class="fas fa-align-left me-2"></i>描述</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($app['description']); ?></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="age_rating" class="form-label"><i class="fas fa-shield-alt me-2"></i>年龄分级</label>
                 <select class="form-select" id="age_rating" name="age_rating" required>
                     <option value="3+" <?php echo $app['age_rating'] === '3+' ? 'selected' : ''; ?>>3+</option>
                     <option value="7+" <?php echo $app['age_rating'] === '7+' ? 'selected' : ''; ?>>7+</option>
@@ -305,22 +285,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_app'])) {
             </div>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="version" name="version" placeholder="如: 1.0.1">
-                <label for="version">新版本号</label>
+                <label for="version" class="form-label"><i class="fas fa-code-branch me-2"></i>版本号</label>
                 <div class="form-text">仅在上传新安装包时填写</div>
             </div>
             <div class="form-floating mb-3">
                 <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="描述本次更新内容"></textarea>
-                <label for="changelog">更新日志</label>
+                <label for="changelog" class="form-label"><i class="fas fa-history me-2"></i>更新日志</label>
             </div>
             <div class="mb-3">
                 <label for="app_file" class="form-label">新App文件 (可选)</label>
                 <input class="form-control" type="file" id="app_file" name="app_file">
             </div>
             <div class="mb-3">
-                <label for="images" class="form-label">新增预览图片 (可选, 可多选)</label>
+                <label for="images" class="form-label"><i class="fas fa-upload me-2"></i>预览图片 (可多选)</label>
                 <input class="form-control" type="file" id="images" name="images[]" multiple>
             </div>
-            <button type="submit" class="btn btn-primary" name="edit_app">更新App</button>
+            <button type="submit" name="edit_app" class="btn btn-primary"><i class="fas fa-save me-2"></i>保存修改</button>
             <a href="index.php" class="btn btn-secondary ms-2">取消</a>
         </form>
     </div>

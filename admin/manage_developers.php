@@ -202,6 +202,8 @@ if (!$stmt) {
     <title>管理开发者用户 - 应用商店管理</title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- Fluent Design 模糊效果 -->
@@ -245,7 +247,7 @@ if (!$stmt) {
     });
 </script>
     <div class="container">
-        <h1>管理开发者用户</h1>
+        <h1><i class="fas fa-users me-2"></i>管理开发者用户</h1>
 <pre>调试信息:
 查询SQL: <?php echo $sql; ?>
 查询结果行数: <?php echo $rowCount; ?>
@@ -263,21 +265,21 @@ if (!$stmt) {
         <?php if ($editUser): ?>
             <div class="card mb-4">
                 <div class="card-header">
-                    <h2>编辑开发者用户</h2>
+                    <h2><i class="fas fa-edit me-2"></i>编辑开发者用户</h2>
                 </div>
                 <div class="card-body">
                     <form method="post" action="manage_developers.php">
                         <input type="hidden" name="user_id" value="<?php echo $editUser['id']; ?>">
                         <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($editUser['username']); ?>" required>
-                <label for="username">用户名</label>
+                <label for="username"><i class="fas fa-user me-2"></i>用户名</label>
             </div>
                         <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email']); ?>" required>
-                <label for="email">邮箱</label>
+                <label for="email"><i class="fas fa-envelope me-2"></i>邮箱</label>
             </div>
-                        <button type="submit" name="update_user" class="btn btn-primary me-2">更新用户</button>
-                        <a href="manage_developers.php" class="btn btn-secondary">取消</a>
+                        <button type="submit" name="update_user" class="btn btn-primary me-2"><i class="fas fa-save me-2"></i>更新用户</button>
+                        <a href="manage_developers.php" class="btn btn-secondary"><i class="fas fa-times-circle me-2"></i>取消</a>
                     </form>
                 </div>
             </div>
@@ -286,11 +288,11 @@ if (!$stmt) {
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>用户名</th>
-                    <th>邮箱</th>
-                    <th>注册时间</th>
-                    <th>操作</th>
+                    <th><i class="fas fa-id-card me-2"></i>ID</th>
+                    <th><i class="fas fa-user me-2"></i>用户名</th>
+                    <th><i class="fas fa-envelope me-2"></i>邮箱</th>
+                    <th><i class="fas fa-clock me-2"></i>注册时间</th>
+                    <th><i class="fas fa-cog me-2"></i>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -301,10 +303,10 @@ if (!$stmt) {
                         <td><?php echo htmlspecialchars($developer['email']); ?></td>
                         <td><?php echo $developer['created_at']; ?></td>
                         <td>
-                            <a href="manage_developers.php?edit=<?php echo $developer['id']; ?>" class="btn btn-sm btn-outline-primary">编辑</a>
+                            <a href="manage_developers.php?edit=<?php echo $developer['id']; ?>" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>编辑</a>
                             <form method="post" action="manage_developers.php" style="display: inline-block;" onsubmit="return confirm('确定要删除这个用户吗？');">
                                 <input type="hidden" name="user_id" value="<?php echo $developer['id']; ?>">
-                                <button type="submit" name="delete_user" class="btn btn-sm btn-outline-danger">删除</button>
+                                <button type="submit" name="delete_user" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt me-1"></i>删除</button>
                             </form>
                         </td>
                     </tr>

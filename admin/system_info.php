@@ -104,6 +104,8 @@
     <title>系统信息 - 上传文件列表</title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../styles.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
@@ -132,13 +134,13 @@
 
     <div class="container mt-4">
         <form method="post">
-            <h2>上传文件信息</h2>
+            <h2><i class="fas fa-file-alt me-2"></i>上传文件信息</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAll"></th>
-                    <th>文件名</th>
-                    <th>大小</th>
+                    <th><i class="fas fa-file-name me-2"></i>文件名</th>
+                    <th><i class="fas fa-database me-2"></i>大小</th>
                 </tr>
             </thead>
             <tbody>
@@ -154,13 +156,13 @@
             </tbody>
         </table>
 
-        <h2>上传图片信息</h2>
+        <h2><i class="fas fa-image me-2"></i>上传图片信息</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAllImages"></th>
-                    <th>文件名</th>
-                    <th>大小</th>
+                    <th><i class="fas fa-file-image me-2"></i>文件名</th>
+                    <th><i class="fas fa-database me-2"></i>大小</th>
                 </tr>
             </thead>
             <tbody>
@@ -175,8 +177,8 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
-            <button type="submit" name="delete_all" class="btn btn-danger" onclick="return confirm('确定要删除所有文件吗？')">全量删除</button>
-            <button type="submit" class="btn btn-danger ms-2" onclick="return confirm('确定要删除选中的文件吗？')">删除选中</button>
+            <button type="submit" name="delete_all" class="btn btn-danger" onclick="return confirm('确定要删除所有文件吗？')"><i class="fas fa-trash-alt me-2"></i>全量删除</button>
+            <button type="submit" class="btn btn-danger ms-2" onclick="return confirm('确定要删除选中的文件吗？')"><i class="fas fa-trash-alt me-2"></i>删除选中</button>
         </form>
     </div>
         </form>

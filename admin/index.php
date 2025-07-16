@@ -64,6 +64,8 @@ if (!$resultApps) {
     <title>App管理 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
@@ -146,7 +148,7 @@ if (!$resultApps) {
         </script>
         <h2>App列表</h2>
         <div class="mb-3">
-            <a href="manage_tags.php" class="btn btn-info">标签管理</a>
+            <a href="manage_tags.php" class="btn btn-info"><i class="fas fa-tags me-2"></i>标签管理</a>
         </div>
         <table class="table table-striped">
             <thead>
@@ -166,8 +168,8 @@ if (!$resultApps) {
                         <td><?php echo $app['age_rating']; ?></td>
                         <td><?php echo $app['created_at']; ?></td>
                         <td>
-                            <a href="editapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-primary">编辑</a>
-                            <a href="manage_versions.php?app_id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-secondary">版本管理</a>
+                            <a href="editapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>编辑</a>
+                            <a href="manage_versions.php?app_id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-secondary"><i class="fas fa-code-branch me-1"></i>版本管理</a>
                             <a href="deleteapp.php?id=<?php echo $app['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="event.preventDefault(); Swal.fire({
                                 title: '确定要删除吗?',
                                 text: '删除后将无法恢复!',
