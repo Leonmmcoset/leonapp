@@ -500,6 +500,9 @@ if (!($conn instanceof mysqli)) {
                 <textarea class="form-control" id="age_rating_description" name="age_rating_description" rows="3" placeholder="请说明为何需要此年龄分级"></textarea>
                 <small>当年龄分级为12+或以上时，此项为必填</small>
             </div>
+            <div class="alert alert-info mb-3">
+                <strong>信息：</strong>我们尝试了开发多选子平台的功能，但是就会导致以前的app会全部显示“未知平台”，如果你是Windows的话，选择Win7以上选项，如果你是Linux的话，选择APP支持平台中的任意一个即可。
+            </div>
             <div class="form-group mb-3">
                 <label class="form-label">适用平台</label>
                 <div class="form-check">

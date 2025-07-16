@@ -117,8 +117,9 @@ if (!($conn instanceof mysqli)) {
     log_error('数据库连接错误: 连接不是MySQLi实例', __FILE__, __LINE__);
     $error = '数据库连接错误，请检查配置';
 } else {
-    $stmt = $conn->prepare("SELECT a.id, a.name, a.description, a.status, a.created_at 
+    $stmt = $conn->prepare("SELECT a.id, a.name, a.description, a.status, a.created_at, d.username 
                            FROM apps a
+                           LEFT JOIN developers d ON a.developer_id = d.id
                            WHERE a.status = 'pending'
                            ORDER BY a.created_at DESC");
     if (!$stmt) {
@@ -252,7 +253,7 @@ if (!($conn instanceof mysqli)) {
                                 <?php if (!empty($tagString)): ?>
                                     <p class="card-text"><strong>标签:</strong> <?php echo htmlspecialchars($tagString); ?></p>
                                 <?php endif; ?>
-                                <p class="card-text"><strong>开发者:</strong> <?php echo htmlspecialchars($app['username']); ?></p>
+                                <p class="card-text"><strong>开发者:</strong> <?php echo htmlspecialchars($app['username'] ?? '管理员'); ?></p>
                                 <p class="card-text"><strong>提交时间:</strong> <?php echo htmlspecialchars($app['created_at']); ?></p>
                                 <p class="card-text"><strong>描述:</strong> <?php echo nl2br(htmlspecialchars($app['description'])); ?></p>
 
