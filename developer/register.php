@@ -203,15 +203,15 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
         <?php endif; ?>
         <form method="post">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" name="username" required>
+                <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required>
                 <label for="username">用户名</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="邮箱" required>
                 <label for="email">邮箱</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="密码" required>
                 <label for="password">密码</label>
             </div>
             <div class="mb-3 form-check">
