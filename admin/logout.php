@@ -24,5 +24,14 @@ session_destroy();
 
 // 使用Sweet Alert弹窗提示并跳转登录页
 echo '<script src="/js/sweetalert.js"></script>';
-echo '<script>Swal.fire({title: "登出成功", text: "您已安全登出系统", icon: "success", timer: 1500, showConfirmButton: false}).then(() => { window.location.href = "login.php"; });</script>';
+echo '<script>document.addEventListener("DOMContentLoaded", function() {
+  Swal.fire({
+    title: "登出成功",
+    text: "您已安全登出系统",
+    icon: "success",
+    timer: 1500,
+    showConfirmButton: false,
+    target: document.body
+  }).then(() => { window.location.href = "login.php"; });
+});</script>';
 exit();

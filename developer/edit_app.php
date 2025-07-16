@@ -243,6 +243,8 @@ if (!($conn instanceof mysqli)) {
     <title>编辑应用</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
 </head>
 <body>
     <div class="container mt-4">
@@ -396,7 +398,7 @@ if (!($conn instanceof mysqli)) {
                 <small>支持jpg、png格式，最多上传5张图片</small>
             </div>
             <input type="hidden" name="removed_images" id="removed_images" value="">
-            <button type="submit" class="btn btn-primary w-100">保存更改</button>
+            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-save me-1"></i>保存更改</button>
         </form>
         <div class="text-center mt-3">
             <a href="dashboard.php" class="btn btn-secondary">返回仪表盘</a>

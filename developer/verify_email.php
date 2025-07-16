@@ -51,6 +51,8 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>邮箱验证 - <?= APP_STORE_NAME ?></title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
     <style>
         body { background-color: #f4f4f4; padding: 70px 0; }
         .container { max-width: 500px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
@@ -79,10 +81,10 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
         <h2 class="mb-4">邮箱验证</h2>
         <?php if (!empty($success)): ?>
             <div class="alert alert-success" role="alert"><?= $success ?></div>
-            <a href="login.php" class="btn btn-primary">前往登录</a>
+            <a href="login.php" class="btn btn-primary"><i class="fas fa-sign-in-alt me-1"></i>前往登录</a>
         <?php else: ?>
             <div class="alert alert-danger" role="alert"><?= $error ?></div>
-            <a href="register.php" class="btn btn-secondary">重新注册</a>
+            <a href="register.php" class="btn btn-secondary"><i class="fas fa-user-plus me-1"></i>重新注册</a>
         <?php endif; ?>
     </div>
 

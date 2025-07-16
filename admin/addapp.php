@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
@@ -287,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_app'])) {
                 <label for="images" class="form-label"><i class="fas fa-upload me-2"></i>预览图片 (可多选)</label>
             </div>
             <button type="submit" name="add_app" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>添加App</button>
-            <a href="index.php" class="btn btn-secondary ms-2">取消</a>
+            <a href="index.php" class="btn btn-secondary ms-2"><i class="fas fa-times me-1"></i>取消</a>
         </form>
     </div>
 

@@ -223,6 +223,8 @@ if (!$verStmt) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>版本控制 - <?php echo htmlspecialchars($app['name']); ?></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
     <style>
@@ -295,8 +297,8 @@ if (!$verStmt) {
                         <textarea class="form-control" id="changelog" name="changelog" rows="3" placeholder="更新日志"></textarea>
                         <label for="changelog">更新日志</label>
                     </div>
-                    <button type="submit" class="btn btn-primary" name="upload_version">上传新版本</button>
-                    <a href="dashboard.php" class="btn btn-secondary ms-2">返回</a>
+                    <button type="submit" class="btn btn-primary" name="upload_version"><i class="fas fa-cloud-upload-alt me-1"></i>上传新版本</button>
+                    <a href="dashboard.php" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-1"></i>返回</a>
                 </form>
 
                 <hr>
@@ -322,9 +324,9 @@ if (!$verStmt) {
                                     <td><?php echo htmlspecialchars($ver['upload_time']); ?></td>
                                     <td><?php echo nl2br(htmlspecialchars($ver['changelog'] ?: '无')); ?></td>
                                     <td>
-                                        <a href="../download.php?id=<?php echo $ver['id']; ?>&type=version" class="btn btn-sm btn-outline-primary">下载</a>
-                                        <a href="#" class="btn btn-sm btn-outline-warning ms-2" onclick="openEditModal(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['version']); ?>', '<?php echo htmlspecialchars($ver['changelog']); ?>')">修改</a>
-                                        <a href="#" class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDelete(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['file_path']); ?>')">删除</a>
+                                        <a href="../download.php?id=<?php echo $ver['id']; ?>&type=version" class="btn btn-sm btn-outline-primary"><i class="fas fa-download me-1"></i>下载</a>
+                                        <a href="#" class="btn btn-sm btn-outline-warning ms-2" onclick="openEditModal(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['version']); ?>', '<?php echo htmlspecialchars($ver['changelog']); ?>')"><i class="fas fa-edit me-1"></i>修改</a>
+                                        <a href="#" class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDelete(<?php echo $ver['id']; ?>, '<?php echo htmlspecialchars($ver['file_path']); ?>')"><i class="fas fa-trash-alt me-1"></i>删除</a>
                                         <?php if ($ver['is_current'] == 1): ?>
                                             <span class="badge bg-success">当前版本</span>
                                         <?php endif; ?>
@@ -367,8 +369,8 @@ if (!$verStmt) {
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                    <button type="submit" class="btn btn-primary">保存修改</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i>取消</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>保存修改</button>
                                 </div>
                             </form>
                         </div>

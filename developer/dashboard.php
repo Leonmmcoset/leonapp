@@ -45,6 +45,8 @@ if (!($conn instanceof mysqli)) {
     <title>开发者仪表盘 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- SweetAlert2 -->
@@ -188,7 +190,7 @@ if (!($conn instanceof mysqli)) {
 
         <h1>欢迎，<?php echo htmlspecialchars($developerUsername); ?>！</h1>
         <div class="add-app">
-            <a href="upload_app.php">上传新应用</a>
+            <a href="upload_app.php"><i class="fas fa-upload me-1"></i>上传新应用</a>
         </div>
         <?php if (isset($error)): ?>
             <div style="color: red;"><?php echo $error; ?></div>
@@ -216,9 +218,9 @@ if (!($conn instanceof mysqli)) {
                                 <?php endif; ?>
                             </p>
                             <div class="action-buttons">
-                <a href="edit_app.php?id=<?php echo $app['id']; ?>", class="btn btn-primary">编辑</a>
-                <a href="version_control.php?id=<?php echo $app['id']; ?>", class="btn btn-secondary">版本控制</a>
-                <a href="#" class="delete-btn btn btn-danger" data-app-id="<?php echo $app['id']; ?>">删除</a>
+                <a href="edit_app.php?id=<?php echo $app['id']; ?>" class="btn btn-primary"><i class="fas fa-edit me-1"></i>编辑</a>
+                <a href="version_control.php?id=<?php echo $app['id']; ?>" class="btn btn-secondary"><i class="fas fa-history me-1"></i>版本控制</a>
+                <a href="#" class="delete-btn btn btn-danger" data-app-id="<?php echo $app['id']; ?>"><i class="fas fa-trash-alt me-1"></i>删除</a>
             </div>
                         </div>
                     </div>

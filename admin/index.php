@@ -65,7 +65,7 @@ if (!$resultApps) {
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
@@ -182,7 +182,7 @@ if (!$resultApps) {
                                 if (result.isConfirmed) {
                                     window.location.href = this.href;
                                 }
-                            });">删除</a>
+                            });"><i class="fas fa-trash-alt me-1"></i>删除</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

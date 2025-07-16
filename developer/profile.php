@@ -95,6 +95,8 @@ if (!($conn instanceof mysqli)) {
     <title>开发者信息 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <style>
@@ -193,7 +195,7 @@ if (!($conn instanceof mysqli)) {
                 <label for="social_links">社交媒体链接 (多个链接用逗号分隔)</label>
                 <input type="text" class="form-control" id="social_links" name="social_links" value="<?php echo htmlspecialchars($developer['social_links']); ?>" placeholder="请输入社交媒体链接，多个链接用逗号分隔">
             </div>
-            <button type="submit" class="btn btn-primary">保存更改</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>保存更改</button>
         </form>
 </div>
     <script>

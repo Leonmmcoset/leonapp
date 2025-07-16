@@ -62,7 +62,7 @@ if (!isset($_SESSION['admin'])) {
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <!-- 顶栏样式 -->
@@ -135,11 +135,11 @@ if (!isset($_SESSION['admin'])) {
                             <?php endif; ?> -->
                             <form method="post">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="username" name="username" required>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名"  required>
                                     <label for="username"><i class="fas fa-user me-2"></i>用户名</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" required>
                             <label for="password"><i class="fas fa-lock me-2"></i>密码</label>
                         </div>
                         <div class="form-check mb-3">

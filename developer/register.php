@@ -186,6 +186,8 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发者注册</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
     <style>
         body {
             background-color: #f4f4f4;
@@ -222,7 +224,7 @@ $mail->AuthType = 'PLAIN'; // 尝试使用PLAIN认证方式
                     我已阅读并同意 <a href="../docs/privacy_policy.php" target="_blank">隐私政策</a>
                 </label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">注册</button>
+            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-user-plus me-1"></i>注册</button>
         </form>
     </div>
     <script src="/js/bootstrap.bundle.js"></script>

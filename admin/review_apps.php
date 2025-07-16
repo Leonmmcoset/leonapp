@@ -141,7 +141,7 @@ if (!($conn instanceof mysqli)) {
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="/js/sweetalert.js/dist/sweetalert2.min.css">
     <!-- 自定义CSS -->

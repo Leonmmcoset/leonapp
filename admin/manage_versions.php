@@ -189,7 +189,7 @@ if (isset($_GET['success'])) {
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <style>
@@ -278,7 +278,15 @@ if (isset($_GET['success'])) {
                                         echo '文件不存在';
                                     }
                                 ?></small>
-                                <div>                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn" data-bs-toggle="modal" data-bs-target="#editVersionModal_<?php echo $version['id']; ?>">                                        编辑                                    </button>                                    <a href="../<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-sm btn-primary action-btn" download>下载</a>                                    <a href="?app_id=<?php echo $appId; ?>&delete_id=<?php echo $version['id']; ?>" class="btn btn-sm btn-outline-danger action-btn" onclick="return confirm('确定要删除此版本吗?');">                                        删除                                    </a>                                </div>
+                                <div>                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn" data-bs-toggle="modal" data-bs-target="#editVersionModal_<?php echo $version['id']; ?>">
+                                        <i class="fas fa-edit me-1"></i>编辑
+                                    </button>
+                                    <a href="../<?php echo htmlspecialchars($version['file_path']); ?>" class="btn btn-sm btn-primary action-btn" download>
+                                        <i class="fas fa-download me-1"></i>下载
+                                    </a>
+                                    <a href="?app_id=<?php echo $appId; ?>&delete_id=<?php echo $version['id']; ?>" class="btn btn-sm btn-outline-danger action-btn" onclick="return confirm('确定要删除此版本吗?');">
+                                        <i class="fas fa-trash-alt me-1"></i>删除
+                                    </a>
                             </div>
                         </div>
                     </div>
@@ -309,8 +317,12 @@ if (isset($_GET['success'])) {
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                        <button type="submit" class="btn btn-primary" name="edit_version">保存更改</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="fas fa-times-circle me-1"></i>取消
+                                        </button>
+                                        <button type="submit" class="btn btn-primary" name="edit_version">
+                                            <i class="fas fa-save me-1"></i>保存更改
+                                        </button>
                                     </div>
                                 </form>
                             </div>

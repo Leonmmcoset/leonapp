@@ -104,6 +104,8 @@ if (!($conn instanceof mysqli)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发者登录</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
     <style>
         body {
             background-color: #f4f4f4;
@@ -148,7 +150,7 @@ if (!($conn instanceof mysqli)) {
                     自动登录
                 </label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">登录</button>
+            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-user me-1"></i>登录</button>
         </form>
         <div class="text-center mt-3">
             还没有账号？<a href="register.php" class="text-decoration-none">注册</a>

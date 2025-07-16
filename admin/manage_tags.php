@@ -68,7 +68,7 @@ $tagsResult = $conn->query("SELECT * FROM tags ORDER BY created_at DESC");
     <title>标签管理 - 应用商店后台</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
     <script>

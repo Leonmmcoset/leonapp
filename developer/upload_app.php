@@ -286,7 +286,9 @@ if (!($conn instanceof mysqli)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>上传应用 - <?php echo APP_STORE_NAME; ?></title>
     <!-- Bootstrap CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/all.min.css">
     <!-- 自定义CSS -->
     <link rel="stylesheet" href="../styles.css">
     <script src="/js/sweetalert.js"></script>
@@ -575,7 +577,7 @@ if (!($conn instanceof mysqli)) {
                     </label>
                 </div>
             </div>
-            <input type="submit" value="上传" class="btn btn-primary w-100 py-2">
+            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-upload me-1"></i>上传应用</button>
         </form>
         <div class="back-link mt-4">
             <a href="dashboard.php" class="btn btn-outline-secondary w-100">返回仪表盘</a>
