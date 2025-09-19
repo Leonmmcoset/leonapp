@@ -1,3 +1,5 @@
+> [!WARN]
+> 这个项目已迁移到LeonGit上，该项目将会存档。
 # App Store 项目
 
 这是一个基于 PHP 7.4 的 App Store 项目，使用 Bootstrap 实现 Fluent Design 风格界面，数据存储采用 MySQL 数据库。项目各页面顶栏已添加 logo 图片，路径为 `/favicon.jpeg`，点击可跳转至首页，图片设置了高度 30px、右边距 10px 以及圆角样式 `var(--border-radius)`。
