@@ -1,4 +1,4 @@
-> [!WARN]
+> [!IMPORTANT]
 > 这个项目已迁移到LeonGit上，该项目将会存档。
 # App Store 项目
 
